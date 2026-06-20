@@ -144,3 +144,35 @@ Append-only decision log. Each entry records one iteration of work.
 1. **SPEC.md Section 4: Convergence** — when work is done at the memory level. Completes the governance loop (start + middle + end).
 2. **SPEC.md Section 5: Prior Art** — formal citations. Now that Sections 1-3 establish the framing, citations contextualize it.
 3. **SPEC.md Section 6: Reference Implementation** — practical .trail/ guidance. Could defer until spec content is complete.
+
+---
+
+## 2026-06-20 — spec-section-4-convergence
+
+**Ask:** Write SPEC.md Section 4 (Convergence) per work queue item 4.
+
+**Examination:** Sections 1-3 cover authorization and execution. Section 4 defines when work is done — the governance arc endpoint. Destination specified: work queue empty as signal, independent evaluator role, PEA P3 relationship.
+
+**Decision:** Write Section 4 with convergence definition, work-queue-empty semantics, independent evaluator role, why agent cannot self-assess, silence as signal, and PEA P3 mapping.
+
+**Prediction:** Section 4 will define convergence as a memory-level property. Reader will understand that "done" is structurally derivable, not agent-declared.
+
+**Action:** Added Section 4 to SPEC.md:
+- 4.1 Definition — convergence as structural property (work queue empty + independent review)
+- 4.2 Work Queue Empty — trace tier signal, necessary but not sufficient
+- 4.3 Independent Evaluator Role — why needed, what they do, who counts
+- 4.4 Why Agent Cannot Self-Assess — structural bias, separation principle
+- 4.5 Silence as Signal — bounded, provisional, not a guarantee
+- 4.6 Convergence at the Memory Level — tier-by-tier signals table
+- 4.7 Conformance Criteria — testable conditions
+- 4.8 Relationship to PEA Principles — maps to Convergence Is Silence (P3)
+
+**Outcome vs. Prediction:** Section 4 is complete. Convergence is defined as derivable from memory state. Agent self-declaration is explicitly excluded.
+
+**Reflection:** Sections 1-4 now form a complete governance arc: tiers (1) → requirements (2) → mandate gate/start (3) → convergence/end (4). The spec has conceptual closure. Remaining sections (5: Prior Art, 6: Reference Implementation) are contextual and practical rather than foundational.
+
+### Candidate Next Moves
+
+1. **SPEC.md Section 5: Prior Art** — formal citations. Contextualizes what ACM inherits vs. adds.
+2. **SPEC.md Section 6: Reference Implementation** — practical .trail/ guidance. Makes the spec implementable.
+3. **Retrospect update** — the work queue in retrospect.md is now half-done. Could update before continuing.

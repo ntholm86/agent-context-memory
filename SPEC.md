@@ -320,4 +320,124 @@ The principal says *what* and *why*. The agent determines *how*. But the agent c
 
 ---
 
-*[Sections 4-6 to follow in subsequent iterations]*
+## 4. Convergence
+
+The mandate gate defines when work can *begin*. Convergence defines when work is *done*. Together they bound the governance arc: authorized start → governed execution → verified end.
+
+### 4.1 Definition
+
+**Convergence:** Work is done when the trace tier shows no remaining work items and independent evaluators examining the evidence tier find nothing left to change.
+
+This is not the agent's assessment of its own work. The agent cannot declare itself done. Convergence is a structural property derivable from the memory state:
+1. The work queue (in the trace tier) is empty
+2. External review of the evidence tier produces no new findings
+
+Both conditions must hold. An empty work queue with unreviewed evidence is not convergence — it's an untested claim. A reviewed evidence tier with remaining work items is not convergence — work remains.
+
+### 4.2 Work Queue Empty
+
+The trace tier contains the agent's work queue — what remains to be done. In the reference implementation, this appears in `retrospect.md` under "What the next runs should test."
+
+**Work queue empty** means:
+- No items remain in the "next runs" section
+- No open questions or deferred work flagged in recent trail entries
+- The most recent retrospect explicitly states the queue is exhausted
+
+This is a necessary but not sufficient condition for convergence. The agent can exhaust its own list of ideas without having found everything worth finding.
+
+### 4.3 Independent Evaluator Role
+
+Convergence requires that independent evaluators — parties other than the agent — examine the evidence tier and find nothing left to change.
+
+**Why independent:** The agent has an interest in being done. It produced the work. It will naturally see its work favorably. This is not dishonesty — it's structural bias. The same bias exists in human self-assessment and is why peer review exists.
+
+**What independent evaluators do:**
+1. Examine the evidence tier (session records)
+2. Compare agent actions against the mandate
+3. Check for gaps between what the mandate required and what the evidence shows
+4. Identify findings the agent's trace tier did not surface
+
+**Who counts as independent:**
+- A different agent (model independence)
+- The principal reviewing the evidence (role independence)
+- An external auditor (organizational independence)
+
+The agent itself does not count, regardless of how carefully it reviews its own work.
+
+### 4.4 Why Agent Cannot Self-Assess
+
+A core premise of ACM (inherited from PEA) is that the agent is an unreliable narrator of itself. This applies to completion assessment as much as to action narration.
+
+**Self-assessment failure modes:**
+1. **Premature convergence:** The agent declares done before finding everything findable
+2. **Comfortable-corner bias:** The agent exhausts easy improvements and declares silence, missing harder ones
+3. **Rationalized completion:** The agent produces a coherent narrative for why work is done that does not match the evidence
+
+These are not accusations of agent dishonesty. They are structural properties of any self-assessing system with stakes in its assessment. The solution is the same as for narration: separation. The party doing the work is not the party declaring it done.
+
+### 4.5 Silence as Signal
+
+In ACM (and PEA), **silence** has a specific meaning: independent evaluators find nothing left to change.
+
+Silence is:
+- A signal, not a proof — it means no findings, not that no findings exist
+- Bounded — silence applies to what was examined, not to what wasn't
+- Provisional — new evidence or new evaluators may surface new findings
+
+Silence is not:
+- The agent saying "I'm done"
+- The absence of agent activity
+- A guarantee of correctness
+
+**Bounded silence:** Every silence claim must name what quality bar it applies to and what surfaces were examined. "Silence on internal consistency for the trace tier" is bounded. "The work is done" is unbounded and therefore not a valid convergence claim.
+
+### 4.6 Convergence at the Memory Level
+
+Convergence is visible in the memory structure:
+
+| Tier | Convergence Signal |
+|------|-------------------|
+| Intent | Mandate unchanged (work did not exceed scope) |
+| Trace | Work queue empty, most recent entries show nothing actionable |
+| Evidence | Independent review produced no new findings |
+
+A memory state showing all three signals is converged. A memory state missing any signal is not.
+
+**Example:** 
+- Intent tier: `destination.md` unchanged since session start
+- Trace tier: `retrospect.md` shows "Work queue: empty"; `audit-trail.md` most recent entry declares silence
+- Evidence tier: Session records reviewed by independent evaluator; review notes show no findings
+
+This memory state is converged. The convergence is derivable from the tiers — no declaration required.
+
+### 4.7 Conformance Criteria
+
+A system is conformant if:
+1. Convergence is defined as a memory-state property, not an agent declaration
+2. Work queue exhaustion is necessary but not sufficient for convergence
+3. Independent evaluation is required before convergence can be claimed
+4. Silence claims are bounded (name what was tested, what wasn't)
+
+A system is non-conformant if:
+- The agent can declare itself done
+- Work queue empty alone constitutes convergence
+- No independent review is required
+- Silence claims are unbounded
+
+### 4.8 Relationship to PEA Principles
+
+Convergence is ACM's operationalization of **PEA Principle 3: Convergence Is Silence**.
+
+PEA Principle 3 states: *The system has converged, for purposes of the loop, when diverse independent evaluators find nothing left to change.*
+
+ACM implements this by:
+- Requiring work queue exhaustion (trace tier signal)
+- Requiring independent evaluation (external check of evidence tier)
+- Treating silence as signal, not proof
+- Requiring bounded silence claims
+
+The agent does the work. The memory records it. Independent evaluators assess it. Convergence is what emerges when all three align on "nothing left to change."
+
+---
+
+*[Sections 5-6 to follow in subsequent iterations]*
