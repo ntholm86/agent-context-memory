@@ -53,3 +53,35 @@ Append-only decision log. Each entry records one iteration of work.
 - Loop-effectiveness deferred (arc too short)
 
 **Reflection:** The mandate gate pattern is working — destination existed, was read, interpretation is now visible in this trace entry. Work queue is now explicit. Next: begin SPEC.md with Section 1 (The Three Tiers).
+
+---
+
+## 2026-06-20 — spec-section-1-three-tiers
+
+**Ask:** Write SPEC.md Section 1 (The Three Tiers) per work queue item 1.
+
+**Examination:** SPEC.md did not exist. Destination and README both contain tier tables. The spec needs to formalize: why trust level not memory type, each tier's semantics, authorship rules, conflict resolution.
+
+**Decision:** Create SPEC.md with preamble (abstract) + Section 1 (The Three Tiers). One section per iteration keeps changes reviewable.
+
+**Prediction:** SPEC.md will exist with formal tier definitions. README tier table will be consistent with spec.
+
+**Action:** Created SPEC.md with:
+- Abstract (what ACM is, novel claim, PEA relationship)
+- Section 1: The Three Tiers
+  - 1.1 The Tiers (table)
+  - 1.2 Intent Tier (Mandate) — author, content, mutability, trust semantics
+  - 1.3 Trace Tier (Decisions) — append-only, agent self-report
+  - 1.4 Evidence Tier (Sessions) — capture-author separation, harness-authored
+  - 1.5 Why Trust Level, Not Memory Type — comparison to prior art
+  - 1.6 Conflict Resolution — how tiers interact when they disagree
+
+**Outcome vs. Prediction:** SPEC.md exists. Section 1 is complete. README tier table is consistent (same three tiers, same trust order).
+
+**Reflection:** Section 1 grounds the rest of the spec. The trust-vs-type distinction is the conceptual foundation — if a reader understands that, the structural requirements and mandate gate follow naturally. The conflict resolution subsection (1.6) may need refinement once we write Section 2 (structural requirements).
+
+### Candidate Next Moves
+
+1. **SPEC.md Section 2: Structural Requirements** — capture-author separation, append-only trace, trust-tiered conflict resolution. Builds directly on Section 1's tier definitions.
+2. **SPEC.md Section 3: The Mandate Gate** — the novel claim. Could jump here if operator wants to front-load the differentiation.
+3. **SPEC.md Section 5: Prior Art** — formal citations. Could do this early to establish the "what we inherit vs. what we add" framing.
