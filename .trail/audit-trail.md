@@ -259,3 +259,31 @@ Append-only decision log. Each entry records one iteration of work.
 2. **Verify arXiv IDs** — still pending from Section 5. Could fetch actual papers to confirm.
 3. **README update** — README says "spec defines" but the spec now exists. Could add a link to SPEC.md and note it's complete.
 4. **Declare silence** — the destination's work items are fulfilled. The next move may be operator-directed rather than work-queue-driven.
+
+---
+
+## 2026-06-20 — housekeeping-post-spec-complete
+
+**Ask:** Update retrospect.md (mark work queue complete), verify arXiv IDs, update README (link to SPEC.md).
+
+**Actions:**
+1. **Verified arXiv IDs** — fetched all three paper pages. IDs confirmed:
+   - 2309.02427 = CoALA (Sumers, Yao, Narasimhan, Griffiths)
+   - 2304.03442 = Generative Agents (Park, O'Brien, Cai, Morris, Liang, Bernstein)
+   - 2310.08560 = MemGPT (Packer, Wooders, Lin, Fang, Patil, Stoica, Gonzalez)
+
+2. **Fixed MemGPT citation** — author order was wrong and missing Ion Stoica. Corrected in Section 5.3.
+
+3. **Updated retrospect.md** — marked work queue EMPTY, updated current claims to reflect spec completion, added loop-effectiveness notes now that arc has 8+ entries.
+
+4. **Updated README.md** — added prominent link to SPEC.md at top.
+
+**Reflection:**
+- *Model claim:* The ACM spec v0.1.0 is complete. The destination's requirements are met. The next phase is external review and iteration based on feedback.
+- *Blind spot:* None for this housekeeping run — it was mechanical.
+
+### Candidate Next Moves
+
+1. **Declare silence** — the destination's work items are fulfilled. Next direction is operator-initiated.
+2. **External review** — share spec with independent readers for feedback.
+3. **Evidence tier harness** — implement session capture in this repo to achieve full conformance.
