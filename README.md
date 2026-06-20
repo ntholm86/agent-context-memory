@@ -2,6 +2,8 @@
 
 **A specification for governance-first context memory in autonomous AI agent systems.**
 
+📄 **[Read the full specification →](./SPEC.md)**
+
 If an agent begins work without a principal-authored mandate already in memory, the session is unauthorized. That is the mandate gate. It is what makes context memory *governance-first* rather than merely *persistent*.
 
 ---

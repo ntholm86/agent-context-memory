@@ -484,7 +484,7 @@ Generative Agents asks: *How can agents maintain coherent long-term behavior?* A
 
 ### 5.3 MemGPT
 
-**Citation:** Packer, C., Fang, V., Patil, S. G., Lin, K., Wooders, S., & Gonzalez, J. E. (2023). *MemGPT: Towards LLMs as Operating Systems*. arXiv:2310.08560.
+**Citation:** Packer, C., Wooders, S., Lin, K., Fang, V., Patil, S. G., Stoica, I., & Gonzalez, J. E. (2023). *MemGPT: Towards LLMs as Operating Systems*. arXiv:2310.08560.
 
 **What it establishes:** MemGPT addresses the context window limitation by treating memory as a hierarchical system the agent actively manages. The agent promotes salient information to "main memory" (the context window) and demotes less relevant information to "archival memory" (persistent storage). The agent has explicit memory management functions.
 
