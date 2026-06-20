@@ -1,4 +1,4 @@
-# destination.md — Mandated Context Memory (MCM)
+# destination.md — Agent Context Memory (ACM)
 
 _Written by operator: Nils Wendelboe Holmager | June 20, 2026_
 
@@ -6,35 +6,35 @@ _Written by operator: Nils Wendelboe Holmager | June 20, 2026_
 
 ## What this work is
 
-**Mandated Context Memory (MCM)** is a specification for context memory in autonomous AI agent systems. It covers the full scope of agent memory (all purposes prior work already serves) and adds a governance layer that no prior specification defines.
+**Agent Context Memory (ACM)** is a specification for context memory in autonomous AI agent systems. It covers the full scope of agent memory (all purposes prior work already serves) and adds a governance layer that no prior specification defines.
 
-MCM is the operationalization of Principles of Earned Autonomy (PEA) for the context memory design problem. PEA is the theory; MCM is the implementation standard for memory.
+ACM is the operationalization of Principles of Earned Autonomy (PEA) for the context memory design problem. PEA is the theory; ACM is the implementation standard for memory.
 
 ---
 
 ## The novel claim
 
-**The Mandate Gate:** A pre-work mandate must exist before the agent is authorized to act. The principal (operator/team) must have authored the governing context, and the agent must have read it, before any session of work is valid.
+**Principle 1 — The Mandate Gate:** A pre-work mandate must exist before the agent is authorized to act. The principal (operator/team) must have authored the governing context, and the agent must have read it, before any session of work is valid.
 
-This is what makes context memory *mandated* rather than merely *persistent*. Every prior memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. MCM treats memory as a precondition — the gate that determines whether work can begin at all.
+This is what makes ACM governance-first rather than merely capability-first. Every prior memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. ACM treats memory as a precondition — the gate that determines whether work can begin at all.
 
 ---
 
 ## Relationship to prior art
 
-MCM does not ignore or contradict prior work. It builds on it:
+ACM does not ignore or contradict prior work. It builds on it:
 
-- **CoALA (Sumers et al., 2023)** — formally modeled agent memory as four typed tiers: working, episodic, semantic, procedural. MCM adopts the tiered structure, adds trust-based tier differentiation.
-- **Generative Agents (Park et al., 2023)** — observation → reflection → planning. MCM adopts reflection as a memory operation (retrospect), adds the mandate gate.
-- **MemGPT (Packer et al., 2023)** — hierarchical memory with persistence across sessions, promotion/demotion. MCM adopts cross-session persistence, adds capture-author separation.
+- **CoALA (Sumers et al., 2023)** — formally modeled agent memory as four typed tiers: working, episodic, semantic, procedural. ACM adopts the tiered structure, adds trust-based tier differentiation.
+- **Generative Agents (Park et al., 2023)** — observation → reflection → planning. ACM adopts reflection as a memory operation (retrospect), adds the mandate gate.
+- **MemGPT (Packer et al., 2023)** — hierarchical memory with persistence across sessions, promotion/demotion. ACM adopts cross-session persistence, adds capture-author separation.
 
-These are capability-first memory models: they optimize for what the agent can do. MCM is governance-first: it optimizes for whether the operator can trust what the agent did, and whether the agent was authorized to begin at all.
+These are capability-first memory models: they optimize for what the agent can do. ACM is governance-first: it optimizes for whether the operator can trust what the agent did, and whether the agent was authorized to begin at all.
 
 ---
 
 ## What the spec defines
 
-The MCM spec must define:
+The ACM spec must define:
 
 ### 1. The three tiers (by trust level, not memory type)
 
@@ -67,11 +67,11 @@ The work is done when:
 
 ## What success looks like
 
-A published MCM v1.0 spec that:
+A published ACM v1.0 spec that:
 - Can be adopted independently of PEA (but cites PEA as origin theory)
 - References CoALA/MemGPT/Generative Agents as capability-first prior art
 - Claims the mandate gate and governance-first architecture as novel
-- Defines a directory structure (`.trail/` or `.mcm/`) implementable today
+- Defines a directory structure (`.trail/`) implementable today
 - Is defensible against the literature scan already performed
 
 ---
