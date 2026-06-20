@@ -204,4 +204,120 @@ A system missing any one of these requirements has a governance gap that undermi
 
 ---
 
-*[Sections 3-6 to follow in subsequent iterations]*
+## 3. The Mandate Gate
+
+This is ACM's novel contribution. Prior agent memory models treat memory as a resource the agent uses during work. ACM treats memory as a precondition — a gate that must be passed before work begins.
+
+### 3.1 Definition
+
+**The Mandate Gate:** A pre-work mandate, authored by the principal, must exist in the agent's memory before any session of work is valid.
+
+More precisely:
+1. The intent tier must contain a mandate (governing context) before the session begins
+2. The agent must read the mandate before taking any action
+3. The agent's interpretation of the mandate must be visible in the trace tier
+
+If any of these conditions is not met, the session is **unauthorized** — not merely suboptimal, but structurally invalid from a governance perspective.
+
+### 3.2 What "Session Valid" Means
+
+A session is **valid** if it operates under a mandate that:
+- Existed before the session started
+- Was authored by the principal (not the agent)
+- Was read by the agent before any action
+- Has a visible interpretation in the trace tier
+
+A session is **invalid** if:
+- No mandate exists (the agent acts without authorization)
+- The mandate was created during the session (the agent authorizes itself)
+- The mandate was not read (the agent ignores its authorization)
+- No interpretation is visible (the agent's understanding cannot be checked)
+
+Validity is binary. A session that begins without a mandate cannot become valid by creating one mid-session — the pre-work condition was already violated.
+
+### 3.3 Why Pre-Work, Not During-Work
+
+Prior memory models answer: *What does the agent need to remember to do the job?*
+
+ACM answers: *What must be established before the agent is authorized to begin?*
+
+This is a different question with different implications:
+
+**Memory as resource (prior art):** The agent proceeds. Memory helps it proceed better. If memory is missing, the agent may perform suboptimally, but it still acts.
+
+**Memory as precondition (ACM):** The agent cannot proceed until the mandate exists. Memory isn't just helpful — it's the authorization gate. If the mandate is missing, the agent must stop and request it, not act and hope.
+
+The difference is structural, not a matter of degree. A capability-first model with excellent memory is still not governance-first if the agent can act without a mandate.
+
+### 3.4 Interpretation Visibility
+
+It is not enough for the mandate to exist and be read. The agent's *interpretation* of the mandate must be visible in the trace tier before action begins.
+
+**Why this matters:** Two failure modes are possible even when a mandate exists:
+1. The agent reads the mandate but misinterprets it
+2. The agent reads the mandate but ignores parts of it
+
+If the interpretation is invisible, these failures cannot be detected until after damage is done. Visible interpretation allows the principal (or an auditor) to catch misalignment *before* the agent acts on a wrong interpretation.
+
+**What visible interpretation looks like:**
+- The trace tier contains a statement of what the agent understood the mandate to mean
+- This statement appears before any action entries
+- The statement is specific enough that a reader can identify gaps between it and the mandate
+
+**Example:** The mandate says "improve code quality without changing public APIs." The agent's trace entry shows: "Interpretation: refactor internal implementations, preserve all public method signatures and return types." A reader can verify alignment.
+
+### 3.5 Historical Grounding
+
+The mandate gate is not a novel invention — it is the application of an ancient governance principle to agent memory.
+
+**Roman Law — Mandatum:** In Roman contract law, a *mandatum* was the formal authorization by which a principal empowered an agent to act on their behalf. The mandate:
+- Was authored by the principal, not the agent
+- Had to exist before the agent could act
+- Defined the scope within which the agent was authorized
+- Made the agent accountable for acting outside scope
+
+The structure is identical to ACM's intent tier: principal-authored, pre-existing, scope-defining, accountability-enabling.
+
+**Aviation — Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the mission parameters. The brief:
+- Must be completed before departure (pre-work gate)
+- Covers what the mission is and what constraints apply
+- Requires acknowledgment from all crew members
+- Creates a shared understanding that can be referenced if things go wrong
+
+**Surgery — Surgical Timeout:** Before incision, the surgical team conducts a timeout that verifies patient identity, procedure, and site. The timeout:
+- Is a hard stop (no proceeding until complete)
+- Ensures all participants have the same understanding
+- Creates a documented checkpoint
+
+All three share the same structure: a principal-authored or team-verified mandate must exist and be acknowledged before high-stakes action begins. The agent (pilot, surgeon, Roman agent) cannot proceed on assumption.
+
+### 3.6 Conformance Criteria
+
+A system is conformant if:
+1. The intent tier contains a mandate before any session begins
+2. The agent reads the intent tier as its first action in every session
+3. The trace tier contains the agent's interpretation of the mandate before any other entries
+4. Sessions that begin without a mandate are rejected or flagged as unauthorized
+
+A system is non-conformant if:
+- The agent can begin work without a mandate
+- The agent can create its own mandate
+- The agent can act before reading the mandate
+- The agent's interpretation is not recorded before action
+
+### 3.7 Relationship to PEA Principles
+
+The mandate gate is ACM's operationalization of **PEA Principle 1: Commander's Intent**.
+
+PEA Principle 1 states: *Define the destination, never the route. The agent must interpret and adapt rather than execute a checklist.*
+
+The mandate gate implements this by:
+- Requiring the principal to define the destination (intent tier)
+- Requiring the agent to read and interpret it (visible interpretation)
+- Allowing the agent to determine its own route (action entries in trace tier)
+
+The principal says *what* and *why*. The agent determines *how*. But the agent cannot begin determining *how* until the *what* exists in memory.
+
+---
+
+*[Sections 4-6 to follow in subsequent iterations]*

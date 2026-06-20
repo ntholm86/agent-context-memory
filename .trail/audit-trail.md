@@ -113,3 +113,34 @@ Append-only decision log. Each entry records one iteration of work.
 1. **SPEC.md Section 3: The Mandate Gate** — the novel claim, the reason ACM exists as a separate spec. Front-loads the differentiation.
 2. **SPEC.md Section 4: Convergence** — connects to PEA Principle 3. Defines when work is done at the memory level.
 3. **SPEC.md Section 5: Prior Art** — formal citations. Could defer until content sections are complete.
+
+---
+
+## 2026-06-20 — spec-section-3-mandate-gate
+
+**Ask:** Write SPEC.md Section 3 (The Mandate Gate) per work queue item 3.
+
+**Examination:** Sections 1-2 provide foundation (tiers, structural requirements). Section 3 is the novel claim — what differentiates ACM from prior art. Destination specified: formal precondition, session validity semantics, interpretation visibility, historical grounding.
+
+**Decision:** Write Section 3 with formal definition, validity conditions, why pre-work matters, interpretation visibility requirement, historical grounding (Roman mandatum, aviation brief, surgical timeout), conformance criteria, and PEA mapping.
+
+**Prediction:** Section 3 will clearly articulate the novel claim. Reader will understand memory-as-precondition vs. memory-as-resource distinction.
+
+**Action:** Added Section 3 to SPEC.md:
+- 3.1 Definition — formal statement of the mandate gate
+- 3.2 What "Session Valid" Means — binary validity conditions
+- 3.3 Why Pre-Work, Not During-Work — the conceptual distinction from prior art
+- 3.4 Interpretation Visibility — why interpretation must be in trace tier before action
+- 3.5 Historical Grounding — Roman mandatum, aviation pre-flight brief, surgical timeout
+- 3.6 Conformance Criteria — testable conditions
+- 3.7 Relationship to PEA Principles — maps to Commander's Intent (P1)
+
+**Outcome vs. Prediction:** Section 3 is complete. The pre-work vs. during-work distinction is explicit. Historical grounding shows the pattern is ancient, not invented.
+
+**Reflection:** This is the payload section — if a reader understands only Section 3, they understand what ACM adds. The historical grounding (3.5) may be the most memorable part for adoption purposes: "the same pattern used in Roman law, aviation, and surgery." The interpretation visibility requirement (3.4) is subtle but important — it's not enough to have a mandate, the agent's understanding must be checkable.
+
+### Candidate Next Moves
+
+1. **SPEC.md Section 4: Convergence** — when work is done at the memory level. Completes the governance loop (start + middle + end).
+2. **SPEC.md Section 5: Prior Art** — formal citations. Now that Sections 1-3 establish the framing, citations contextualize it.
+3. **SPEC.md Section 6: Reference Implementation** — practical .trail/ guidance. Could defer until spec content is complete.
