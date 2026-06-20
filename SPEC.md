@@ -534,4 +534,187 @@ ACM does not claim novelty for tiered memory, reflection, or cross-session persi
 
 ---
 
-*[Section 6 to follow in subsequent iteration]*
+## 6. Reference Implementation
+
+This section defines a minimal file-based implementation of ACM using a `.trail/` directory structure. This specification repository itself uses this structure and serves as a working example.
+
+### 6.1 Directory Structure
+
+An ACM-conformant repository contains a `.trail/` directory at the repository root with the following structure:
+
+```
+.trail/
+├── destination.md      # Intent tier (principal-authored mandate)
+├── audit-trail.md      # Trace tier (agent decisions, append-only)
+├── retrospect.md       # Trace tier (derived orientation, rewritten each run)
+└── sessions/           # Evidence tier (harness-captured session records)
+    ├── 2026-06-20-001.jsonl
+    └── ...
+```
+
+**Required files:**
+- `destination.md` — the intent tier. Must exist before any agent session.
+- `audit-trail.md` — the trace tier. Created by first agent run, append-only thereafter.
+
+**Optional files:**
+- `retrospect.md` — derived trace tier file. Contains current orientation and work queue. Rewritten (not appended) by retrospect operations.
+- `sessions/*.jsonl` — evidence tier. Harness-captured LLM calls. Format and naming are implementation-dependent.
+
+### 6.2 File Semantics by Tier
+
+#### Intent Tier: `destination.md`
+
+**Purpose:** The principal's mandate — what the agent is authorized to do, why, and what constraints apply.
+
+**Author:** Principal only. The agent must never write to this file.
+
+**Content requirements:**
+- What the work is (scope definition)
+- What success looks like (completion criteria)
+- What constraints apply (quality bar, style rules, forbidden actions)
+
+**Mutability:** The principal may update or replace at any time. Changes should be appended or clearly marked; destructive rewrites lose the history of how the mandate evolved.
+
+**Example structure:**
+```markdown
+# destination.md — [Project Name]
+
+## What this work is
+[Scope definition]
+
+## What success looks like
+[Completion criteria]
+
+## Constraints
+[Quality bar, rules, forbidden actions]
+```
+
+#### Trace Tier: `audit-trail.md`
+
+**Purpose:** The agent's decision log — what was decided, why, and what happened.
+
+**Author:** Agent only. The principal may read but should not edit.
+
+**Content requirements:** Each entry must include:
+- Date and entry identifier (slug)
+- Interpretation of the ask
+- Decision made (change, redesign argument, or silence)
+- Action taken and verification evidence
+- Reflection (model claim, blind spot, imagined reader pushback)
+
+**Mutability:** Append-only. The agent may add entries but never modify or delete existing entries. This is the structural guarantee that makes the trace tier trustworthy.
+
+**Format:** Markdown with entries separated by horizontal rules (`---`). Each entry is a dated block with a unique slug.
+
+#### Trace Tier: `retrospect.md`
+
+**Purpose:** Derived orientation — the current state of the work as understood by the loop.
+
+**Author:** Agent (retrospect operation). The principal may read but should not edit.
+
+**Content requirements:**
+- Current claims about the target (what the arc shows is true)
+- Work queue (what the next runs should test)
+- Active operational rules (lessons learned that constrain future runs)
+
+**Mutability:** Rewritten each retrospect run (not append-only). This file represents the *current* orientation, not the history. The history lives in `audit-trail.md`.
+
+#### Evidence Tier: `sessions/*.jsonl`
+
+**Purpose:** Independently captured session records — what actually happened at the LLM layer.
+
+**Author:** Harness (independent capture mechanism). Neither agent nor principal should write to these files.
+
+**Content requirements:** Implementation-dependent. At minimum:
+- Timestamp
+- Model identifier
+- Prompt sent
+- Response received
+- Token counts
+
+**Mutability:** Immutable after capture. Once a session record is written, it cannot be modified.
+
+**Note:** The evidence tier is optional for minimal conformance but required for full ACM conformance. Without independent capture, the trace tier is the only record of what happened, and the agent authored it.
+
+### 6.3 Minimal Conformance
+
+A system is **minimally ACM-conformant** if:
+
+1. **Intent tier exists before work begins.** A `destination.md` (or equivalent) must exist and be read by the agent before any session.
+
+2. **Trace tier is append-only.** The agent's decision log cannot be modified after entries are written.
+
+3. **Author separation is enforced.** The agent cannot write to the intent tier. The principal should not write to the trace tier.
+
+4. **The mandate gate is implemented.** The system checks for intent-tier existence before authorizing agent action.
+
+### 6.4 Full Conformance
+
+A system is **fully ACM-conformant** if it meets minimal conformance plus:
+
+1. **Evidence tier exists.** An independent harness captures LLM calls before the agent can respond.
+
+2. **Capture-author separation is enforced.** The agent cannot write to the evidence tier.
+
+3. **Convergence is structurally derivable.** The system can determine completion from the memory state (work queue empty + independent review) without relying on agent declaration.
+
+4. **Trust-tiered conflict resolution is implemented.** When tiers disagree, the system resolves toward higher trust (Intent > Evidence > Trace).
+
+### 6.5 This Repository as Reference
+
+This specification repository (`agent-context-memory`) implements ACM:
+
+- **Intent tier:** `.trail/destination.md` — authored by the operator, defines what the spec must achieve
+- **Trace tier:** `.trail/audit-trail.md` — agent decisions for each spec section, append-only
+- **Trace tier:** `.trail/retrospect.md` — current orientation and work queue
+- **Evidence tier:** Not implemented in this repository (no harness capture)
+
+This repository is therefore minimally conformant but not fully conformant. Full conformance would require adding an independent session capture harness.
+
+The spec documents what the directory structure means. This repository demonstrates that the structure works.
+
+---
+
+## Appendix A: Relationship to PEA Principles
+
+ACM operationalizes the three principles of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy):
+
+| PEA Principle | ACM Implementation |
+|---------------|-------------------|
+| **P1: Commander's Intent** | The Mandate Gate (Section 3) — work cannot begin without principal-authored intent |
+| **P2: Observable Autonomy** | Capture-Author Separation (Section 2.1) + Append-Only Trace (Section 2.2) — agent reasoning is recorded and cannot be rewritten |
+| **P3: Convergence Is Silence** | Convergence (Section 4) — completion is a memory-state property, not an agent declaration |
+
+PEA is the theory. ACM is the implementation standard for the memory design problem.
+
+---
+
+## Appendix B: Glossary
+
+**Agent:** An autonomous system that takes actions on behalf of a principal.
+
+**Capture-author separation:** The structural requirement that the party recording evidence is not the party whose behavior is being recorded.
+
+**Convergence:** The state where work is done — work queue empty and independent evaluators find nothing left to change.
+
+**Evidence tier:** Memory captured by an independent harness, not authored by the agent.
+
+**Harness:** An independent system that captures LLM calls and responses before the agent can respond.
+
+**Intent tier:** Memory authored by the principal, defining what the agent is authorized to do.
+
+**Mandate:** The principal's governing context — what, why, and what constraints apply.
+
+**Mandate gate:** The requirement that a mandate must exist in memory before any agent session is valid.
+
+**Principal:** The party with standing to authorize agent action (human operator, team, or organization).
+
+**Silence:** Independent evaluators finding nothing left to change. A signal, not a proof.
+
+**Trace tier:** Memory authored by the agent, recording its decisions and reasoning.
+
+**Trust tier:** A layer of memory organized by trust level (who authored it, whether it can be modified, how conflicts resolve).
+
+---
+
+*End of specification.*

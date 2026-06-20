@@ -216,3 +216,46 @@ Append-only decision log. Each entry records one iteration of work.
 1. **SPEC.md Section 6: Reference Implementation** — the final section. Defines the `.trail/` structure, file semantics, minimal conformance. Makes the spec implementable.
 2. **Verify arXiv IDs** — fetch the actual papers to confirm IDs are correct. Low urgency if IDs came from a prior literature scan.
 3. **Update retrospect.md** — work queue items 1-5 done, only item 6 remains. Could update before or after Section 6.
+
+---
+
+## 2026-06-20 — spec-section-6-reference-implementation
+
+**Ask:** Write SPEC.md Section 6 (Reference Implementation) per work queue item 6.
+
+**Lenses applied:**
+- *Purpose:* Does Section 6 make the spec implementable? Yes — defines `.trail/` structure, file semantics per tier, minimal vs. full conformance criteria.
+- *Overburden:* Is the section asking too much of implementers? No — minimal conformance is 4 requirements; full conformance adds 4 more. Reasonable scope.
+
+**Decision:** One incremental change — write Section 6 and appendices.
+
+**Prediction:** Section 6 will define `.trail/` directory structure, file semantics for each tier, minimal/full conformance criteria. This repo will be cited as reference. Added appendices for PEA mapping and glossary.
+
+**Action:** Added Section 6 and Appendices to SPEC.md:
+- 6.1 Directory Structure — `.trail/` layout with required/optional files
+- 6.2 File Semantics by Tier — purpose, author, content, mutability for each file
+- 6.3 Minimal Conformance — 4 testable criteria
+- 6.4 Full Conformance — 4 additional criteria (adds evidence tier)
+- 6.5 This Repository as Reference — notes this repo is minimally but not fully conformant
+- Appendix A: Relationship to PEA Principles — mapping table
+- Appendix B: Glossary — key terms defined
+
+**Outcome vs. Prediction:** Prediction held. Section 6 is ~150 lines including appendices. The spec is now complete.
+
+**Reflection:**
+- *Model claim:* [!REALIZATION] The ACM spec is complete. Sections 1-6 cover the full architecture — conceptual, contextual, and practical. The spec can be adopted independently of PEA. This repo demonstrates the pattern it specifies (minimal conformance).
+- *Blind spot:* Evidence tier format (sessions/*.jsonl) is specified but not implemented in this repo. The format may need revision when someone builds an actual harness.
+- *Imagined reader:* "Where are the conformance tests?" Fair criticism. The spec defines what to test but not how. A test suite could be a follow-on artifact.
+
+**Trigger evaluation:**
+- Recurring finding-class: not fired (Section 5 = literature; Section 6 = implementation)
+- About to declare silence: not fired (made a change)
+- Contradicts prior realization: not fired
+- Operator explicitly asked: not fired
+
+### Candidate Next Moves
+
+1. **Update retrospect.md** — work queue items 1-6 all done. The work queue should be marked complete.
+2. **Verify arXiv IDs** — still pending from Section 5. Could fetch actual papers to confirm.
+3. **README update** — README says "spec defines" but the spec now exists. Could add a link to SPEC.md and note it's complete.
+4. **Declare silence** — the destination's work items are fulfilled. The next move may be operator-directed rather than work-queue-driven.
