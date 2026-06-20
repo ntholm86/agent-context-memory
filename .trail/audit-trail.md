@@ -85,3 +85,31 @@ Append-only decision log. Each entry records one iteration of work.
 1. **SPEC.md Section 2: Structural Requirements** — capture-author separation, append-only trace, trust-tiered conflict resolution. Builds directly on Section 1's tier definitions.
 2. **SPEC.md Section 3: The Mandate Gate** — the novel claim. Could jump here if operator wants to front-load the differentiation.
 3. **SPEC.md Section 5: Prior Art** — formal citations. Could do this early to establish the "what we inherit vs. what we add" framing.
+
+---
+
+## 2026-06-20 — spec-section-2-structural-requirements
+
+**Ask:** Write SPEC.md Section 2 (Structural Requirements) per work queue item 2.
+
+**Examination:** Section 1 defined tiers conceptually. Section 2 needed to formalize enforceable properties with conformance criteria. Destination listed three requirements: capture-author separation, append-only trace, trust-tiered resolution.
+
+**Decision:** Write Section 2 with each requirement formally defined, rationale stated, and conformance criteria specified (testable conditions for compliance/non-compliance).
+
+**Prediction:** SPEC.md will have Section 2 with testable structural requirements. An implementer can verify conformance against explicit criteria.
+
+**Action:** Added Section 2 to SPEC.md:
+- 2.1 Capture-Author Separation — definition, rationale, conformance criteria, reference implementation link
+- 2.2 Append-Only Trace — definition, rationale, conformance criteria, git implementation note
+- 2.3 Trust-Tiered Conflict Resolution — definition, rationale, conformance criteria, example
+- 2.4 Requirement Summary — table + interdependency explanation
+
+**Outcome vs. Prediction:** Section 2 is complete. Each requirement has explicit conformance/non-conformance criteria. An implementer can test against them.
+
+**Reflection:** The conformance criteria make the spec auditable — you can check whether a system meets each requirement. The interdependency paragraph (2.4) explains why all three are needed together. Section 1.6 (conflict resolution) and Section 2.3 overlap slightly; could consolidate in a future pass, but not blocking.
+
+### Candidate Next Moves
+
+1. **SPEC.md Section 3: The Mandate Gate** — the novel claim, the reason ACM exists as a separate spec. Front-loads the differentiation.
+2. **SPEC.md Section 4: Convergence** — connects to PEA Principle 3. Defines when work is done at the memory level.
+3. **SPEC.md Section 5: Prior Art** — formal citations. Could defer until content sections are complete.
