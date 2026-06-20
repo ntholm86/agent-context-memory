@@ -29,3 +29,27 @@ Append-only decision log. Each entry records one iteration of work.
 **Action:** Renamed repo from `mandated-context-memory` to `agent-context-memory`. Updated destination.md and audit-trail.md to reflect ACM.
 
 **Reflection:** ACM is cleaner. The name doesn't require explanation; it describes what it is. The novel contribution (mandate gate) is a principle inside the spec, same structural pattern as PEA.
+
+---
+
+## 2026-06-20 — initial-retrospect
+
+**Ask:** Generate work queue from destination using retrospect skill.
+
+**Scope:** Read full arc (2 entries) against destination. Derive what must be built to fulfill the destination.
+
+**Arc-read:**
+- Target is in scaffolding phase — naming settled, spec not started
+- Destination defines 4 sections SPEC.md must cover: tiers, structural requirements, mandate gate, convergence
+- Prior art is named but not formally cited
+- README is complete; SPEC.md is empty
+
+**Decision:** Write retrospect.md with 6-item work queue covering each spec section the destination requires.
+
+**Action:** Created .trail/retrospect.md with:
+- 5 current claims about target state
+- 6-item work queue (the spec sections)
+- 4 active operational rules
+- Loop-effectiveness deferred (arc too short)
+
+**Reflection:** The mandate gate pattern is working — destination existed, was read, interpretation is now visible in this trace entry. Work queue is now explicit. Next: begin SPEC.md with Section 1 (The Three Tiers).
