@@ -1,0 +1,68 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v0.1.0)'
+        required: true
+      notes:
+        description: 'Release notes (one line summary)'
+        required: false
+        default: ''
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate version format
+        run: |
+          if [[ ! "${{ github.event.inputs.version }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Version must be in format vX.Y.Z"
+            exit 1
+          fi
+
+      - name: Ensure tag exists
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          git config user.email "action@github.com"
+          git config user.name "GitHub Actions"
+          if git ls-remote --exit-code --tags origin "refs/tags/${VERSION}" >/dev/null 2>&1; then
+            echo "Tag ${VERSION} already exists on origin; reusing."
+          else
+            if git rev-parse "${VERSION}" >/dev/null 2>&1; then
+              echo "Tag ${VERSION} already exists locally; pushing."
+            else
+              git tag "${VERSION}"
+            fi
+            git push origin "${VERSION}"
+          fi
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          TITLE="Agent Context Memory ${VERSION}"
+          NOTES="${{ github.event.inputs.notes }}"
+
+          if gh release view "${VERSION}" >/dev/null 2>&1; then
+            echo "Release ${VERSION} already exists; updating metadata."
+            gh release edit "${VERSION}" \
+              --title "${TITLE}" \
+              --notes "${NOTES:-Release ${VERSION}}"
+          else
+            echo "Creating release ${VERSION}."
+            gh release create "${VERSION}" \
+              --title "${TITLE}" \
+              --notes "${NOTES:-Release ${VERSION}}" \
+              --generate-notes
+          fi

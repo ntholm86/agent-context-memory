@@ -287,3 +287,41 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Declare silence** — the destination's work items are fulfilled. Next direction is operator-initiated.
 2. **External review** — share spec with independent readers for feedback.
 3. **Evidence tier harness** — implement session capture in this repo to achieve full conformance.
+
+---
+
+## 2026-06-20 — zenodo-preparation
+
+**Ask:** Prepare ACM for academic submission on Zenodo, following PEA's pattern.
+
+**Examination:**
+- PEA has `.zenodo.json` with HTML description, ORCID, keywords, related_identifiers
+- PEA has `.github/workflows/release.yml` for consistent release creation
+- ACM had CITATION.cff but no Zenodo metadata
+
+**Decision:** Create Zenodo metadata and release workflow.
+
+**Prediction:** ACM will be Zenodo-ready. When GitHub release is created and Zenodo webhook fires, ACM will receive a DOI and appear linked to PEA.
+
+**Actions:**
+1. Created `.zenodo.json` with:
+   - Title matching CITATION.cff
+   - HTML description summarizing the contribution (mandate gate, tiers, prior art)
+   - Creator with ORCID (0009-0009-7157-9084)
+   - Keywords matching CITATION.cff
+   - `related_identifiers` linking to PEA (10.5281/zenodo.19732890) with relation `isDerivedFrom`
+   - upload_type: software, license: CC-BY-SA-4.0, access_right: open
+
+2. Created `.github/workflows/release.yml` for GitHub Actions release creation.
+
+**Outcome vs. Prediction:** Files created. Zenodo integration requires manual webhook setup in Zenodo web UI (connect GitHub repo to Zenodo). After that, creating a GitHub release will trigger Zenodo deposit.
+
+**Reflection:**
+- *Model claim:* ACM is now publication-ready. The file structure matches PEA's pattern. The `isDerivedFrom` relationship correctly positions ACM as an operationalization of PEA.
+- *Blind spot:* Did not verify if the GitHub repo is already connected to Zenodo. The webhook must be set up manually in Zenodo's web interface.
+
+### Candidate Next Moves
+
+1. **Connect to Zenodo** — manually link the GitHub repo to Zenodo via Zenodo's GitHub integration page.
+2. **Create v0.1.0 release** — trigger the workflow or create release manually. This will mint the DOI.
+3. **Update CITATION.cff** — add the DOI after Zenodo assigns it.
