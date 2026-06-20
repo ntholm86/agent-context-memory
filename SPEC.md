@@ -440,4 +440,98 @@ The agent does the work. The memory records it. Independent evaluators assess it
 
 ---
 
-*[Sections 5-6 to follow in subsequent iterations]*
+## 5. Prior Art
+
+ACM builds on prior work in agent memory architecture. This section identifies the main precedents, states what ACM inherits from each, and clarifies where ACM's contribution lies.
+
+### 5.1 Cognitive Architectures for Language Agents (CoALA)
+
+**Citation:** Sumers, T. R., Yao, S., Narasimhan, K., & Griffiths, T. L. (2023). *Cognitive Architectures for Language Agents*. arXiv:2309.02427.
+
+**What it establishes:** CoALA provides a formal framework for language agent architecture organized around memory types: working memory (active context), episodic memory (past experiences), semantic memory (world knowledge), and procedural memory (action repertoire). The framework unifies prior agent designs under a cognitive-science-inspired taxonomy.
+
+**What ACM inherits:**
+- The recognition that agent memory requires explicit architectural treatment, not ad-hoc prompt engineering
+- The multi-tier structure (though ACM organizes by trust, not function)
+- The distinction between transient working memory and persistent long-term memory
+
+**What ACM adds:**
+- Trust-level organization orthogonal to functional types
+- The mandate gate — a governance precondition absent from CoALA's capability-focused design
+- Capture-author separation as a structural requirement
+- Convergence as a memory-level property
+
+CoALA asks: *What kinds of memory does an agent need?* ACM asks: *Who authored each memory tier, and can it be trusted?*
+
+### 5.2 Generative Agents
+
+**Citation:** Park, J. S., O'Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). *Generative Agents: Interactive Simulacra of Human Behavior*. arXiv:2304.03442.
+
+**What it establishes:** Generative Agents introduced the observation → reflection → planning loop for persistent agents. Agents observe their environment, form reflections (higher-order summaries of observations), and use reflections to plan future action. Memory is retrieved by relevance, recency, and importance.
+
+**What ACM inherits:**
+- Reflection as a first-class memory operation (ACM's retrospect tier parallels this)
+- The observation → reasoning → action cycle
+- Importance-weighted memory retrieval as a design pattern
+
+**What ACM adds:**
+- Principal-authored intent tier (Generative Agents have no concept of externally-imposed mandate)
+- Append-only trace constraint (Generative Agents can rewrite reflections)
+- Independent evidence capture (Generative Agents have no harness-captured session records)
+- Explicit governance layer (Generative Agents optimize for behavior plausibility, not accountability)
+
+Generative Agents asks: *How can agents maintain coherent long-term behavior?* ACM asks: *How can principals verify that agent behavior was authorized?*
+
+### 5.3 MemGPT
+
+**Citation:** Packer, C., Fang, V., Patil, S. G., Lin, K., Wooders, S., & Gonzalez, J. E. (2023). *MemGPT: Towards LLMs as Operating Systems*. arXiv:2310.08560.
+
+**What it establishes:** MemGPT addresses the context window limitation by treating memory as a hierarchical system the agent actively manages. The agent promotes salient information to "main memory" (the context window) and demotes less relevant information to "archival memory" (persistent storage). The agent has explicit memory management functions.
+
+**What ACM inherits:**
+- Hierarchical memory with explicit tier boundaries
+- Agent-managed memory promotion/demotion as a design pattern
+- Cross-session persistence as a core requirement
+
+**What ACM adds:**
+- Trust differentiation between tiers (MemGPT tiers differ by salience, not by authorship or trust)
+- The mandate gate (MemGPT has no pre-work authorization requirement)
+- Capture-author separation (MemGPT's agent writes all tiers)
+- Convergence as a structural property (MemGPT has no completion model)
+
+MemGPT asks: *How can agents effectively use more memory than fits in context?* ACM asks: *How can observers trust what agents claim about their memory?*
+
+### 5.4 The Governance Gap
+
+The three prior works share a common assumption: memory exists to serve the agent's capabilities. They optimize for what the agent can do — retrieve relevant context, maintain coherent behavior, overcome context limits.
+
+ACM starts from a different assumption: memory exists to serve the principal's governance needs. The first question is not "how can the agent use memory effectively?" but "how can the principal verify that the agent was authorized and that its account of what happened is trustworthy?"
+
+This is the governance gap:
+
+| System | Primary Concern | Mandate? | Evidence Capture? | Append-Only? |
+|--------|-----------------|----------|-------------------|--------------|
+| CoALA | Capability (what memory types does the agent need?) | No | No | No |
+| Generative Agents | Behavior (how to maintain coherent action?) | No | No | No |
+| MemGPT | Scale (how to use more memory than fits?) | No | No | No |
+| **ACM** | **Governance (was the agent authorized? can we trust its account?)** | **Yes** | **Yes** | **Yes** |
+
+ACM does not replace these systems. An ACM-conformant implementation may use CoALA's functional memory types internally, Generative Agents' reflection loop, or MemGPT's hierarchical memory management. The trust-tier organization is an additional layer that addresses questions the capability-focused systems do not ask.
+
+### 5.5 Novel Claims
+
+ACM claims novelty for:
+
+1. **The Mandate Gate (Section 3)** — the requirement that a principal-authored mandate must exist in memory before any agent session is valid. No prior system requires pre-work authorization as a structural property.
+
+2. **Capture-Author Separation (Section 2.1)** — the requirement that the evidence tier be captured by an independent harness, not authored by the agent. No prior system separates observation capture from agent authorship.
+
+3. **Trust-Tier Organization (Section 1)** — the organization of memory by trust level (who authored it, whether it can be modified, how conflicts resolve) rather than by functional type. This is orthogonal to prior taxonomies.
+
+4. **Convergence as Memory Property (Section 4)** — the definition of work completion as a structural property of the memory state, not an agent declaration. No prior system defines convergence at the memory level.
+
+ACM does not claim novelty for tiered memory, reflection, or cross-session persistence. These are established contributions of prior work.
+
+---
+
+*[Section 6 to follow in subsequent iteration]*
