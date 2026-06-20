@@ -1,0 +1,34 @@
+{
+  "title": "Agent Context Memory: A Governance-First Specification for AI Agent Context Memory",
+  "version": "0.1.0",
+  "description": "<p><strong>What this is.</strong> A specification for governance-first context memory in autonomous AI agent systems.</p>\n<p><strong>The claimed contribution.</strong> The <em>Mandate Gate</em> (Principle 1): a pre-work mandate, authored by the principal, must exist in the agent's memory before any session of work is valid. This makes context memory governance-first rather than capability-first. Prior memory models (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from <em>during</em> work. ACM treats memory as a <em>precondition</em> — the gate that determines whether work can begin at all.</p>\n<p><strong>Why it matters.</strong> The question is not only how agents use memory effectively, but on what evidence a principal should trust that the agent was authorized to act and that its account of what happened is reliable.</p>\n<p><strong>Relationship to PEA.</strong> ACM is the operationalization of <a href=\"https://github.com/ntholm86/principles-of-earned-autonomy\">Principles of Earned Autonomy (PEA)</a> for the context memory design problem. PEA is the theory; ACM is the implementation standard for memory.</p>\n<p><strong>Core structure.</strong> Three memory tiers organized by <em>trust level</em> (not memory type): Intent (principal-authored mandate), Trace (agent decisions, append-only), Evidence (harness-captured session records). Structural requirements: mandate gate, capture-author separation, append-only trace, trust-tiered conflict resolution. Convergence defined as a memory-level property.</p>\n<p><strong>Prior art positioning.</strong> Formal citations to CoALA (arXiv:2309.02427), Generative Agents (arXiv:2304.03442), and MemGPT (arXiv:2310.08560). ACM inherits tiered memory, reflection, and persistence from these capability-first models; ACM adds the governance layer.</p>\n<p><strong>Reference implementation.</strong> The <code>.trail/</code> directory pattern. This repository self-demonstrates ACM.</p>\n<p><strong>Read in this order.</strong></p>\n<ol>\n<li><strong>README.md</strong> — overview and elevator pitch</li>\n<li><strong>SPEC.md</strong> — the full specification (Sections 1-6 + Appendices)</li>\n<li><strong>.trail/destination.md</strong> — the operator-held mandate for this spec's own development</li>\n</ol>",
+  "creators": [
+    {
+      "name": "Holmager, Nils Wendelboe",
+      "orcid": "0009-0009-7157-9084"
+    }
+  ],
+  "upload_type": "software",
+  "license": "CC-BY-SA-4.0",
+  "access_right": "open",
+  "keywords": [
+    "context memory",
+    "agent memory",
+    "AI governance",
+    "mandate gate",
+    "autonomous agents",
+    "earned autonomy",
+    "observable autonomy",
+    "capture-author separation",
+    "large language models",
+    "agent safety"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.19732890",
+      "relation": "isDerivedFrom",
+      "resource_type": "software",
+      "scheme": "doi"
+    }
+  ]
+}
