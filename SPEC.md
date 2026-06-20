@@ -110,4 +110,98 @@ When tiers disagree, resolve toward higher trust:
 
 ---
 
-*[Sections 2-6 to follow in subsequent iterations]*
+## 2. Structural Requirements
+
+Section 1 defined the three tiers. This section defines the structural properties that make the tier organization enforceable. These are not suggestions — they are conformance requirements. A system that violates them is not ACM-conformant.
+
+### 2.1 Capture-Author Separation
+
+**Definition:** The party being observed cannot author its own observation record.
+
+In ACM terms: the agent cannot write to the evidence tier. The evidence tier is authored by an independent harness that captures LLM interactions before the agent receives the response.
+
+**Why it matters:** If the agent could author its own evidence, the evidence tier would be no more trustworthy than the trace tier — both would be agent self-report. Capture-author separation is what gives the evidence tier independent standing.
+
+This is the same structural property that makes audit logs trustworthy in security systems, flight recorders trustworthy in aviation, and financial ledgers trustworthy in accounting. The party with incentive to misrepresent cannot be the party that writes the record.
+
+**Conformance criteria:**
+
+A system is conformant if:
+1. The evidence tier is written by a component architecturally separate from the agent
+2. The agent cannot modify, delete, or suppress evidence-tier content
+3. Evidence capture occurs before the agent receives LLM responses (not reconstructed after)
+
+A system is non-conformant if:
+- The agent writes its own session logs
+- The agent can filter which interactions are captured
+- Evidence is reconstructed from agent memory rather than captured independently
+
+**Reference implementation:** The [LLM Harness Protocol](https://github.com/ntholm86/principles-of-earned-autonomy) implements capture-author separation by acting as a transparent proxy between the agent and the LLM API. The harness writes session records to `sessions/*.jsonl` before forwarding responses to the agent.
+
+### 2.2 Append-Only Trace
+
+**Definition:** The agent may add to its decision history but may not modify or delete existing entries.
+
+In ACM terms: the trace tier (`audit-trail.md`, `retrospect.md`, etc.) grows monotonically. Corrections are made by appending new entries that reference and supersede earlier ones, not by editing the earlier entries.
+
+**Why it matters:** If the agent could edit its past decisions, it could rationalize failures after the fact, making the trace tier unreliable for understanding what actually happened. Append-only constraint prevents history rewriting.
+
+This is distinct from immutability. The trace tier *does* change — new entries are added. But it changes only by extension, never by revision. A reader can trust that entry N was written before entry N+1 and has not been modified since.
+
+**Conformance criteria:**
+
+A system is conformant if:
+1. New trace entries are appended, never inserted or overwritten
+2. Existing trace entries cannot be modified after commit
+3. Corrections reference the entry being corrected (e.g., `[!REVERSAL]` markers)
+
+A system is non-conformant if:
+- The agent can edit past trace entries
+- The agent can delete trace entries
+- The system allows "silent" corrections that don't reference what was corrected
+
+**Implementation note:** Git provides natural append-only semantics when used correctly. Each commit is a new append; the history is immutable once pushed. However, force-push and history rewriting violate append-only. A conformant implementation either disables force-push or treats rewritten history as a governance violation.
+
+### 2.3 Trust-Tiered Conflict Resolution
+
+**Definition:** When information in different tiers conflicts, resolve toward the tier with higher trust.
+
+In ACM terms:
+- Intent tier (principal-authored) overrides trace tier (agent-authored)
+- Evidence tier (independently captured) overrides trace tier (agent-authored)
+- Intent vs. evidence conflicts are governance findings, not resolution problems
+
+**Why it matters:** Without a resolution rule, conflicting information creates ambiguity. The trust hierarchy provides a deterministic answer: when tiers disagree, the tier with less author-bias wins.
+
+**Conformance criteria:**
+
+A system is conformant if:
+1. The system has a defined resolution order for tier conflicts
+2. The resolution order favors lower author-bias (principal > independent > agent)
+3. Intent-evidence conflicts are surfaced as findings rather than silently resolved
+
+A system is non-conformant if:
+- Trace-tier content can override intent-tier content
+- Agent self-report is treated as authoritative when evidence contradicts it
+- Conflicts between tiers are ignored or hidden
+
+**Example:** The agent's trace tier claims it ran 5 iterations. The evidence tier shows 7 LLM calls. This is a discrepancy. Under trust-tiered resolution, the evidence (7 calls) is authoritative for what happened; the trace (5 iterations) may reflect how the agent *categorized* what happened, but it does not override the evidence.
+
+### 2.4 Requirement Summary
+
+| Requirement | What it constrains | Why it matters |
+|-------------|-------------------|----------------|
+| Capture-author separation | Agent cannot author evidence tier | Evidence is independently verifiable |
+| Append-only trace | Agent cannot edit past decisions | History cannot be rewritten |
+| Trust-tiered resolution | Conflicts resolve toward higher trust | Ambiguity has a deterministic answer |
+
+These three requirements are interdependent:
+- Capture-author separation makes the evidence tier trustworthy enough to override the trace tier
+- Append-only trace ensures the trace tier's value (decision history) is preserved even though it's agent-authored
+- Trust-tiered resolution defines how the tiers interact when they contain conflicting information
+
+A system missing any one of these requirements has a governance gap that undermines the others.
+
+---
+
+*[Sections 3-6 to follow in subsequent iterations]*
