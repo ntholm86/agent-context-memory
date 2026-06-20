@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this specification, please cite it as below."
+type: software
+title: "Agent Context Memory: A Governance-First Specification for AI Agent Context Memory"
+abstract: >
+  ACM (Agent Context Memory) is a specification for governance-first context memory
+  in autonomous AI agent systems. It covers the full scope of agent memory —
+  episodic, semantic, and working memory as prior work establishes — and adds a
+  governance layer no prior specification defines. The novel contribution is the
+  Mandate Gate (Principle 1): a pre-work mandate, authored by the principal, must
+  exist in the agent's memory before any session of work is valid. This makes
+  context memory governance-first rather than capability-first. Prior models
+  (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent
+  draws from during work. ACM treats memory as a precondition — the gate that
+  determines whether work can begin at all. ACM also defines three memory tiers
+  organized by trust level (intent / trace / evidence), structural capture-author
+  separation, and convergence as a memory-level property. ACM is the operationalization
+  of Principles of Earned Autonomy (PEA) for the context memory design problem.
+  The reference implementation is the .trail/ directory pattern.
+authors:
+  - family-names: Holmager
+    given-names: Nils Wendelboe
+    orcid: "https://orcid.org/0009-0009-7157-9084"
+repository-code: "https://github.com/ntholm86/agent-context-memory"
+license: CC-BY-SA-4.0
+version: "0.1.0"
+date-released: "2026-06-20"
+keywords:
+  - context memory
+  - agent memory
+  - AI governance
+  - mandate gate
+  - autonomous agents
+  - earned autonomy
+  - observable autonomy
+  - capture-author separation
+  - large language models
+  - agent safety
