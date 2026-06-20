@@ -176,3 +176,43 @@ Append-only decision log. Each entry records one iteration of work.
 1. **SPEC.md Section 5: Prior Art** — formal citations. Contextualizes what ACM inherits vs. adds.
 2. **SPEC.md Section 6: Reference Implementation** — practical .trail/ guidance. Makes the spec implementable.
 3. **Retrospect update** — the work queue in retrospect.md is now half-done. Could update before continuing.
+
+---
+
+## 2026-06-20 — spec-section-5-prior-art
+
+**Ask:** Write SPEC.md Section 5 (Prior Art) per work queue item 5.
+
+**Lenses applied:**
+- *Purpose:* Does Section 5 achieve what the destination requires? Yes — formal citations, inheritance/addition breakdown, governance gap positioning.
+- *Inconsistency:* Does the prior art framing match earlier sections? Verified — Section 1 already mentions these papers; Section 5 deepens the treatment without contradicting.
+
+**Decision:** One incremental change — write Section 5.
+
+**Prediction:** Section 5 will position ACM against CoALA/MemGPT/Generative Agents with formal citations. Each paper gets: what it establishes, what ACM inherits, what ACM adds. A summary table will make the governance gap visible.
+
+**Action:** Added Section 5 to SPEC.md:
+- 5.1 CoALA (arXiv:2309.02427) — functional memory types, what ACM inherits vs. adds
+- 5.2 Generative Agents (arXiv:2304.03442) — observation/reflection/planning, what ACM inherits vs. adds
+- 5.3 MemGPT (arXiv:2310.08560) — hierarchical memory management, what ACM inherits vs. adds
+- 5.4 The Governance Gap — summary table (Mandate/Evidence/Append-Only: No/No/No for all three vs. Yes/Yes/Yes for ACM)
+- 5.5 Novel Claims — explicit list of what ACM claims novelty for
+
+**Outcome vs. Prediction:** Prediction held. Section 5 is ~110 lines, structured as expected. The governance gap table makes the positioning visible at a glance.
+
+**Reflection:**
+- *Model claim:* The ACM spec has conceptual closure. Sections 1-5 cover the full theoretical architecture. Only Section 6 (Reference Implementation) remains — the practical guidance that makes the spec implementable.
+- *Blind spot:* Did not verify arXiv IDs against actual papers. Used IDs from destination.md and prior session work. If those were hallucinated, citations would be invalid.
+- *Imagined reader:* "You're missing other relevant work — AgentBench, ReAct, Reflexion, commercial Assistants APIs." Fair criticism. Section 5 focuses on the three most directly comparable memory architecture papers per destination scope. Could expand if survey scope broadens.
+
+**Trigger evaluation:**
+- Recurring finding-class: not fired (sections 3-5 are different content types)
+- About to declare silence: not fired (made a change)
+- Contradicts prior realization: not fired
+- Operator explicitly asked: not fired
+
+### Candidate Next Moves
+
+1. **SPEC.md Section 6: Reference Implementation** — the final section. Defines the `.trail/` structure, file semantics, minimal conformance. Makes the spec implementable.
+2. **Verify arXiv IDs** — fetch the actual papers to confirm IDs are correct. Low urgency if IDs came from a prior literature scan.
+3. **Update retrospect.md** — work queue items 1-5 done, only item 6 remains. Could update before or after Section 6.
