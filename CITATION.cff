@@ -1,4 +1,4 @@
-﻿cff-version: 1.2.0
+cff-version: 1.2.0
 message: "If you use this specification, please cite it as below."
 type: software
 title: "Agent Context Memory: A Governance-First Specification for AI Agent Context Memory"
@@ -24,7 +24,7 @@ authors:
     orcid: "https://orcid.org/0009-0009-7157-9084"
 repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
-version: "0.3.0"
+version: "0.3.1"
 date-released: "2026-06-21"
 keywords:
   - context memory

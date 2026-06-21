@@ -1,4 +1,4 @@
-ï»¿# Agent Context Memory Specification
+# Agent Context Memory Specification
 
 **Version:** 0.3.0  
 **Date:** 2026-06-21  
@@ -11,7 +11,7 @@
 
 Agent Context Memory (ACM) is a specification for governance-first context memory in autonomous AI agent systems. It defines how agents should organize, protect, and use the memory that persists across sessions and governs their authorization to act.
 
-ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns to this domain. The core contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid. This is the "authorization before action" principle â€” familiar from Role-Based Access Control (RBAC), Mandatory Access Control (MAC), and capability-based security â€” applied to agent sessions.
+ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns to this domain. The core contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid. This is the "authorization before action" principle — familiar from Role-Based Access Control (RBAC), Mandatory Access Control (MAC), and capability-based security — applied to agent sessions.
 
 This specification is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem.
 
@@ -21,9 +21,9 @@ This specification is the operationalization of [Principles of Earned Autonomy (
 
 ACM organizes memory by **trust level**, not by memory type.
 
-Prior agent memory models (CoALA, MemGPT, Generative Agents) organize memory by *function*: what kind of information is stored (episodic, semantic, procedural, working). This is useful for capability â€” it helps the agent retrieve and use information effectively.
+Prior agent memory models (CoALA, MemGPT, Generative Agents) organize memory by *function*: what kind of information is stored (episodic, semantic, procedural, working). This is useful for capability — it helps the agent retrieve and use information effectively.
 
-ACM organizes memory by *trust*: who authored it, whether it can be modified, and how conflicts between tiers are resolved. This is useful for governance â€” it lets an observer determine whether the agent was authorized to act and whether its account of what it did can be trusted.
+ACM organizes memory by *trust*: who authored it, whether it can be modified, and how conflicts between tiers are resolved. This is useful for governance — it lets an observer determine whether the agent was authorized to act and whether its account of what it did can be trusted.
 
 The two organizations are orthogonal. An ACM-conformant system may internally use functional memory types; the trust-tier organization is the governance layer that sits above them.
 
@@ -37,9 +37,9 @@ The two organizations are orthogonal. An ACM-conformant system may internally us
 
 ### 1.2 Intent Tier (Mandate)
 
-The intent tier contains the principal's mandate â€” the governing context that authorizes agent action.
+The intent tier contains the principal's mandate — the governing context that authorizes agent action.
 
-**Author:** The principal â€” the party who holds responsibility for the content and confirms it as their mandate. The agent may contribute to articulation (surfacing hunches, drafting candidate text, asking clarifying questions), but the principal cannot be surprised by what their mandate says. Unconfirmed agent-drafted content is not the intent tier.
+**Author:** The principal — the party who holds responsibility for the content and confirms it as their mandate. The agent may contribute to articulation (surfacing hunches, drafting candidate text, asking clarifying questions), but the principal cannot be surprised by what their mandate says. Unconfirmed agent-drafted content is not the intent tier.
 
 *The governance property being protected is not "the principal did all the typing" but "the principal owns and has confirmed the content."* Principals often have a richer interior model than they can immediately articulate; agent-assisted articulation mechanisms are conformant when the principal confirms the result.
 
@@ -49,7 +49,7 @@ The intent tier contains the principal's mandate â€” the governing context that 
 
 **Trust semantics:** The intent tier is authoritative. When the agent's interpretation of a task conflicts with the mandate, the mandate wins. When the trace tier's account of what happened conflicts with what the mandate authorized, the mandate defines what *should* have happened.
 
-**Why highest trust:** The principal is the party with standing to authorize action. The mandate is the only tier where the agent has no authorship rights â€” it cannot modify intent-tier content on its own authority; any changes require explicit principal confirmation. This structural separation is what makes the tier trustworthy.
+**Why highest trust:** The principal is the party with standing to authorize action. The mandate is the only tier where the agent has no authorship rights — it cannot modify intent-tier content on its own authority; any changes require explicit principal confirmation. This structural separation is what makes the tier trustworthy.
 
 ### 1.3 Trace Tier (Decisions)
 
@@ -63,13 +63,13 @@ The trace tier contains the agent's account of what it decided and why.
 
 **Trust semantics:** The trace tier is the agent's self-report. It is useful but not independently verifiable. An observer reading the trace tier knows what the agent *claims* it did and why, not necessarily what it *actually* did.
 
-**Why medium trust:** The agent has authorship but not editorial control. The append-only constraint prevents the agent from rewriting history to make its past decisions look better. However, the agent still authored the content â€” it can be incomplete, self-serving, or rationalized post-hoc.
+**Why medium trust:** The agent has authorship but not editorial control. The append-only constraint prevents the agent from rewriting history to make its past decisions look better. However, the agent still authored the content — it can be incomplete, self-serving, or rationalized post-hoc.
 
 ### 1.4 Evidence Tier (Sessions)
 
 The evidence tier contains independently captured records of what actually happened during agent execution.
 
-**Author:** An independent harness â€” a component that captures LLM interactions before the agent can respond to them.
+**Author:** An independent harness — a component that captures LLM interactions before the agent can respond to them.
 
 **Content:** Raw LLM calls and responses, timestamps, token counts, and any other execution metadata. In the reference implementation, this is `sessions/*.jsonl` captured by a harness implementing the [LLM Harness Protocol](https://github.com/ntholm86/principles-of-earned-autonomy/blob/main/docs/harness-protocol.md).
 
@@ -77,7 +77,7 @@ The evidence tier contains independently captured records of what actually happe
 
 **Trust semantics:** The evidence tier is independently verifiable. An observer can compare the agent's trace-tier account against the evidence-tier record to check for discrepancies.
 
-**Why independent trust (not "lowest"):** The evidence tier has no authorship from the agent â€” the harness captures it before the agent sees the response. This is **capture-author separation**: the party being observed cannot author its own observation record. The trust is "independent" rather than "lowest" because it serves a different function than the other tiers â€” it exists to verify them, not to be verified by them.
+**Why independent trust (not "lowest"):** The evidence tier has no authorship from the agent — the harness captures it before the agent sees the response. This is **capture-author separation**: the party being observed cannot author its own observation record. The trust is "independent" rather than "lowest" because it serves a different function than the other tiers — it exists to verify them, not to be verified by them.
 
 ### 1.5 Why Trust Level, Not Memory Type
 
@@ -108,13 +108,13 @@ When tiers disagree, resolve toward higher trust:
 
 2. **Trace vs. Evidence:** Evidence wins. If the trace tier claims the agent did X, but the evidence tier shows it did Y, the evidence is authoritative.
 
-3. **Intent vs. Evidence:** This is the interesting case. If the evidence shows the agent did something the mandate did not authorize, that is a governance failure â€” the agent acted outside its mandate. The mandate defines what *should* have happened; the evidence shows what *did* happen. Neither "wins" â€” the discrepancy is the finding.
+3. **Intent vs. Evidence:** This is the interesting case. If the evidence shows the agent did something the mandate did not authorize, that is a governance failure — the agent acted outside its mandate. The mandate defines what *should* have happened; the evidence shows what *did* happen. Neither "wins" — the discrepancy is the finding.
 
 ---
 
 ## 2. Structural Requirements
 
-Section 1 defined the three tiers. This section defines the structural properties that make the tier organization enforceable. These are not suggestions â€” they are conformance requirements. A system that violates them is not ACM-conformant.
+Section 1 defined the three tiers. This section defines the structural properties that make the tier organization enforceable. These are not suggestions — they are conformance requirements. A system that violates them is not ACM-conformant.
 
 ### 2.1 Capture-Author Separation
 
@@ -122,7 +122,7 @@ Section 1 defined the three tiers. This section defines the structural propertie
 
 In ACM terms: the agent cannot write to the evidence tier. The evidence tier is authored by an independent harness that captures LLM interactions before the agent receives the response.
 
-**Why it matters:** If the agent could author its own evidence, the evidence tier would be no more trustworthy than the trace tier â€” both would be agent self-report. Capture-author separation is what gives the evidence tier independent standing.
+**Why it matters:** If the agent could author its own evidence, the evidence tier would be no more trustworthy than the trace tier — both would be agent self-report. Capture-author separation is what gives the evidence tier independent standing.
 
 This is the same structural property that makes audit logs trustworthy in security systems, flight recorders trustworthy in aviation, and financial ledgers trustworthy in accounting. The party with incentive to misrepresent cannot be the party that writes the record.
 
@@ -148,7 +148,7 @@ In ACM terms: the trace tier (`audit-trail.md`, `retrospect.md`, etc.) grows mon
 
 **Why it matters:** If the agent could edit its past decisions, it could rationalize failures after the fact, making the trace tier unreliable for understanding what actually happened. Append-only constraint prevents history rewriting.
 
-This is distinct from immutability. The trace tier *does* change â€” new entries are added. But it changes only by extension, never by revision. A reader can trust that entry N was written before entry N+1 and has not been modified since.
+This is distinct from immutability. The trace tier *does* change — new entries are added. But it changes only by extension, never by revision. A reader can trust that entry N was written before entry N+1 and has not been modified since.
 
 **Conformance criteria:**
 
@@ -208,7 +208,7 @@ A system missing any one of these requirements has a governance gap that undermi
 
 ## 3. The Mandate Gate
 
-This is ACM's novel contribution. Prior agent memory models treat memory as a resource the agent uses during work. ACM treats memory as a precondition â€” a gate that must be passed before work begins.
+This is ACM's novel contribution. Prior agent memory models treat memory as a resource the agent uses during work. ACM treats memory as a precondition — a gate that must be passed before work begins.
 
 ### 3.1 Definition
 
@@ -219,7 +219,7 @@ More precisely:
 2. The agent must read the mandate before taking any action
 3. The agent's interpretation of the mandate must be visible in the trace tier
 
-If any of these conditions is not met, the session is **unauthorized** â€” not merely suboptimal, but structurally invalid from a governance perspective.
+If any of these conditions is not met, the session is **unauthorized** — not merely suboptimal, but structurally invalid from a governance perspective.
 
 ### 3.2 What "Session Valid" Means
 
@@ -235,7 +235,7 @@ A session is **invalid** if:
 - The mandate was not read (the agent ignores its authorization)
 - No interpretation is visible (the agent's understanding cannot be checked)
 
-Validity is binary. A session that begins without a mandate cannot become valid by creating one mid-session â€” the pre-work condition was already violated.
+Validity is binary. A session that begins without a mandate cannot become valid by creating one mid-session — the pre-work condition was already violated.
 
 ### 3.3 Why Pre-Work, Not During-Work
 
@@ -247,7 +247,7 @@ This is a different question with different implications:
 
 **Memory as resource (prior art):** The agent proceeds. Memory helps it proceed better. If memory is missing, the agent may perform suboptimally, but it still acts.
 
-**Memory as precondition (ACM):** The agent cannot proceed until the mandate exists. Memory isn't just helpful â€” it's the authorization gate. If the mandate is missing, the agent must stop and request it, not act and hope.
+**Memory as precondition (ACM):** The agent cannot proceed until the mandate exists. Memory isn't just helpful — it's the authorization gate. If the mandate is missing, the agent must stop and request it, not act and hope.
 
 The difference is structural, not a matter of degree. A capability-first model with excellent memory is still not governance-first if the agent can act without a mandate.
 
@@ -270,9 +270,9 @@ If the interpretation is invisible, these failures cannot be detected until afte
 
 ### 3.5 Historical Grounding
 
-The mandate gate is not a novel invention â€” it is the application of an established governance principle to agent memory.
+The mandate gate is not a novel invention — it is the application of an established governance principle to agent memory.
 
-**Roman Law â€” Mandatum:** In Roman contract law, a *mandatum* was the formal authorization by which a principal empowered an agent to act on their behalf. The mandate:
+**Roman Law — Mandatum:** In Roman contract law, a *mandatum* was the formal authorization by which a principal empowered an agent to act on their behalf. The mandate:
 - Was authored by the principal, not the agent
 - Had to exist before the agent could act
 - Defined the scope within which the agent was authorized
@@ -280,7 +280,7 @@ The mandate gate is not a novel invention â€” it is the application of an establ
 
 The structure is identical to ACM's intent tier: principal-authored, pre-existing, scope-defining, accountability-enabling.
 
-**Access Control â€” RBAC/MAC/Capability Models:** In software security, access control models (Sandhu et al., 1996) share a common structure:
+**Access Control — RBAC/MAC/Capability Models:** In software security, access control models (Sandhu et al., 1996) share a common structure:
 - Authorization must exist before action is permitted
 - Scope is defined by the authorizing party, not the actor
 - The actor is accountable for exceeding authorized scope
@@ -288,13 +288,13 @@ The structure is identical to ACM's intent tier: principal-authored, pre-existin
 
 The mandate gate is this pattern applied to agent sessions rather than individual operations.
 
-**Aviation â€” Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the mission parameters. The brief:
+**Aviation — Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the mission parameters. The brief:
 - Must be completed before departure (pre-work gate)
 - Covers what the mission is and what constraints apply
 - Requires acknowledgment from all crew members
 - Creates a shared understanding that can be referenced if things go wrong
 
-**Surgery â€” Surgical Timeout:** Before incision, the surgical team conducts a timeout that verifies patient identity, procedure, and site. The timeout:
+**Surgery — Surgical Timeout:** Before incision, the surgical team conducts a timeout that verifies patient identity, procedure, and site. The timeout:
 - Is a hard stop (no proceeding until complete)
 - Ensures all participants have the same understanding
 - Creates a documented checkpoint
@@ -332,19 +332,19 @@ The principal says *what* and *why*. The agent determines *how*. But the agent c
 
 ## 4. Scoped Memory
 
-Sections 1-3 defined trust tiers â€” organizing memory by *who authored it*. This section defines scope tiers â€” organizing memory by *what it governs*. The two axes are orthogonal and both are core to ACM.
+Sections 1-3 defined trust tiers — organizing memory by *who authored it*. This section defines scope tiers — organizing memory by *what it governs*. The two axes are orthogonal and both are core to ACM.
 
 ### 4.1 The Scope Axis
 
 ACM memory can exist at multiple nested scopes:
 
 ```
-org/.acm/           â† governs all workspaces in the org
-  workspace/.acm/   â† governs all repos in the workspace
-    repo/.acm/      â† governs this repo
+org/.acm/           ? governs all workspaces in the org
+  workspace/.acm/   ? governs all repos in the workspace
+    repo/.acm/      ? governs this repo
 ```
 
-Each scope has its own complete ACM structure (intent tier, trace tier, evidence tier). The scope names shown (org, workspace, repo) are examples â€” ACM defines the *hierarchy pattern*, not a fixed vocabulary. Different deployments may use different scope names (team, product, project, etc.).
+Each scope has its own complete ACM structure (intent tier, trace tier, evidence tier). The scope names shown (org, workspace, repo) are examples — ACM defines the *hierarchy pattern*, not a fixed vocabulary. Different deployments may use different scope names (team, product, project, etc.).
 
 ### 4.2 Discovery Mechanism
 
@@ -354,9 +354,9 @@ Scopes are discovered by filesystem structure: parent-directory traversal from t
 2. Traverses parent directories, reading any `.acm/` directories found
 3. Stops when any of the following conditions are true:
 
-   - **Filesystem root reached** â€” the hard stop. Always applies. Traversal never crosses the filesystem root.
-   - **Scope ceiling marker found** â€” if a directory contains a file named `.acm-root`, that directory is the topmost scope. After reading its `.acm/destination.md` (if present), traversal stops. Operators place `.acm-root` in the directory they wish to treat as the organizational ceiling.
-   - **Implementation depth ceiling** â€” conformant implementations SHOULD apply a maximum traversal depth as a safety bound. The RECOMMENDED ceiling is **4 levels** above the starting directory (sufficient for the deepest practical hierarchy: session â†’ repo â†’ workspace â†’ org). Implementations MAY use a higher ceiling with operator configuration.
+   - **Filesystem root reached** — the hard stop. Always applies. Traversal never crosses the filesystem root.
+   - **Scope ceiling marker found** — if a directory contains a file named `.acm-root`, that directory is the topmost scope. After reading its `.acm/destination.md` (if present), traversal stops. Operators place `.acm-root` in the directory they wish to treat as the organizational ceiling.
+   - **Implementation depth ceiling** — conformant implementations SHOULD apply a maximum traversal depth as a safety bound. The RECOMMENDED ceiling is **4 levels** above the starting directory (sufficient for the deepest practical hierarchy: session ? repo ? workspace ? org). Implementations MAY use a higher ceiling with operator configuration.
 
 The result is an ordered list of scopes from most local to most encompassing. All scopes in the list govern the current work session.
 
@@ -366,7 +366,7 @@ The result is an ordered list of scopes from most local to most encompassing. Al
 
 **Higher scope always wins.**
 
-When a higher-scope mandate conflicts with a lower-scope mandate, the higher scope is authoritative. This is not because lower-scope decisions are unimportant â€” it is because scope-crossing effects are structurally invisible to the lower scope. A repo-level mandate cannot know what coordination constraints affect it; only the workspace or org level can see that.
+When a higher-scope mandate conflicts with a lower-scope mandate, the higher scope is authoritative. This is not because lower-scope decisions are unimportant — it is because scope-crossing effects are structurally invisible to the lower scope. A repo-level mandate cannot know what coordination constraints affect it; only the workspace or org level can see that.
 
 | Conflict | Resolution |
 |----------|------------|
@@ -378,7 +378,7 @@ This mirrors the trust resolution rule (Intent > Trace > Evidence). Both are "re
 
 ### 4.4 Why Scope Matters for Governance
 
-An agent with access only to repo-level context cannot reason about cross-repo consequences. It sees its local effects but is blind to coordination effects â€” how its work affects other repos, what shared constraints apply, what the ensemble is trying to achieve.
+An agent with access only to repo-level context cannot reason about cross-repo consequences. It sees its local effects but is blind to coordination effects — how its work affects other repos, what shared constraints apply, what the ensemble is trying to achieve.
 
 Scoped memory solves this by giving the agent access to higher-scope context:
 
@@ -390,7 +390,7 @@ Better context produces safer decisions. Scope hierarchy is what enables organiz
 
 ### 4.5 Mandate Gate at Multiple Scopes
 
-The mandate gate (Â§3) applies at each scope. Before a session is valid:
+The mandate gate (§3) applies at each scope. Before a session is valid:
 
 1. Each scope's intent tier must contain a mandate
 2. The agent must read all applicable mandates (all scopes in the discovered hierarchy)
@@ -430,7 +430,7 @@ The Commander's Intent principle requires the agent to understand *what* the pri
 
 ## 5. Convergence
 
-The mandate gate defines when work can *begin*. Convergence defines when work is *done*. Together they bound the governance arc: authorized start â†’ governed execution â†’ verified end.
+The mandate gate defines when work can *begin*. Convergence defines when work is *done*. Together they bound the governance arc: authorized start ? governed execution ? verified end.
 
 ### 5.1 Definition
 
@@ -440,11 +440,11 @@ This is not the agent's assessment of its own work. The agent cannot declare its
 1. The work queue (in the trace tier) is empty
 2. External review of the evidence tier produces no new findings
 
-Both conditions must hold. An empty work queue with unreviewed evidence is not convergence â€” it's an untested claim. A reviewed evidence tier with remaining work items is not convergence â€” work remains.
+Both conditions must hold. An empty work queue with unreviewed evidence is not convergence — it's an untested claim. A reviewed evidence tier with remaining work items is not convergence — work remains.
 
 ### 5.2 Work Queue Empty
 
-The trace tier contains the agent's work queue â€” what remains to be done. In the reference implementation, this appears in `retrospect.md` under "What the next runs should test."
+The trace tier contains the agent's work queue — what remains to be done. In the reference implementation, this appears in `retrospect.md` under "What the next runs should test."
 
 **Work queue empty** means:
 - No items remain in the "next runs" section
@@ -455,9 +455,9 @@ This is a necessary but not sufficient condition for convergence. The agent can 
 
 ### 5.3 Independent Evaluator Role
 
-Convergence requires that independent evaluators â€” parties other than the agent â€” examine the evidence tier and find nothing left to change.
+Convergence requires that independent evaluators — parties other than the agent — examine the evidence tier and find nothing left to change.
 
-**Why independent:** The agent has an interest in being done. It produced the work. It will naturally see its work favorably. This is not dishonesty â€” it's structural bias. The same bias exists in human self-assessment and is why peer review exists.
+**Why independent:** The agent has an interest in being done. It produced the work. It will naturally see its work favorably. This is not dishonesty — it's structural bias. The same bias exists in human self-assessment and is why peer review exists.
 
 **What independent evaluators do:**
 1. Examine the evidence tier (session records)
@@ -466,7 +466,7 @@ Convergence requires that independent evaluators â€” parties other than the agen
 4. Identify findings the agent's trace tier did not surface
 
 **Who counts as independent:**
-- An agent from a different model family (e.g., Claude evaluating GPT's work, or vice versa) â€” instances of the same model share training data and cannot be considered statistically independent
+- An agent from a different model family (e.g., Claude evaluating GPT's work, or vice versa) — instances of the same model share training data and cannot be considered statistically independent
 - The principal reviewing the evidence (role independence)
 - An external auditor (organizational independence)
 
@@ -488,9 +488,9 @@ These are not accusations of agent dishonesty. They are structural properties of
 In ACM (and PEA), **silence** has a specific meaning: independent evaluators find nothing left to change.
 
 Silence is:
-- A signal, not a proof â€” it means no findings, not that no findings exist
-- Bounded â€” silence applies to what was examined, not to what wasn't
-- Provisional â€” new evidence or new evaluators may surface new findings
+- A signal, not a proof — it means no findings, not that no findings exist
+- Bounded — silence applies to what was examined, not to what wasn't
+- Provisional — new evidence or new evaluators may surface new findings
 
 Silence is not:
 - The agent saying "I'm done"
@@ -516,7 +516,7 @@ A memory state showing all three signals is converged. A memory state missing an
 - Trace tier: `retrospect.md` shows "Work queue: empty"; `audit-trail.md` most recent entry declares silence
 - Evidence tier: Session records reviewed by independent evaluator; review notes show no findings
 
-This memory state is converged. The convergence is derivable from the tiers â€” no declaration required.
+This memory state is converged. The convergence is derivable from the tiers — no declaration required.
 
 ### 5.7 Conformance Criteria
 
@@ -565,7 +565,7 @@ ACM builds on prior work in agent memory architecture. This section identifies t
 
 **What ACM adds:**
 - Trust-level organization orthogonal to functional types
-- The mandate gate â€” a governance precondition absent from CoALA's capability-focused design
+- The mandate gate — a governance precondition absent from CoALA's capability-focused design
 - Capture-author separation as a structural requirement
 - Convergence as a memory-level property
 
@@ -575,11 +575,11 @@ CoALA asks: *What kinds of memory does an agent need?* ACM asks: *Who authored e
 
 **Citation:** Park, J. S., O'Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). *Generative Agents: Interactive Simulacra of Human Behavior*. arXiv:2304.03442.
 
-**What it establishes:** Generative Agents introduced the observation â†’ reflection â†’ planning loop for persistent agents. Agents observe their environment, form reflections (higher-order summaries of observations), and use reflections to plan future action. Memory is retrieved by relevance, recency, and importance.
+**What it establishes:** Generative Agents introduced the observation ? reflection ? planning loop for persistent agents. Agents observe their environment, form reflections (higher-order summaries of observations), and use reflections to plan future action. Memory is retrieved by relevance, recency, and importance.
 
 **What ACM inherits:**
 - Reflection as a first-class memory operation (ACM's retrospect tier parallels this)
-- The observation â†’ reasoning â†’ action cycle
+- The observation ? reasoning ? action cycle
 - Importance-weighted memory retrieval as a design pattern
 
 **What ACM adds:**
@@ -611,7 +611,7 @@ MemGPT asks: *How can agents effectively use more memory than fits in context?* 
 
 ### 5.4 Access Control Prior Art
 
-The mandate gate is not a novel mechanism â€” it is an established access control pattern applied to a new domain.
+The mandate gate is not a novel mechanism — it is an established access control pattern applied to a new domain.
 
 **Authorization Patterns (RBAC, MAC, Capability Models):** Role-Based Access Control and related authorization models share core properties (Sandhu, Coyne, Feinstein, & Youman, 1996):
 - Authorization must exist before action is permitted
@@ -621,9 +621,9 @@ The mandate gate is not a novel mechanism â€” it is an established access contro
 
 These properties map directly to ACM's mandate gate. The mandate is the authorization. The principal defines scope. The agent is accountable for exceeding it. The check happens before the session begins.
 
-ACM's specific pattern is closer to Mandatory Access Control (MAC) than RBAC in one respect: the agent has only one role (actor) and one principal relationship, rather than multiple roles with different permissions. The shared property is "authorization before action" â€” the principle common to the entire family.
+ACM's specific pattern is closer to Mandatory Access Control (MAC) than RBAC in one respect: the agent has only one role (actor) and one principal relationship, rather than multiple roles with different permissions. The shared property is "authorization before action" — the principle common to the entire family.
 
-ACM's contribution is not inventing these patterns but recognizing that **agent memory is an authorization domain** where they apply. Prior agent memory models (Section 5.1Ã¢â‚¬â€œ5.3) treat memory as a capability resource. ACM treats memory as an authorization substrate â€” the place where the mandate lives, where the agent's interpretation is recorded, and where independent evidence of what happened accumulates.
+ACM's contribution is not inventing these patterns but recognizing that **agent memory is an authorization domain** where they apply. Prior agent memory models (Section 5.1â€“5.3) treat memory as a capability resource. ACM treats memory as an authorization substrate — the place where the mandate lives, where the agent's interpretation is recorded, and where independent evidence of what happened accumulates.
 
 The mandate gate differs from per-operation access checks in that it gates the *session*, not individual operations. RBAC asks "can this principal perform this action?" The mandate gate asks "does this session have authorization to exist at all?" This is closer to aviation's pre-flight brief or surgery's timeout than to per-operation access checks.
 
@@ -631,7 +631,7 @@ The mandate gate differs from per-operation access checks in that it gates the *
 
 ### 5.5 The Governance Gap
 
-The prior agent memory works share a common assumption: memory exists to serve the agent's capabilities. They optimize for what the agent can do â€” retrieve relevant context, maintain coherent behavior, overcome context limits.
+The prior agent memory works share a common assumption: memory exists to serve the agent's capabilities. They optimize for what the agent can do — retrieve relevant context, maintain coherent behavior, overcome context limits.
 
 ACM starts from a different assumption: memory exists to serve the principal's governance needs. The first question is not "how can the agent use memory effectively?" but "how can the principal verify that the agent was authorized and that its account of what happened is trustworthy?"
 
@@ -650,13 +650,13 @@ ACM does not replace these systems. An ACM-conformant implementation may use CoA
 
 ACM's contribution is the **transfer of established authorization patterns to agent memory governance**:
 
-1. **The Mandate Gate (Section 3)** â€” applies RBAC's "authorization before action" principle to agent sessions. The mechanism is established in access control; its application to agent memory as a structural property is new in this domain.
+1. **The Mandate Gate (Section 3)** — applies RBAC's "authorization before action" principle to agent sessions. The mechanism is established in access control; its application to agent memory as a structural property is new in this domain.
 
-2. **Capture-Author Separation (Section 2.1)** â€” applies audit-log principles (the observed party cannot author its own observation record) to agent memory. The principle is established in security and accounting; its application to agent memory tiers is new.
+2. **Capture-Author Separation (Section 2.1)** — applies audit-log principles (the observed party cannot author its own observation record) to agent memory. The principle is established in security and accounting; its application to agent memory tiers is new.
 
-3. **Trust-Tier Organization (Section 1)** â€” organizes memory by trust level (who authored it, whether it can be modified, how conflicts resolve) rather than by functional type. This framing is new in agent memory literature, though trust-based data classification exists in security contexts.
+3. **Trust-Tier Organization (Section 1)** — organizes memory by trust level (who authored it, whether it can be modified, how conflicts resolve) rather than by functional type. This framing is new in agent memory literature, though trust-based data classification exists in security contexts.
 
-4. **Convergence as Memory Property (Section 4)** â€” defines work completion as a structural property derivable from the memory state, not an agent declaration. No prior agent memory system defines convergence at the memory level.
+4. **Convergence as Memory Property (Section 4)** — defines work completion as a structural property derivable from the memory state, not an agent declaration. No prior agent memory system defines convergence at the memory level.
 
 ACM does not claim novelty for tiered memory, reflection, cross-session persistence, or the underlying authorization mechanisms. These are established contributions of prior work. The contribution is recognizing that agent memory is an authorization domain and applying these patterns systematically.
 
@@ -664,7 +664,7 @@ ACM does not claim novelty for tiered memory, reflection, cross-session persiste
 
 Augmented Individual Intelligence (AII) is a cognitive construct for studying sustained human-AI cognitive coupling at the individual level (Holmager, 2026; DOI: [10.5281/zenodo.18417872](https://doi.org/10.5281/zenodo.18417872)). AII defines five boundary conditions for when human-AI interaction qualifies as cognitive partnership: continuity, bidirectionality, adaptivity, cross-domain integration, and **agency preservation**.
 
-The fifth condition â€” agency preservation â€” is definitional: "the human retains final decision authority and can override AI suggestions." AII treats this as a boundary requirement but does not specify *how* to enforce it at the system level.
+The fifth condition — agency preservation — is definitional: "the human retains final decision authority and can override AI suggestions." AII treats this as a boundary requirement but does not specify *how* to enforce it at the system level.
 
 ACM provides that enforcement mechanism:
 
@@ -691,27 +691,27 @@ An ACM-conformant repository contains a `.acm/` directory at the repository root
 
 ```
 .acm/
-â”œâ”€â”€ destination.md      # Intent tier (principal-authored mandate)
-â”œâ”€â”€ audit-trail.md      # Trace tier (agent decisions, append-only)
-â”œâ”€â”€ retrospect.md       # Trace tier (derived orientation, rewritten each run)
-â””â”€â”€ sessions/           # Evidence tier (harness-captured session records)
-    â”œâ”€â”€ 2026-06-20-001.jsonl
-    â””â”€â”€ ...
++-- destination.md      # Intent tier (principal-authored mandate)
++-- audit-trail.md      # Trace tier (agent decisions, append-only)
++-- retrospect.md       # Trace tier (derived orientation, rewritten each run)
++-- sessions/           # Evidence tier (harness-captured session records)
+    +-- 2026-06-20-001.jsonl
+    +-- ...
 ```
 
 **Required files:**
-- `destination.md` â€” the intent tier. Must exist before any agent session.
-- `audit-trail.md` â€” the trace tier. Created by first agent run, append-only thereafter.
+- `destination.md` — the intent tier. Must exist before any agent session.
+- `audit-trail.md` — the trace tier. Created by first agent run, append-only thereafter.
 
 **Optional files:**
-- `retrospect.md` â€” derived trace tier file. Contains current orientation and work queue. Rewritten (not appended) by retrospect operations.
-- `sessions/*.jsonl` â€” evidence tier. Harness-captured LLM calls. Format and naming are implementation-dependent.
+- `retrospect.md` — derived trace tier file. Contains current orientation and work queue. Rewritten (not appended) by retrospect operations.
+- `sessions/*.jsonl` — evidence tier. Harness-captured LLM calls. Format and naming are implementation-dependent.
 
 ### 6.2 File Semantics by Tier
 
 #### Intent Tier: `destination.md`
 
-**Purpose:** The principal's mandate â€” what the agent is authorized to do, why, and what constraints apply.
+**Purpose:** The principal's mandate — what the agent is authorized to do, why, and what constraints apply.
 
 **Author:** Principal only (confirmed content). The agent may assist in articulation but must never write to this file without explicit principal confirmation of the result.
 
@@ -724,7 +724,7 @@ An ACM-conformant repository contains a `.acm/` directory at the repository root
 
 **Example structure:**
 ```markdown
-# destination.md â€” [Project Name]
+# destination.md — [Project Name]
 
 ## What this work is
 [Scope definition]
@@ -738,7 +738,7 @@ An ACM-conformant repository contains a `.acm/` directory at the repository root
 
 #### Trace Tier: `audit-trail.md`
 
-**Purpose:** The agent's decision log â€” what was decided, why, and what happened.
+**Purpose:** The agent's decision log — what was decided, why, and what happened.
 
 **Author:** Agent only. The principal may read but should not edit.
 
@@ -755,7 +755,7 @@ An ACM-conformant repository contains a `.acm/` directory at the repository root
 
 #### Trace Tier: `retrospect.md`
 
-**Purpose:** Derived orientation â€” the current state of the work as understood by the loop.
+**Purpose:** Derived orientation — the current state of the work as understood by the loop.
 
 **Author:** Agent (retrospect operation). The principal may read but should not edit.
 
@@ -768,7 +768,7 @@ An ACM-conformant repository contains a `.acm/` directory at the repository root
 
 #### Evidence Tier: `sessions/*.jsonl`
 
-**Purpose:** Independently captured session records â€” what actually happened at the LLM layer.
+**Purpose:** Independently captured session records — what actually happened at the LLM layer.
 
 **Author:** Harness (independent capture mechanism). Neither agent nor principal should write to these files.
 
@@ -815,9 +815,9 @@ A system is **fully ACM-conformant** if it meets minimal conformance plus:
 
 This specification repository (`agent-context-memory`) implements ACM:
 
-- **Intent tier:** `.acm/destination.md` â€” authored by the operator, defines what the spec must achieve
-- **Trace tier:** `.acm/audit-trail.md` â€” agent decisions for each spec section, append-only
-- **Trace tier:** `.acm/retrospect.md` â€” current orientation and work queue
+- **Intent tier:** `.acm/destination.md` — authored by the operator, defines what the spec must achieve
+- **Trace tier:** `.acm/audit-trail.md` — agent decisions for each spec section, append-only
+- **Trace tier:** `.acm/retrospect.md` — current orientation and work queue
 - **Evidence tier:** Not implemented in this repository (no harness capture)
 
 This repository is therefore minimally conformant but not fully conformant. Full conformance would require adding an independent session capture harness.
@@ -838,9 +838,9 @@ ACM operationalizes the three principles of [Principles of Earned Autonomy (PEA)
 
 | PEA Principle | ACM Implementation |
 |---------------|-------------------|
-| **P1: Commander's Intent** | The Mandate Gate (Section 3) â€” work cannot begin without principal-authored intent |
-| **P2: Observable Autonomy** | Capture-Author Separation (Section 2.1) + Append-Only Trace (Section 2.2) â€” agent reasoning is recorded and cannot be rewritten |
-| **P3: Convergence Is Silence** | Convergence (Section 4) â€” completion is a memory-state property, not an agent declaration |
+| **P1: Commander's Intent** | The Mandate Gate (Section 3) — work cannot begin without principal-authored intent |
+| **P2: Observable Autonomy** | Capture-Author Separation (Section 2.1) + Append-Only Trace (Section 2.2) — agent reasoning is recorded and cannot be rewritten |
+| **P3: Convergence Is Silence** | Convergence (Section 4) — completion is a memory-state property, not an agent declaration |
 
 PEA is the theory. ACM is the implementation standard for the memory design problem.
 
@@ -852,7 +852,7 @@ PEA is the theory. ACM is the implementation standard for the memory design prob
 
 **Capture-author separation:** The structural requirement that the party recording evidence is not the party whose behavior is being recorded.
 
-**Convergence:** The state where work is done â€” work queue empty and independent evaluators find nothing left to change.
+**Convergence:** The state where work is done — work queue empty and independent evaluators find nothing left to change.
 
 **Evidence tier:** Memory captured by an independent harness, not authored by the agent.
 
@@ -860,7 +860,7 @@ PEA is the theory. ACM is the implementation standard for the memory design prob
 
 **Intent tier:** Memory authored by the principal, defining what the agent is authorized to do.
 
-**Mandate:** The principal's governing context â€” what, why, and what constraints apply.
+**Mandate:** The principal's governing context — what, why, and what constraints apply.
 
 **Mandate gate:** The requirement that a mandate must exist in memory before any agent session is valid.
 
