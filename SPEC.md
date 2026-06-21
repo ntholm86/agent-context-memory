@@ -1,7 +1,7 @@
 ﻿# Agent Context Memory Specification
 
-**Version:** 0.1.0 (draft)  
-**Date:** 2026-06-20  
+**Version:** 0.2.0 (draft)  
+**Date:** 2026-06-21  
 **Author:** Nils Wendelboe Holmager  
 **License:** CC BY-SA 4.0
 
@@ -330,11 +330,109 @@ The principal says *what* and *why*. The agent determines *how*. But the agent c
 
 ---
 
-## 4. Convergence
+## 4. Scoped Memory
+
+Sections 1-3 defined trust tiers — organizing memory by *who authored it*. This section defines scope tiers — organizing memory by *what it governs*. The two axes are orthogonal and both are core to ACM.
+
+### 4.1 The Scope Axis
+
+ACM memory can exist at multiple nested scopes:
+
+```
+org/.acm/           ← governs all workspaces in the org
+  workspace/.acm/   ← governs all repos in the workspace
+    repo/.acm/      ← governs this repo
+```
+
+Each scope has its own complete ACM structure (intent tier, trace tier, evidence tier). The scope names shown (org, workspace, repo) are examples — ACM defines the *hierarchy pattern*, not a fixed vocabulary. Different deployments may use different scope names (team, product, project, etc.).
+
+### 4.2 Discovery Mechanism
+
+Scopes are discovered by filesystem structure: parent-directory traversal from the working directory upward. An ACM-conformant agent discovering its scopes:
+
+1. Reads `.acm/` in the current working directory (most local scope)
+2. Traverses parent directories, reading any `.acm/` directories found
+3. Stops when any of the following conditions are true:
+
+   - **Filesystem root reached** — the hard stop. Always applies. Traversal never crosses the filesystem root.
+   - **Scope ceiling marker found** — if a directory contains a file named `.acm-root`, that directory is the topmost scope. After reading its `.acm/destination.md` (if present), traversal stops. Operators place `.acm-root` in the directory they wish to treat as the organizational ceiling.
+   - **Implementation depth ceiling** — conformant implementations SHOULD apply a maximum traversal depth as a safety bound. The RECOMMENDED ceiling is **4 levels** above the starting directory (sufficient for the deepest practical hierarchy: session → repo → workspace → org). Implementations MAY use a higher ceiling with operator configuration.
+
+The result is an ordered list of scopes from most local to most encompassing. All scopes in the list govern the current work session.
+
+**Note on the `.acm-root` marker:** This file need not have any content. Its presence alone signals the scope ceiling. It is the operator's explicit declaration that "this is as far up as scope resolution should go." Without it, traversal continues to the filesystem root (or the implementation ceiling, whichever comes first).
+
+### 4.3 Scope Resolution Rule
+
+**Higher scope always wins.**
+
+When a higher-scope mandate conflicts with a lower-scope mandate, the higher scope is authoritative. This is not because lower-scope decisions are unimportant — it is because scope-crossing effects are structurally invisible to the lower scope. A repo-level mandate cannot know what coordination constraints affect it; only the workspace or org level can see that.
+
+| Conflict | Resolution |
+|----------|------------|
+| Workspace destination vs repo destination | Workspace wins |
+| Org destination vs workspace destination | Org wins |
+| Repo constraint vs workspace constraint | Workspace wins |
+
+This mirrors the trust resolution rule (Intent > Trace > Evidence). Both are "resolve toward the party with broader visibility."
+
+### 4.4 Why Scope Matters for Governance
+
+An agent with access only to repo-level context cannot reason about cross-repo consequences. It sees its local effects but is blind to coordination effects — how its work affects other repos, what shared constraints apply, what the ensemble is trying to achieve.
+
+Scoped memory solves this by giving the agent access to higher-scope context:
+
+- **Workspace-level destination** tells the agent what the ensemble of repos is working toward
+- **Org-level constraints** tell the agent what applies across all work in the organization
+- **Cross-repo coordination** becomes visible because it's stated at the scope that can see all parties
+
+Better context produces safer decisions. Scope hierarchy is what enables organizational context.
+
+### 4.5 Mandate Gate at Multiple Scopes
+
+The mandate gate (§3) applies at each scope. Before a session is valid:
+
+1. Each scope's intent tier must contain a mandate
+2. The agent must read all applicable mandates (all scopes in the discovered hierarchy)
+3. Higher-scope mandates take precedence when they conflict with lower-scope mandates
+
+If any applicable scope's mandate gate fails (no mandate exists at that scope), the agent should surface this as a finding, not silently proceed with only the lower-scope mandates.
+
+### 4.6 Evidence Tier and Scope
+
+The evidence tier (session captures) lands at the scope where the change was made:
+
+- Changes to a repo are captured in that repo's `.acm/sessions/`
+- Cross-repo operations (if any) are captured at the workspace scope's `.acm/sessions/`
+
+This ensures evidence is collocated with the artifacts it documents.
+
+### 4.7 Conformance Criteria
+
+A system is conformant if:
+1. It discovers all applicable scopes by parent-directory traversal
+2. It reads all applicable mandates before beginning work
+3. It resolves scope conflicts by "higher scope wins"
+4. It places evidence at the scope where changes were made
+
+A system is non-conformant if:
+- It reads only the most local scope
+- Lower-scope mandates can override higher-scope mandates
+- Evidence is placed at a different scope than the changes it documents
+
+### 4.8 Relationship to PEA Principles
+
+Scoped memory is ACM's operationalization of organizational context for **PEA Principle 1: Commander's Intent**.
+
+The Commander's Intent principle requires the agent to understand *what* the principal wants and *why*. When work spans multiple scopes (repos in a workspace, workspaces in an org), the "commander" at each scope provides part of the intent. Scoped memory makes this multi-level intent visible and resolvable.
+
+---
+
+## 5. Convergence
 
 The mandate gate defines when work can *begin*. Convergence defines when work is *done*. Together they bound the governance arc: authorized start â†’ governed execution â†’ verified end.
 
-### 4.1 Definition
+### 5.1 Definition
 
 **Convergence:** Work is done when the trace tier shows no remaining work items and independent evaluators examining the evidence tier find nothing left to change.
 
@@ -344,7 +442,7 @@ This is not the agent's assessment of its own work. The agent cannot declare its
 
 Both conditions must hold. An empty work queue with unreviewed evidence is not convergence â€” it's an untested claim. A reviewed evidence tier with remaining work items is not convergence â€” work remains.
 
-### 4.2 Work Queue Empty
+### 5.2 Work Queue Empty
 
 The trace tier contains the agent's work queue â€” what remains to be done. In the reference implementation, this appears in `retrospect.md` under "What the next runs should test."
 
@@ -355,7 +453,7 @@ The trace tier contains the agent's work queue â€” what remains to be done.
 
 This is a necessary but not sufficient condition for convergence. The agent can exhaust its own list of ideas without having found everything worth finding.
 
-### 4.3 Independent Evaluator Role
+### 5.3 Independent Evaluator Role
 
 Convergence requires that independent evaluators â€” parties other than the agent â€” examine the evidence tier and find nothing left to change.
 
@@ -374,7 +472,7 @@ Convergence requires that independent evaluators â€” parties other than the
 
 The agent itself does not count, regardless of how carefully it reviews its own work.
 
-### 4.4 Why Agent Cannot Self-Assess
+### 5.4 Why Agent Cannot Self-Assess
 
 A core premise of ACM (inherited from PEA) is that the agent is an unreliable narrator of itself. This applies to completion assessment as much as to action narration.
 
@@ -385,7 +483,7 @@ A core premise of ACM (inherited from PEA) is that the agent is an unreliable na
 
 These are not accusations of agent dishonesty. They are structural properties of any self-assessing system with stakes in its assessment. The solution is the same as for narration: separation. The party doing the work is not the party declaring it done.
 
-### 4.5 Silence as Signal
+### 5.5 Silence as Signal
 
 In ACM (and PEA), **silence** has a specific meaning: independent evaluators find nothing left to change.
 
@@ -401,7 +499,7 @@ Silence is not:
 
 **Bounded silence:** Every silence claim must name what quality bar it applies to and what surfaces were examined. "Silence on internal consistency for the trace tier" is bounded. "The work is done" is unbounded and therefore not a valid convergence claim.
 
-### 4.6 Convergence at the Memory Level
+### 5.6 Convergence at the Memory Level
 
 Convergence is visible in the memory structure:
 
@@ -420,7 +518,7 @@ A memory state showing all three signals is converged. A memory state missing an
 
 This memory state is converged. The convergence is derivable from the tiers â€” no declaration required.
 
-### 4.7 Conformance Criteria
+### 5.7 Conformance Criteria
 
 A system is conformant if:
 1. Convergence is defined as a memory-state property, not an agent declaration
@@ -434,7 +532,7 @@ A system is non-conformant if:
 - No independent review is required
 - Silence claims are unbounded
 
-### 4.8 Relationship to PEA Principles
+### 5.8 Relationship to PEA Principles
 
 Convergence is ACM's operationalization of **PEA Principle 3: Convergence Is Silence**.
 

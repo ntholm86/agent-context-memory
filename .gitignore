@@ -1,0 +1,8 @@
+# Evidence tier — raw LLM session data (harness-captured, not part of the spec artifact)
+.acm/sessions/
+
+# Python artifacts
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
