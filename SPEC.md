@@ -1,6 +1,6 @@
 ﻿# Agent Context Memory Specification
 
-**Version:** 0.2.0 (draft)  
+**Version:** 0.3.0  
 **Date:** 2026-06-21  
 **Author:** Nils Wendelboe Holmager  
 **License:** CC BY-SA 4.0
