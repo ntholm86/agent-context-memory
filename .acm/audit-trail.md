@@ -548,3 +548,32 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Silence** — the coupling is established. Next direction is operator-initiated.
 2. **Update AII preprint** — add ACM citation in a future revision. Blocked on operator decision (is AII revision in scope?).
 3. **Add PEA→ACM cross-reference** — PEA doesn't yet cite ACM. Lower priority; ACM already cites PEA.
+
+---
+
+## 2026-06-21 — trail-to-acm-rename
+
+**Ask:** Rename .trail/ to .acm/ across all repositories. The folder IS the Agent Context Memory reference implementation — the name should match.
+
+**Examination:** 11 repos with .trail/ folders. ai-steward has Python code with ~50 references. Skills suite has 6 skills referencing .trail/. ACM spec defines .trail/ as reference implementation in Section 6.
+
+**Lenses applied:**
+- *Branding coherence:* .acm/ aligns folder name with specification name (Agent Context Memory)
+- *Breaking change analysis:* Code changes required in ai-steward (Python), skills (SKILL.md), documentation across all repos
+- *Historical preservation:* Trail entries INSIDE .acm/ folders keep original .trail/ references — they're historical record of what the folder was called at the time
+
+**Decision:** [!DECISION] Proceed with rename. Update in dependency order: ACM spec (source of truth) → skills suite → ai-steward (implementation) → all other repos.
+
+**Prediction:** All active code references .acm/. Tests pass. Historical trail entries remain unchanged.
+
+**Action:**
+1. Renamed .trail/ to .acm/ in 11 repos
+2. Updated ACM SPEC.md Section 6 to define .acm/ as standard
+3. Updated ai-steward Python code (scan.py, record.py, harness.py, cli.py, loop.py, _types.py)
+4. Updated ai-steward tests — all 76 pass
+5. Updated local copilot skills (6 files)
+6. Updated README files in ACM, ai-steward, AII
+
+**Blind spot:** Third-party users who installed the skills before this change will still have .trail/ references. The skills read from local install path, not from the repo.
+
+**Reflection:** The rename is complete. The reference implementation folder now matches the specification name. Breaking change — any external tooling referencing .trail/ must update.
