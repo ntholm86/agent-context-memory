@@ -49,7 +49,7 @@ The intent tier contains the principal's mandate — the governing context that 
 
 **Trust semantics:** The intent tier is authoritative. When the agent's interpretation of a task conflicts with the mandate, the mandate wins. When the trace tier's account of what happened conflicts with what the mandate authorized, the mandate defines what *should* have happened.
 
-**Why highest trust:** The principal is the party with standing to authorize action. The mandate is the only tier where the agent has no authorship — it cannot write, edit, or delete intent-tier content. This structural separation is what makes the tier trustworthy.
+**Why highest trust:** The principal is the party with standing to authorize action. The mandate is the only tier where the agent has no authorship rights — it cannot modify intent-tier content on its own authority; any changes require explicit principal confirmation. This structural separation is what makes the tier trustworthy.
 
 ### 1.3 Trace Tier (Decisions)
 
@@ -225,7 +225,7 @@ If any of these conditions is not met, the session is **unauthorized** — not m
 
 A session is **valid** if it operates under a mandate that:
 - Existed before the session started
-- Was authored by the principal (not the agent)
+- Was confirmed by the principal as their mandate (the principal bears responsibility for the content; agent-assisted articulation is conformant if the principal confirmed the result)
 - Was read by the agent before any action
 - Has a visible interpretation in the trace tier
 
@@ -646,7 +646,7 @@ A system is **minimally ACM-conformant** if:
 
 2. **Trace tier is append-only.** The agent's decision log cannot be modified after entries are written.
 
-3. **Author separation is enforced.** The agent cannot write to the intent tier. The principal should not write to the trace tier.
+3. **Author separation is enforced.** The agent cannot modify the intent tier on its own authority; any intent-tier changes require explicit principal confirmation. The principal should not write to the trace tier.
 
 4. **The mandate gate is implemented.** The system checks for intent-tier existence before authorizing agent action.
 

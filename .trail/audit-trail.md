@@ -376,3 +376,45 @@ Append-only decision log. Each entry records one iteration of work.
 **Reflection:**
 - *Model claim:* [!REALIZATION] "Never the agent" was a shorthand that protected the right thing (agent can't be the authority) but said the wrong thing (agent can't contribute). The correct frame is authorship-as-responsibility, not authorship-as-typing. This distinction matters beyond ACM -- it's a general principle for any governance spec that involves AI assistance in producing the governed artifact.
 - *Blind spot:* Section 3.2 still says "Was authored by the principal (not the agent)" -- same issue, smaller surface. Not fixing now unless operator asks.
+
+---
+
+## 2026-06-21 -- propagate-scribe-model-residue
+
+**Ask:** Improve skill run on SPEC.md. Work queue was EMPTY per retrospect; skill invoked to probe for remaining inconsistencies.
+
+**Interpretation:** The Author-field fix in Section 1.2 (previous session) established the scribe model but did not propagate to every other sentence that makes absolute "agent cannot write to intent tier" claims. Those residues create internal contradiction: the Author field says one thing, and the Why-highest-trust paragraph, the Section 3.2 validity checklist, and the Section 6.3 conformance criterion each say the opposite.
+
+**Lenses applied:**
+- Inconsistency: FIRED. Three surfaces with absolute agent-write prohibition contradicting the confirmed scribe model in 1.2 Author field and 6.2 Author field.
+- Purpose, Overburden, Waste: not fired.
+
+**Decision:** Fix all three surfaces as one iteration (same finding class, same root cause). [!DECISION]
+
+**Pre-commit prediction:** Sections 1.2, 3.2, and 6.3 will be internally consistent on the scribe model. No other sections affected.
+
+**Changes made:**
+1. Section 1.2 Why-highest-trust: "has no authorship" → "has no authorship rights" + "cannot write, edit, or delete" → "cannot modify... on its own authority; any changes require explicit principal confirmation"
+2. Section 3.2 validity list: "Was authored by the principal (not the agent)" → "Was confirmed by the principal as their mandate (principal bears responsibility; agent-assisted articulation conformant if confirmed)"
+3. Section 6.3 minimal conformance: "The agent cannot write to the intent tier" → "cannot modify on its own authority; any intent-tier changes require explicit principal confirmation"
+
+**Verification:** grep for "cannot write|authored by the principal" across SPEC.md — three problem surfaces resolved; one remaining "Was authored by the principal, not the agent" at line 276 is in historical Roman law description (Section 3.5), not a conformance requirement — correct to leave.
+
+**Prediction held.**
+
+**Reflection:**
+- *Model claim:* [!REALIZATION] The spec carries a residue pattern: whenever a new concept clarification is added, the sentences that were accurate before the clarification remain and contradict it. The fix propagation problem is structural, not one-off. Future spec changes should include a grep-and-check step for every absolute claim that the new language softens.
+- *Blind spot:* Section 6.3 minimal conformance is still missing two of Section 3's four validity conditions (agent must read mandate; interpretation must be visible). Not examined in this run.
+- *Imagined reader pushback:* A careful reader might argue that "cannot modify on its own authority" is too vague — what counts as "own authority"? The spec doesn't define the boundary between assisted-and-confirmed vs. unilateral. That definition is implicit in "explicit principal confirmation" but could be sharper.
+
+**Across-trail reflection:**
+- Recurring finding-class: FIRED — this is the third run in a row touching the same Author-field authorship language in SPEC.md (run 1: added two clarifying paragraphs; run 2: collapsed to accurate Author field; run 3: propagated to residue). Arc-level pattern: clarification introduced incrementally, residues cleaned up across multiple runs. [!REALIZATION] This arc pattern is normal for living specs but it does argue for a propagation-check discipline on concept changes.
+- About to declare silence: not fired — a change was made.
+- Contradicts prior realization: not fired.
+- Operator explicitly asked: not fired.
+
+### Candidate Next Moves
+
+1. **Section 6.3 minimal conformance criteria expansion** — Section 3.2 requires four conditions for a valid session (mandate exists, confirmed by principal, was read, interpretation visible). Section 6.3 minimal conformance only enforces two of them. Adding "agent must read mandate before acting" and "agent must record interpretation before other trace entries" to 6.3 closes a logical gap that an external reviewer would catch. Ranks first because it's a structural incompleteness, not a wording inconsistency.
+2. **Section 4.3 model-independence language** — "A different agent (model independence)" as an independent evaluator is weak for academic purposes; two GPT-4 instances share training data and cannot be considered independent. Ranks second; lower impact than the logical gap but matters for defensibility under formal review.
+3. **External review pass** — retrospect's top item; requires an external party.
