@@ -41,6 +41,10 @@ The intent tier contains the principal's mandate — the governing context that 
 
 **Author:** The principal (human operator, team, or organization). Never the agent.
 
+*What "principal-authored" means:* The principal holds responsibility for the content and has confirmed it as their mandate. It does not require that the principal wrote every word without assistance. An agent may help a principal articulate an implicit destination — surfacing hunches, asking clarifying questions, drafting candidate text — provided the principal reviews and confirms the result before it enters the intent tier. This is the scribe model: the scribe contributes to production; the principal authors by confirming. What is prohibited is the agent writing intent-tier content the principal never confirmed. If the principal has not approved it, it is not their mandate — regardless of how plausible or well-reasoned it appears.
+
+*Why the distinction matters:* Principals often have a richer interior model than they can immediately articulate. Assistance mechanisms that help surface that model are valuable and conformant. The governance property being protected is not "the principal did all the typing" but "the principal cannot be surprised by what their mandate says."
+
 **Content:** The destination the agent is working toward, the constraints that apply across all sessions, and any scope limitations. In the reference implementation, this is `destination.md`.
 
 **Mutability:** The principal may update or replace the mandate at any time. The agent may not modify it.
