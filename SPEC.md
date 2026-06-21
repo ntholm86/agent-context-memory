@@ -39,11 +39,9 @@ The two organizations are orthogonal. An ACM-conformant system may internally us
 
 The intent tier contains the principal's mandate — the governing context that authorizes agent action.
 
-**Author:** The principal (human operator, team, or organization). Never the agent.
+**Author:** The principal — the party who holds responsibility for the content and confirms it as their mandate. The agent may contribute to articulation (surfacing hunches, drafting candidate text, asking clarifying questions), but the principal cannot be surprised by what their mandate says. Unconfirmed agent-drafted content is not the intent tier.
 
-*What "principal-authored" means:* The principal holds responsibility for the content and has confirmed it as their mandate. It does not require that the principal wrote every word without assistance. An agent may help a principal articulate an implicit destination — surfacing hunches, asking clarifying questions, drafting candidate text — provided the principal reviews and confirms the result before it enters the intent tier. This is the scribe model: the scribe contributes to production; the principal authors by confirming. What is prohibited is the agent writing intent-tier content the principal never confirmed. If the principal has not approved it, it is not their mandate — regardless of how plausible or well-reasoned it appears.
-
-*Why the distinction matters:* Principals often have a richer interior model than they can immediately articulate. Assistance mechanisms that help surface that model are valuable and conformant. The governance property being protected is not "the principal did all the typing" but "the principal cannot be surprised by what their mandate says."
+*The governance property being protected is not "the principal did all the typing" but "the principal owns and has confirmed the content."* Principals often have a richer interior model than they can immediately articulate; agent-assisted articulation mechanisms are conformant when the principal confirms the result.
 
 **Content:** The destination the agent is working toward, the constraints that apply across all sessions, and any scope limitations. In the reference implementation, this is `destination.md`.
 
@@ -570,7 +568,7 @@ An ACM-conformant repository contains a `.trail/` directory at the repository ro
 
 **Purpose:** The principal's mandate — what the agent is authorized to do, why, and what constraints apply.
 
-**Author:** Principal only. The agent must never write to this file.
+**Author:** Principal only (confirmed content). The agent may assist in articulation but must never write to this file without explicit principal confirmation of the result.
 
 **Content requirements:**
 - What the work is (scope definition)
