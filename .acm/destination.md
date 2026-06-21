@@ -1,4 +1,4 @@
-# destination.md — Agent Context Memory (ACM)
+﻿# destination.md â€” Agent Context Memory (ACM)
 
 _Written by operator: Nils Wendelboe Holmager | June 20, 2026_
 
@@ -14,9 +14,9 @@ ACM is the operationalization of Principles of Earned Autonomy (PEA) for the con
 
 ## The novel claim
 
-**Principle 1 — The Mandate Gate:** A pre-work mandate must exist before the agent is authorized to act. The principal (operator/team) must have authored the governing context, and the agent must have read it, before any session of work is valid.
+**Principle 1 â€” The Mandate Gate:** A pre-work mandate must exist before the agent is authorized to act. The principal (operator/team) must have authored the governing context, and the agent must have read it, before any session of work is valid.
 
-This is what makes ACM governance-first rather than merely capability-first. Every prior memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. ACM treats memory as a precondition — the gate that determines whether work can begin at all.
+This is what makes ACM governance-first rather than merely capability-first. Every prior memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. ACM treats memory as a precondition â€” the gate that determines whether work can begin at all.
 
 ---
 
@@ -24,9 +24,9 @@ This is what makes ACM governance-first rather than merely capability-first. Eve
 
 ACM does not ignore or contradict prior work. It builds on it:
 
-- **CoALA (Sumers et al., 2023)** — formally modeled agent memory as four typed tiers: working, episodic, semantic, procedural. ACM adopts the tiered structure, adds trust-based tier differentiation.
-- **Generative Agents (Park et al., 2023)** — observation → reflection → planning. ACM adopts reflection as a memory operation (retrospect), adds the mandate gate.
-- **MemGPT (Packer et al., 2023)** — hierarchical memory with persistence across sessions, promotion/demotion. ACM adopts cross-session persistence, adds capture-author separation.
+- **CoALA (Sumers et al., 2023)** â€” formally modeled agent memory as four typed tiers: working, episodic, semantic, procedural. ACM adopts the tiered structure, adds trust-based tier differentiation.
+- **Generative Agents (Park et al., 2023)** â€” observation â†’ reflection â†’ planning. ACM adopts reflection as a memory operation (retrospect), adds the mandate gate.
+- **MemGPT (Packer et al., 2023)** â€” hierarchical memory with persistence across sessions, promotion/demotion. ACM adopts cross-session persistence, adds capture-author separation.
 
 These are capability-first memory models: they optimize for what the agent can do. ACM is governance-first: it optimizes for whether the operator can trust what the agent did, and whether the agent was authorized to begin at all.
 
@@ -46,9 +46,9 @@ The ACM spec must define:
 
 ### 2. Structural requirements
 
-- **Capture-author separation** — the evidence tier cannot be authored by the agent. An independent harness captures LLM calls before the agent can respond.
-- **Append-only trace tier** — the agent can extend but never rewrite its decision history.
-- **Trust-tiered organization** — intent tier is authoritative, trace is agent-derived, evidence is independently captured. Conflicts resolve toward higher trust.
+- **Capture-author separation** â€” the evidence tier cannot be authored by the agent. An independent harness captures LLM calls before the agent can respond.
+- **Append-only trace tier** â€” the agent can extend but never rewrite its decision history.
+- **Trust-tiered organization** â€” intent tier is authoritative, trace is agent-derived, evidence is independently captured. Conflicts resolve toward higher trust.
 
 ### 3. The mandate gate
 
@@ -60,7 +60,7 @@ The session is not valid unless:
 ### 4. Convergence at the memory level
 
 The work is done when:
-- The trace tier shows no open work items (retrospect → empty queue)
+- The trace tier shows no open work items (retrospect â†’ empty queue)
 - Independent evaluators examining the evidence tier find nothing left to change
 
 ---
@@ -71,7 +71,7 @@ A published ACM v1.0 spec that:
 - Can be adopted independently of PEA (but cites PEA as origin theory)
 - References CoALA/MemGPT/Generative Agents as capability-first prior art
 - Claims the mandate gate and governance-first architecture as novel
-- Defines a directory structure (`.trail/`) implementable today
+- Defines a directory structure (`.acm/`) implementable today
 - Is defensible against the literature scan already performed
 
 ---
@@ -79,7 +79,7 @@ A published ACM v1.0 spec that:
 ## Quality bar
 
 The spec must be:
-- **Scientifically honest** — acknowledges prior art, claims only the novel contribution
-- **Practically adoptable** — an organization can implement it from the spec alone
-- **PEA-aligned** — implements all three PEA principles in the memory layer
-- **Citable** — has CITATION.cff, versioned, persistent home
+- **Scientifically honest** â€” acknowledges prior art, claims only the novel contribution
+- **Practically adoptable** â€” an organization can implement it from the spec alone
+- **PEA-aligned** â€” implements all three PEA principles in the memory layer
+- **Citable** â€” has CITATION.cff, versioned, persistent home

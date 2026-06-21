@@ -1,4 +1,4 @@
-# retrospect.md — Agent Context Memory (ACM)
+﻿# retrospect.md â€” Agent Context Memory (ACM)
 
 _Last updated: 2026-06-20 (run: spec-complete)_
 
@@ -22,10 +22,10 @@ _Last updated: 2026-06-20 (run: spec-complete)_
 
 The destination's requirements have been met. Candidate next directions (operator-initiated):
 
-1. **External review** — have independent readers assess the spec for clarity, defensibility, gaps
-2. **Conformance test suite** — automated tests that verify an implementation meets ACM criteria
-3. **Evidence tier harness** — implement session capture to achieve full conformance in this repo
-4. **Academic submission** — prepare the spec for formal publication (workshop paper, position paper)
+1. **External review** â€” have independent readers assess the spec for clarity, defensibility, gaps
+2. **Conformance test suite** â€” automated tests that verify an implementation meets ACM criteria
+3. **Evidence tier harness** â€” implement session capture to achieve full conformance in this repo
+4. **Academic submission** â€” prepare the spec for formal publication (workshop paper, position paper)
 
 ---
 
@@ -37,7 +37,7 @@ The destination's requirements have been met. Candidate next directions (operato
 
 3. **Prior art must be cited honestly.** The mandate gate is the novel claim. Tiered memory, reflection, persistence are prior art. Do not overclaim.
 
-4. **The repo demonstrates what it specifies.** ACM's `.trail/` is the reference implementation of ACM. If the spec says something, this repo must do it.
+4. **The repo demonstrates what it specifies.** ACM's `.acm/` is the reference implementation of ACM. If the spec says something, this repo must do it.
 
 ---
 
