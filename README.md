@@ -10,7 +10,7 @@ If an agent begins work without a principal-authored mandate already in memory, 
 
 ## What this is
 
-ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory. It recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns — principally RBAC — to this domain.
+ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory. It recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns — the "authorization before action" principle common to RBAC, MAC, and capability-based security — to this domain.
 
 ACM is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem. PEA is the theory; ACM is the implementation standard for memory.
 
@@ -20,7 +20,7 @@ ACM is the operationalization of [Principles of Earned Autonomy (PEA)](https://g
 
 **Principle 1 — The Mandate Gate:** A pre-work mandate must exist in memory, authored by the principal, before any agent session of work is valid. The agent must read it before touching anything else.
 
-This is RBAC's "authorization before action" principle applied to agent sessions. Every prior context memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition* — the gate that determines whether work can begin at all. Without the mandate, the session is not authorized.
+This is the "authorization before action" principle — familiar from RBAC, MAC, and capability-based security — applied to agent sessions. Every prior context memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition* — the gate that determines whether work can begin at all. Without the mandate, the session is not authorized.
 
 ---
 

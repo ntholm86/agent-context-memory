@@ -11,7 +11,7 @@
 
 Agent Context Memory (ACM) is a specification for governance-first context memory in autonomous AI agent systems. It defines how agents should organize, protect, and use the memory that persists across sessions and governs their authorization to act.
 
-ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns — principally Role-Based Access Control (RBAC) — to this domain. The core contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid. This is RBAC's "authorization before action" principle applied to agent sessions.
+ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns to this domain. The core contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid. This is the "authorization before action" principle — familiar from Role-Based Access Control (RBAC), Mandatory Access Control (MAC), and capability-based security — applied to agent sessions.
 
 This specification is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem.
 
@@ -270,7 +270,7 @@ If the interpretation is invisible, these failures cannot be detected until afte
 
 ### 3.5 Historical Grounding
 
-The mandate gate is not a novel invention — it is the application of an ancient governance principle to agent memory.
+The mandate gate is not a novel invention — it is the application of an established governance principle to agent memory.
 
 **Roman Law — Mandatum:** In Roman contract law, a *mandatum* was the formal authorization by which a principal empowered an agent to act on their behalf. The mandate:
 - Was authored by the principal, not the agent
@@ -279,6 +279,14 @@ The mandate gate is not a novel invention — it is the application of an ancien
 - Made the agent accountable for acting outside scope
 
 The structure is identical to ACM's intent tier: principal-authored, pre-existing, scope-defining, accountability-enabling.
+
+**Access Control — RBAC/MAC/Capability Models:** In software security, access control models (Sandhu et al., 1996) share a common structure:
+- Authorization must exist before action is permitted
+- Scope is defined by the authorizing party, not the actor
+- The actor is accountable for exceeding authorized scope
+- Permissions are checked at session initiation
+
+The mandate gate is this pattern applied to agent sessions rather than individual operations.
 
 **Aviation — Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the mission parameters. The brief:
 - Must be completed before departure (pre-work gate)
@@ -291,7 +299,7 @@ The structure is identical to ACM's intent tier: principal-authored, pre-existin
 - Ensures all participants have the same understanding
 - Creates a documented checkpoint
 
-All three share the same structure: a principal-authored or team-verified mandate must exist and be acknowledged before high-stakes action begins. The agent (pilot, surgeon, Roman agent) cannot proceed on assumption.
+All four share the same structure: a principal-authored or externally-verified authorization must exist and be acknowledged before high-stakes action begins. The agent (pilot, surgeon, software process, Roman agent) cannot proceed on assumption.
 
 ### 3.6 Conformance Criteria
 
@@ -507,7 +515,7 @@ MemGPT asks: *How can agents effectively use more memory than fits in context?* 
 
 The mandate gate is not a novel mechanism — it is an established access control pattern applied to a new domain.
 
-**Role-Based Access Control (RBAC)** is the dominant model for authorization in software systems. Its core properties:
+**Authorization Patterns (RBAC, MAC, Capability Models):** Role-Based Access Control and related authorization models share core properties (Sandhu, Coyne, Feinstein, & Youman, 1996):
 - Authorization must exist before action is permitted
 - Scope is defined by the authorizing party, not the actor
 - The actor is accountable for exceeding authorized scope
@@ -515,9 +523,13 @@ The mandate gate is not a novel mechanism — it is an established access contro
 
 These properties map directly to ACM's mandate gate. The mandate is the authorization. The principal defines scope. The agent is accountable for exceeding it. The check happens before the session begins.
 
+ACM's specific pattern is closer to Mandatory Access Control (MAC) than RBAC in one respect: the agent has only one role (actor) and one principal relationship, rather than multiple roles with different permissions. The shared property is "authorization before action" — the principle common to the entire family.
+
 ACM's contribution is not inventing these patterns but recognizing that **agent memory is an authorization domain** where they apply. Prior agent memory models (Section 5.1–5.3) treat memory as a capability resource. ACM treats memory as an authorization substrate — the place where the mandate lives, where the agent's interpretation is recorded, and where independent evidence of what happened accumulates.
 
-The mandate gate differs from RBAC in one respect: it gates the *session*, not individual operations. RBAC asks "can this principal perform this action?" The mandate gate asks "does this session have authorization to exist at all?" This is closer to aviation's pre-flight brief or surgery's timeout than to per-operation access checks.
+The mandate gate differs from per-operation access checks in that it gates the *session*, not individual operations. RBAC asks "can this principal perform this action?" The mandate gate asks "does this session have authorization to exist at all?" This is closer to aviation's pre-flight brief or surgery's timeout than to per-operation access checks.
+
+**Constitutional AI Differentiation:** ACM addresses runtime memory governance, not training-time alignment. Constitutional AI (Bai et al., 2022) and related approaches constrain what the agent learns to do; ACM constrains what an already-trained agent is authorized to do in a specific session. The two are complementary: Constitutional AI shapes the agent's dispositions, ACM governs its runtime authorization.
 
 ### 5.5 The Governance Gap
 
