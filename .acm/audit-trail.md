@@ -711,3 +711,65 @@ Plus: 4-level implementation ceiling (RECOMMENDED in spec, enforced in ai-stewar
 ### [!REALIZATION]
 
 Three surfaces (spec, implementation, skills) had three different stop rules, all written at different times. The spec is now the single source of truth; all surfaces should cite it. Future changes to the stop conditions must change the spec first, then propagate.
+
+---
+
+## 2026-06-21 -- release-v0.2.0
+
+- target: agent-context-memory GitHub + Zenodo
+- operator: Nils Wendelboe Holmager
+- agent: GitHub Copilot (Claude Sonnet 4.6)
+- skill: improve
+- outcome: v0.2.0 released on GitHub. Tag v0.2.0 pushed. Zenodo auto-capture pending.
+
+### What's in v0.2.0
+
+1. **SPEC.md §4 Scoped Memory** — new governance axis (scope hierarchy). Added in prior session; included in this release.
+2. **SPEC.md §4.2 stop conditions** — three explicit, testable stop conditions replacing vague 'natural boundary'. Added today.
+3. **README.md** — scope hierarchy added to structural requirements list.
+4. **.gitignore** — created. .acm/sessions/ excluded (raw LLM data). .acm/ trace/intent tiers remain tracked: they self-demonstrate the spec.
+5. **CITATION.cff / .zenodo.json** — version 0.1.0 -> 0.2.0, date 2026-06-21.
+
+### .acm/ gitignore decision
+
+Intent: keep .acm/ tracked. The spec is self-demonstrating -- it uses its own pattern to govern its own development. The .zenodo.json explicitly tells readers to read .acm/destination.md as the third document. Hiding the trail would undermine the spec's credibility.
+
+Exception: sessions/ gitignored. Raw LLM call data is not part of the spec artifact.
+
+### Release URL
+
+https://github.com/ntholm86/agent-context-memory/releases/tag/v0.2.0
+
+### Zenodo note
+
+If the Zenodo GitHub webhook is configured, v0.2.0 will be auto-captured on the GitHub Release. If not, a manual deposit is needed. The prior v0.1.0 release exists on GitHub but no ACM-specific Zenodo DOI has been confirmed.
+
+## 2026-06-21 — release-v0.2.0-tag-corrected
+
+**Ask:** Verify that the v0.2.0 GitHub Release archive includes the .zenodo.json description update (two-axis description + What's new paragraph).
+
+**Finding:** Tag v0.2.0 was originally cut at commit 147e89e. The .zenodo.json description fix (scope axis, changelog paragraph) landed at d8dbdb0 — one commit after the tag. The release archive would have contained the old single-axis description.
+
+**Decision:** Move the tag forward to HEAD (d8dbdb0) so the archive is consistent. Release was fresh with no citations, so tag deletion + recreation was safe.
+
+**Actions:**
+- Deleted GitHub Release id 342502968 (v0.2.0 at 147e89e)
+- Deleted remote tag v0.2.0; recreated at d8dbdb0; pushed
+- Recreated GitHub Release id 342503742: https://github.com/ntholm86/agent-context-memory/releases/tag/v0.2.0
+
+**State:** v0.2.0 tag = d8dbdb0. Release archive contains correct .zenodo.json. Zenodo auto-capture (if webhook active) will now receive the two-axis description.
+
+## 2026-06-21 — release-v0.2.0-tag-corrected
+
+**Ask:** Verify that the v0.2.0 GitHub Release archive includes the .zenodo.json description update (two-axis description + What's new paragraph).
+
+**Finding:** Tag v0.2.0 was originally cut at commit 147e89e. The .zenodo.json description fix (scope axis, changelog paragraph) landed at d8dbdb0 — one commit after the tag. The release archive would have contained the old single-axis description.
+
+**Decision:** Move the tag forward to HEAD (d8dbdb0) so the archive is consistent. Release was fresh with no citations, so tag deletion + recreation was safe.
+
+**Actions:**
+- Deleted GitHub Release id 342502968 (v0.2.0 at 147e89e)
+- Deleted remote tag v0.2.0; recreated at d8dbdb0; pushed
+- Recreated GitHub Release id 342503742: https://github.com/ntholm86/agent-context-memory/releases/tag/v0.2.0
+
+**State:** v0.2.0 tag = d8dbdb0. Release archive contains correct .zenodo.json. Zenodo auto-capture (if webhook active) will now receive the two-axis description.
