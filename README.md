@@ -1,5 +1,7 @@
 ﻿# Agent Context Memory (ACM)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20785506.svg)](https://doi.org/10.5281/zenodo.20785506)
+
 **A specification for governance-first context memory in autonomous AI agent systems.**
 
 📄 **[Read the full specification →](./SPEC.md)**

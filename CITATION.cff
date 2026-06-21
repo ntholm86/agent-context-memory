@@ -26,6 +26,10 @@ repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
 version: "0.3.2"
 date-released: "2026-06-21"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20785506"
+    description: "Zenodo concept DOI (resolves to latest version)"
 keywords:
   - context memory
   - agent memory
