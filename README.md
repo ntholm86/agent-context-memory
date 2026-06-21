@@ -58,6 +58,16 @@ These models optimize for what the agent *can do*. ACM optimizes for whether the
 
 ---
 
+## Relationship to Augmented Individual Intelligence
+
+[Augmented Individual Intelligence (AII)](https://doi.org/10.5281/zenodo.18417872) defines five boundary conditions for when human-AI coupling qualifies as cognitive partnership. The fifth condition is **agency preservation**: the human retains final decision authority and can override AI suggestions.
+
+ACM provides the enforcement mechanism for this requirement. The mandate gate ensures the principal authors the authorization; capture-author separation ensures the agent cannot rewrite its own observation record; append-only trace ensures the agent cannot rationalize overstepping after the fact.
+
+**ACM is infrastructure for AII-qualifying practices.** Without governance-first memory, agency preservation is behavioral hope. With ACM, it is structural guarantee.
+
+---
+
 ## Reference implementation
 
 The `.trail/` directory pattern is the reference implementation of ACM:
