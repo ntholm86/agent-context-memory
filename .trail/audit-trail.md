@@ -418,3 +418,44 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Section 6.3 minimal conformance criteria expansion** — Section 3.2 requires four conditions for a valid session (mandate exists, confirmed by principal, was read, interpretation visible). Section 6.3 minimal conformance only enforces two of them. Adding "agent must read mandate before acting" and "agent must record interpretation before other trace entries" to 6.3 closes a logical gap that an external reviewer would catch. Ranks first because it's a structural incompleteness, not a wording inconsistency.
 2. **Section 4.3 model-independence language** — "A different agent (model independence)" as an independent evaluator is weak for academic purposes; two GPT-4 instances share training data and cannot be considered independent. Ranks second; lower impact than the logical gap but matters for defensibility under formal review.
 3. **External review pass** — retrospect's top item; requires an external party.
+
+---
+
+## 2026-06-21 -- reframe-novelty-as-domain-transfer
+
+**Ask:** Publication-rigour-review flagged that claiming the mandate gate as a novel invention is weaker than claiming the domain transfer. RBAC already has authorization-before-action. The contribution is recognizing that agent memory IS an authorization domain and applying established patterns to it.
+
+**Interpretation:** Shift from "we invented X" to "we transferred X from access control to agent memory." This is more defensible: a reviewer can't say "the mechanism already exists in agent memory literature" because the transfer hasn't been made, even though the mechanism itself is established in security.
+
+**Decision:** [!DECISION] Reframe the entire contribution claim structure:
+1. Abstract: "recognizes that agent memory is fundamentally an authorization problem and applies RBAC patterns"
+2. New Section 5.4: Access Control Prior Art (RBAC, explicit differentiation)
+3. Section 5.5 renamed "Contribution Claims" with domain-transfer framing
+4. Section 6.6: Implementation Provenance citing Skills Suite DOI (April 24, 2026) — the pattern was publicly working before the spec
+
+**Pre-commit prediction:** After these changes, the spec will be harder to attack on novelty grounds. A reviewer cannot say "RBAC already exists" (yes, and the spec acknowledges it) or "this is just access control" (yes, applied to a new domain). The April 24 DOI proves the implementation predates the specification.
+
+**Also fixed (from publication review findings):**
+- Section 4.3: "model independence" now requires different model families, not just different instances
+- Section 6.3: Added two missing conformance criteria (agent reads mandate first; interpretation visible before action) — aligning with Section 3.2's four validity conditions
+
+**Verification:** grep for RBAC shows 6 matches across Abstract, Section 5.4, Section 5.5. grep for DOI shows provenance section with April 24, 2026 anchor.
+
+**Prediction held.** The spec now positions its contribution as domain transfer, not mechanism invention.
+
+**Reflection:**
+- *Model claim:* [!REALIZATION] "Novelty in transfer" is the more defensible and more honest framing for most applied work. The mandate gate pattern exists in Roman law, aviation, surgery, and RBAC. The contribution is recognizing that agent memory belongs to the same problem class. This reframe applies beyond ACM — it's a general principle for positioning applied specifications.
+- *Blind spot:* The .zenodo.json description wasn't updated in this run. Should be aligned when Zenodo processes.
+- *Imagined reader pushback:* A reader might say "if the mechanism isn't novel, why publish a spec?" The answer: the domain transfer hasn't been made in agent memory literature. CoALA, MemGPT, Generative Agents don't have mandate gates. The contribution is bridging two literatures.
+
+**Across-trail reflection:**
+- Recurring finding-class: not fired — this is a new finding class (positioning/framing), not the authorship-language propagation of the last three runs.
+- About to declare silence: not fired — significant changes made.
+- Contradicts prior realization: not fired.
+- Operator explicitly asked: not fired.
+
+### Candidate Next Moves
+
+1. **Update .zenodo.json description** — the abstract still uses old framing; should match CITATION.cff. Ranks first because it's a metadata-surface consistency issue.
+2. **Section 3.5 Historical Grounding — add RBAC explicitly** — the section has Roman law, aviation, surgery but not RBAC. Ranks second; would complete the prior-art integration.
+3. **Wait for Zenodo to process, then update DOIs** — CITATION.cff needs ACM's own DOI once assigned, and Skills Suite .zenodo.json needs the ACM DOI. Blocked on external.
