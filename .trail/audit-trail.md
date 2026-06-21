@@ -504,3 +504,47 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Silence** — the publication-rigour-review findings are addressed. Next direction is operator-initiated (external review, submission).
 2. **Add References section** — for academic venues, a formal references section may be expected. Ranks second because it's format polish.
 3. **Expand Constitutional AI differentiation** — add formal Bai et al. (2022) citation. Ranks third; optional for spec, helpful for paper.
+
+---
+
+## 2026-06-21 — aii-acm-coupling
+
+**Ask:** Establish formal citable relationship between ACM and AII. ACM operationalizes AII's agency-preservation boundary condition at the memory-governance level.
+
+**Examination:**
+- AII defines five boundary conditions for human-AI cognitive partnership
+- The fifth is agency preservation: "human retains final decision authority"
+- AII specifies *what* but not *how* to enforce agency preservation
+- ACM's mandate gate, capture-author separation, and append-only trace *are* the enforcement mechanism
+
+**Decision:** Add Section 5.7 to SPEC.md establishing the relationship, update README with AII section, add AII DOI to .zenodo.json related_identifiers.
+
+**Prediction:** ACM will be positioned as infrastructure for AII-qualifying practices. The relationship is asymmetric (ACM→AII) but citable in both directions.
+
+**Actions:**
+1. **Section 5.7** — new "Relationship to Augmented Individual Intelligence" section with table mapping AII requirements to ACM implementations
+2. **README.md** — new section between "Relationship to prior art" and "Reference implementation"
+3. **.zenodo.json** — added AII DOI (10.5281/zenodo.18417872) as `isSupplementTo` related identifier
+
+**[!REVERSAL]** During the run, discovered `.zenodo.json` was corrupted from an earlier edit (truncated description field causing invalid JSON). Rebuilt from last valid version (1bd0a4e) with updated framing.
+
+**Verification:** Committed `95bca30`, pushed. JSON validated with Python.
+
+**Prediction held.** The coupling is now citable. ACM is infrastructure for AII.
+
+**Reflection:**
+- *Model claim:* [!REALIZATION] The body of work now has three layers: AII (phenomenon), PEA (principles), ACM (implementation). This wasn't planned from the start — it emerged from the work. The fact that they fit together cleanly suggests the underlying model is coherent.
+- *Blind spot:* AII preprint doesn't yet cite ACM (would require revision). This is acceptable — ACM is newer.
+- *Imagined reader pushback:* "Why only agency preservation?" Because it's the condition that requires *structural* enforcement. Continuity, bidirectionality, adaptivity, cross-domain use are behavioral properties observable from outside. Agency preservation is the one that can be *violated* by the system itself if not structurally constrained.
+
+**Across-trail reflection:**
+- Recurring finding-class: not fired
+- About to declare silence: not fired — made changes
+- Contradicts prior realization: not fired — extends the arc
+- Operator explicitly asked: not fired
+
+### Candidate Next Moves
+
+1. **Silence** — the coupling is established. Next direction is operator-initiated.
+2. **Update AII preprint** — add ACM citation in a future revision. Blocked on operator decision (is AII revision in scope?).
+3. **Add PEA→ACM cross-reference** — PEA doesn't yet cite ACM. Lower priority; ACM already cites PEA.
