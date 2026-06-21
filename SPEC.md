@@ -11,7 +11,7 @@
 
 Agent Context Memory (ACM) is a specification for governance-first context memory in autonomous AI agent systems. It defines how agents should organize, protect, and use the memory that persists across sessions and governs their authorization to act.
 
-ACM covers the full scope of agent memory — episodic, semantic, and working memory as prior work establishes — and adds a governance layer no prior specification defines. The novel contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid.
+ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns — principally Role-Based Access Control (RBAC) — to this domain. The core contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid. This is RBAC's "authorization before action" principle applied to agent sessions.
 
 This specification is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem.
 
@@ -360,7 +360,7 @@ Convergence requires that independent evaluators — parties other than the agen
 4. Identify findings the agent's trace tier did not surface
 
 **Who counts as independent:**
-- A different agent (model independence)
+- An agent from a different model family (e.g., Claude evaluating GPT's work, or vice versa) — instances of the same model share training data and cannot be considered statistically independent
 - The principal reviewing the evidence (role independence)
 - An external auditor (organizational independence)
 
@@ -503,9 +503,25 @@ Generative Agents asks: *How can agents maintain coherent long-term behavior?* A
 
 MemGPT asks: *How can agents effectively use more memory than fits in context?* ACM asks: *How can observers trust what agents claim about their memory?*
 
-### 5.4 The Governance Gap
+### 5.4 Access Control Prior Art
 
-The three prior works share a common assumption: memory exists to serve the agent's capabilities. They optimize for what the agent can do — retrieve relevant context, maintain coherent behavior, overcome context limits.
+The mandate gate is not a novel mechanism — it is an established access control pattern applied to a new domain.
+
+**Role-Based Access Control (RBAC)** is the dominant model for authorization in software systems. Its core properties:
+- Authorization must exist before action is permitted
+- Scope is defined by the authorizing party, not the actor
+- The actor is accountable for exceeding authorized scope
+- Permissions are checked at session/request initiation, not only at individual operations
+
+These properties map directly to ACM's mandate gate. The mandate is the authorization. The principal defines scope. The agent is accountable for exceeding it. The check happens before the session begins.
+
+ACM's contribution is not inventing these patterns but recognizing that **agent memory is an authorization domain** where they apply. Prior agent memory models (Section 5.1–5.3) treat memory as a capability resource. ACM treats memory as an authorization substrate — the place where the mandate lives, where the agent's interpretation is recorded, and where independent evidence of what happened accumulates.
+
+The mandate gate differs from RBAC in one respect: it gates the *session*, not individual operations. RBAC asks "can this principal perform this action?" The mandate gate asks "does this session have authorization to exist at all?" This is closer to aviation's pre-flight brief or surgery's timeout than to per-operation access checks.
+
+### 5.5 The Governance Gap
+
+The prior agent memory works share a common assumption: memory exists to serve the agent's capabilities. They optimize for what the agent can do — retrieve relevant context, maintain coherent behavior, overcome context limits.
 
 ACM starts from a different assumption: memory exists to serve the principal's governance needs. The first question is not "how can the agent use memory effectively?" but "how can the principal verify that the agent was authorized and that its account of what happened is trustworthy?"
 
@@ -520,19 +536,19 @@ This is the governance gap:
 
 ACM does not replace these systems. An ACM-conformant implementation may use CoALA's functional memory types internally, Generative Agents' reflection loop, or MemGPT's hierarchical memory management. The trust-tier organization is an additional layer that addresses questions the capability-focused systems do not ask.
 
-### 5.5 Novel Claims
+### 5.6 Contribution Claims
 
-ACM claims novelty for:
+ACM's contribution is the **transfer of established authorization patterns to agent memory governance**:
 
-1. **The Mandate Gate (Section 3)** — the requirement that a principal-authored mandate must exist in memory before any agent session is valid. No prior system requires pre-work authorization as a structural property.
+1. **The Mandate Gate (Section 3)** — applies RBAC's "authorization before action" principle to agent sessions. The mechanism is established in access control; its application to agent memory as a structural property is new in this domain.
 
-2. **Capture-Author Separation (Section 2.1)** — the requirement that the evidence tier be captured by an independent harness, not authored by the agent. No prior system separates observation capture from agent authorship.
+2. **Capture-Author Separation (Section 2.1)** — applies audit-log principles (the observed party cannot author its own observation record) to agent memory. The principle is established in security and accounting; its application to agent memory tiers is new.
 
-3. **Trust-Tier Organization (Section 1)** — the organization of memory by trust level (who authored it, whether it can be modified, how conflicts resolve) rather than by functional type. This is orthogonal to prior taxonomies.
+3. **Trust-Tier Organization (Section 1)** — organizes memory by trust level (who authored it, whether it can be modified, how conflicts resolve) rather than by functional type. This framing is new in agent memory literature, though trust-based data classification exists in security contexts.
 
-4. **Convergence as Memory Property (Section 4)** — the definition of work completion as a structural property of the memory state, not an agent declaration. No prior system defines convergence at the memory level.
+4. **Convergence as Memory Property (Section 4)** — defines work completion as a structural property derivable from the memory state, not an agent declaration. No prior agent memory system defines convergence at the memory level.
 
-ACM does not claim novelty for tiered memory, reflection, or cross-session persistence. These are established contributions of prior work.
+ACM does not claim novelty for tiered memory, reflection, cross-session persistence, or the underlying authorization mechanisms. These are established contributions of prior work. The contribution is recognizing that agent memory is an authorization domain and applying these patterns systematically.
 
 ---
 
@@ -642,13 +658,17 @@ An ACM-conformant repository contains a `.trail/` directory at the repository ro
 
 A system is **minimally ACM-conformant** if:
 
-1. **Intent tier exists before work begins.** A `destination.md` (or equivalent) must exist and be read by the agent before any session.
+1. **Intent tier exists before work begins.** A `destination.md` (or equivalent) must exist before any session.
 
-2. **Trace tier is append-only.** The agent's decision log cannot be modified after entries are written.
+2. **The agent reads the mandate first.** The agent's first action in each session is reading the intent tier.
 
-3. **Author separation is enforced.** The agent cannot modify the intent tier on its own authority; any intent-tier changes require explicit principal confirmation. The principal should not write to the trace tier.
+3. **Interpretation is visible before action.** The agent's interpretation of the mandate appears in the trace tier before any action entries.
 
-4. **The mandate gate is implemented.** The system checks for intent-tier existence before authorizing agent action.
+4. **Trace tier is append-only.** The agent's decision log cannot be modified after entries are written.
+
+5. **Author separation is enforced.** The agent cannot modify the intent tier on its own authority; any intent-tier changes require explicit principal confirmation. The principal should not write to the trace tier.
+
+6. **The mandate gate is implemented.** The system checks for intent-tier existence before authorizing agent action.
 
 ### 6.4 Full Conformance
 
@@ -674,6 +694,12 @@ This specification repository (`agent-context-memory`) implements ACM:
 This repository is therefore minimally conformant but not fully conformant. Full conformance would require adding an independent session capture harness.
 
 The spec documents what the directory structure means. This repository demonstrates that the structure works.
+
+### 6.6 Implementation Provenance
+
+The `.trail/` directory pattern was publicly released as part of the **Principles of Earned Autonomy Skills Suite** (DOI: [10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), April 24, 2026) before this specification was written. The implementation predates and informed the specification.
+
+This is intentional: the pattern was developed through iterative use, proved effective in practice, and only then formalized. The specification describes what the implementation already demonstrated.
 
 ---
 

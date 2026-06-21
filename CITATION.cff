@@ -4,19 +4,20 @@ type: software
 title: "Agent Context Memory: A Governance-First Specification for AI Agent Context Memory"
 abstract: >
   ACM (Agent Context Memory) is a specification for governance-first context memory
-  in autonomous AI agent systems. It covers the full scope of agent memory —
-  episodic, semantic, and working memory as prior work establishes — and adds a
-  governance layer no prior specification defines. The novel contribution is the
-  Mandate Gate (Principle 1): a pre-work mandate, authored by the principal, must
-  exist in the agent's memory before any session of work is valid. This makes
-  context memory governance-first rather than capability-first. Prior models
-  (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent
-  draws from during work. ACM treats memory as a precondition — the gate that
-  determines whether work can begin at all. ACM also defines three memory tiers
-  organized by trust level (intent / trace / evidence), structural capture-author
-  separation, and convergence as a memory-level property. ACM is the operationalization
-  of Principles of Earned Autonomy (PEA) for the context memory design problem.
-  The reference implementation is the .trail/ directory pattern.
+  in autonomous AI agent systems. It recognizes that agent memory is fundamentally
+  an authorization problem and applies established access control patterns —
+  principally RBAC — to this domain. The core contribution is the Mandate Gate:
+  a pre-work mandate, authored by the principal, must exist in the agent's memory
+  before any session of work is valid. This is RBAC's "authorization before action"
+  principle applied to agent sessions. Prior models (MemGPT, CoALA, Generative Agents)
+  treat memory as a working resource the agent draws from during work. ACM treats
+  memory as a precondition — the gate that determines whether work can begin at all.
+  ACM also defines three memory tiers organized by trust level (intent / trace /
+  evidence), structural capture-author separation, and convergence as a memory-level
+  property. ACM is the operationalization of Principles of Earned Autonomy (PEA)
+  for the context memory design problem. The reference implementation is the
+  .trail/ directory pattern, publicly released April 24, 2026 (DOI: 10.5281/zenodo.19732827)
+  before this specification was written.
 authors:
   - family-names: Holmager
     given-names: Nils Wendelboe
