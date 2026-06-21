@@ -360,3 +360,19 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Echo the scribe-model clarification in Section 3.1** — a brief cross-reference ("see Section 1.2 for what principal-authored means") would prevent the same ambiguity from biting a reader who starts at the Mandate Gate.
 2. **Silence on Section 1.2 authorship clarity** — the primary surface is now clear; Section 3 echo is optional reinforcement, not a defect.
 3. **Update retrospect.md** — the work queue is technically still empty (this was operator-initiated, not queue-derived).
+
+---
+
+## 2026-06-21 -- fix-never-the-agent-misleading-author-field
+
+**Ask:** "Never the agent" is misleading and empirically false -- the Destination skill writes destination.md content that operators confirm with "yes". Fix the Author field in Section 1.2 to say the right thing.
+
+**Decision:** Collapse the two clarifying paragraphs from the previous commit back into the Author field itself. Remove the contradictory "Never the agent" line. The field now leads with what the property actually is: the principal owns and confirms the content. Agent-assisted articulation is conformant.
+
+**Action:** Section 1.2 Author field rewritten. Section 6.2 Author field updated to match. Two-paragraph clarification block removed (content absorbed into the field).
+
+**Outcome:** The first thing a reader sees is the correct governance property, not a rule that contradicts the clarification below it.
+
+**Reflection:**
+- *Model claim:* [!REALIZATION] "Never the agent" was a shorthand that protected the right thing (agent can't be the authority) but said the wrong thing (agent can't contribute). The correct frame is authorship-as-responsibility, not authorship-as-typing. This distinction matters beyond ACM -- it's a general principle for any governance spec that involves AI assistance in producing the governed artifact.
+- *Blind spot:* Section 3.2 still says "Was authored by the principal (not the agent)" -- same issue, smaller surface. Not fixing now unless operator asks.
