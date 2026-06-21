@@ -459,3 +459,48 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Update .zenodo.json description** — the abstract still uses old framing; should match CITATION.cff. Ranks first because it's a metadata-surface consistency issue.
 2. **Section 3.5 Historical Grounding — add RBAC explicitly** — the section has Roman law, aviation, surgery but not RBAC. Ranks second; would complete the prior-art integration.
 3. **Wait for Zenodo to process, then update DOIs** — CITATION.cff needs ACM's own DOI once assigned, and Skills Suite .zenodo.json needs the ACM DOI. Blocked on external.
+
+---
+
+## 2026-06-21 — broaden-rbac-framing
+
+**Ask:** Apply publication-rigour-review findings via improve skill. Fix M1 (RBAC analogy imprecise), m1 (no formal RBAC citation), m2 (Constitutional AI not differentiated), m3 (Section 3.5 missing RBAC).
+
+**Examination:** 
+- Section 5.4 anchored specifically to RBAC when the actual pattern is the broader family (RBAC, MAC, capability-based security)
+- Section 3.5 lists Roman law, aviation, surgery — no access control precedent
+- No formal Sandhu citation
+- No differentiation from Constitutional AI
+
+**Decision:** One incremental change: broaden "principally RBAC" to "authorization patterns family" across all surfaces, add RBAC to Section 3.5, add Sandhu citation, add Constitutional AI differentiation.
+
+**Prediction:** The spec will be more defensible against pedantic attack on RBAC label while maintaining the same contribution claim. No structural damage.
+
+**Actions:**
+1. **Abstract:** "principally RBAC" → "the 'authorization before action' principle common to RBAC, MAC, and capability-based security"
+2. **Section 3.5:** Added "Access Control — RBAC/MAC/Capability Models" with Sandhu citation, updated count from "all three share" to "all four share"
+3. **Section 5.4:** Broadened from RBAC-specific to authorization patterns family, noted MAC is closer fit for single-role pattern, added Constitutional AI differentiation paragraph
+4. **README.md:** Updated two RBAC-specific sentences to authorization patterns framing
+5. **CITATION.cff:** Updated abstract to authorization patterns framing
+6. **.zenodo.json:** Updated description to authorization patterns framing
+
+**Verification:** Committed `c0ae510`, pushed. 4 files changed, 24 insertions, 12 deletions.
+
+**Prediction held.** The spec is now more defensible without weakening the contribution claim.
+
+**Reflection:**
+- *Model claim:* ACM is at its publication-defensible state. The remaining work items (Zenodo DOI finalization, potential Constitutional AI citation expansion) are incremental polish, not structural.
+- *Blind spot:* The Sandhu (1996) citation is inline rather than in a formal references section. For academic submission, a dedicated References section may be expected.
+- *Imagined reader pushback:* "One sentence on Constitutional AI differentiation is thin." Fair — could be expanded with formal citation. But for a spec (not a paper), brevity is acceptable.
+
+**Across-trail reflection:**
+- Recurring finding-class: not fired — this was targeted fix iteration
+- About to declare silence: not fired — made changes
+- Contradicts prior realization: not fired — extends the domain-transfer framing from previous run
+- Operator explicitly asked: not fired
+
+### Candidate Next Moves
+
+1. **Silence** — the publication-rigour-review findings are addressed. Next direction is operator-initiated (external review, submission).
+2. **Add References section** — for academic venues, a formal references section may be expected. Ranks second because it's format polish.
+3. **Expand Constitutional AI differentiation** — add formal Bai et al. (2022) citation. Ranks third; optional for spec, helpful for paper.
