@@ -28,12 +28,6 @@
   ],
   "related_identifiers": [
     {
-      "identifier": "https://github.com/ntholm86/principles-of-earned-autonomy",
-      "relation": "isBasedOn",
-      "resource_type": "software",
-      "scheme": "url"
-    },
-    {
       "identifier": "10.5281/zenodo.19732890",
       "relation": "isDerivedFrom",
       "resource_type": "software",
