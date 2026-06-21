@@ -562,6 +562,25 @@ ACM's contribution is the **transfer of established authorization patterns to ag
 
 ACM does not claim novelty for tiered memory, reflection, cross-session persistence, or the underlying authorization mechanisms. These are established contributions of prior work. The contribution is recognizing that agent memory is an authorization domain and applying these patterns systematically.
 
+### 5.7 Relationship to Augmented Individual Intelligence
+
+Augmented Individual Intelligence (AII) is a cognitive construct for studying sustained human-AI cognitive coupling at the individual level (Holmager, 2026; DOI: [10.5281/zenodo.18417872](https://doi.org/10.5281/zenodo.18417872)). AII defines five boundary conditions for when human-AI interaction qualifies as cognitive partnership: continuity, bidirectionality, adaptivity, cross-domain integration, and **agency preservation**.
+
+The fifth condition — agency preservation — is definitional: "the human retains final decision authority and can override AI suggestions." AII treats this as a boundary requirement but does not specify *how* to enforce it at the system level.
+
+ACM provides that enforcement mechanism:
+
+| AII Requirement | ACM Implementation |
+|-----------------|-------------------|
+| Human retains decision authority | Mandate is principal-authored; agent cannot modify intent tier |
+| Human can override AI suggestions | Agent cannot self-authorize; mandate gate requires principal confirmation |
+| Agency is preserved over time | Append-only trace prevents agent from rewriting history to rationalize overstepping |
+| Override behavior is verifiable | Evidence tier captures what actually happened, independent of agent's account |
+
+ACM is therefore infrastructure for AII-qualifying practices. A system implementing ACM's mandate gate, capture-author separation, and append-only trace structurally enforces the agency-preservation condition that AII requires. Without such infrastructure, agency preservation is a behavioral hope rather than a structural guarantee.
+
+This relationship is asymmetric: ACM operationalizes AII's agency requirement, but AII could in principle use other governance infrastructure. The claim is that ACM is *sufficient* for agency preservation, not that it is the only possible implementation.
+
 ---
 
 ## 6. Reference Implementation
