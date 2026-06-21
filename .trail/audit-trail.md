@@ -325,3 +325,38 @@ Append-only decision log. Each entry records one iteration of work.
 1. **Connect to Zenodo** — manually link the GitHub repo to Zenodo via Zenodo's GitHub integration page.
 2. **Create v0.1.0 release** — trigger the workflow or create release manually. This will mint the DOI.
 3. **Update CITATION.cff** — add the DOI after Zenodo assigns it.
+
+---
+
+## 2026-06-21 — clarify-principal-authored-scribe-model
+
+**Ask:** Clarify "principal-authored" in Section 1.2 to accommodate agent-assisted articulation (the Destination skill's hunch mechanism) without weakening the mandate gate.
+
+**Examination:** The gap surfaced from comparing ACM's authorship rule ("Never the agent") against the Skills Suite's Destination skill, which helps principals articulate their destination through agent-surfaced hunches. The current text could be read as prohibiting this pattern, making the Skills Suite non-conformant with its own spec.
+
+**Decision:** Add clarifying paragraph to Section 1.2 after the Author field.
+
+**Prediction:** The clarification will resolve the apparent conflict. "Never the agent" becomes the statement about final authority, not about whether the agent can assist in drafting. The governance property being protected is "the principal cannot be surprised by what their mandate says."
+
+**Action:** Added two clarifying paragraphs to Section 1.2:
+- "What principal-authored means" — scribe model, confirmation is the line
+- "Why the distinction matters" — protecting surprise-prevention, not typing exclusivity
+
+**Outcome vs Prediction:** Holds. The spec now separates production mechanism from authorship responsibility.
+
+**Reflection:**
+- *Model claim:* Section 1.2 now carries the precision the scribe/interview analogy requires. The governance property is "principal cannot be surprised" — that is a better test than "principal did all the writing."
+- *Blind spot:* Section 3 (Mandate Gate) still says "authored by the principal" without this clarification. A reader arriving at Section 3 first would still hit the ambiguity. A brief cross-reference back to 1.2 in Section 3 would close it.
+- *Imagined reader:* "How do you prevent rubber-stamp confirmation?" That's enforcement, not spec. The spec correctly puts the line at confirmation.
+
+**Trigger evaluation:**
+- Recurring finding-class: not fired
+- About to declare silence: not fired (made a change)
+- Contradicts prior realization: not fired
+- Operator explicitly asked: FIRED — operator directed this specific clarification
+
+### Candidate Next Moves
+
+1. **Echo the scribe-model clarification in Section 3.1** — a brief cross-reference ("see Section 1.2 for what principal-authored means") would prevent the same ambiguity from biting a reader who starts at the Mandate Gate.
+2. **Silence on Section 1.2 authorship clarity** — the primary surface is now clear; Section 3 echo is optional reinforcement, not a defect.
+3. **Update retrospect.md** — the work queue is technically still empty (this was operator-initiated, not queue-derived).
