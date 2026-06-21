@@ -40,6 +40,7 @@ ACM defines a three-tier memory structure organized by **trust level**, not memo
 - **Capture-author separation** â€” evidence tier cannot be authored by the agent
 - **Append-only trace** â€” the agent extends but never rewrites its decision history
 - **Trust-tiered conflict resolution** â€” intent > trace > evidence when tiers disagree
+- **Scope hierarchy** — ACM memory can exist at nested scopes (repo → workspace → org). Higher-scope mandates govern lower-scope ones. Scopes are discovered by parent-directory traversal, stopping at a `.acm-root` ceiling marker or the filesystem root. See §4 Scoped Memory.
 
 **Convergence at the memory level:** work is done when the trace tier shows an empty work queue and independent evaluators find nothing left to change.
 

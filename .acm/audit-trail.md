@@ -577,3 +577,137 @@ Append-only decision log. Each entry records one iteration of work.
 **Blind spot:** Third-party users who installed the skills before this change will still have .trail/ references. The skills read from local install path, not from the repo.
 
 **Reflection:** The rename is complete. The reference implementation folder now matches the specification name. Breaking change — any external tooling referencing .trail/ must update.
+
+---
+
+## 2026-06-21 — ai-steward: Add a 'related_identifiers' entry linking to the Principles of Earned Autonomy (PEA) repository as the theoretical foundation from which ACM derives.
+
+**[!DECISION]** Proposed: Add a 'related_identifiers' entry linking to the Principles of Earned Autonomy (PEA) repository as the theoretical foundation from which ACM derives.  
+*Rationale:* The SPEC.md and destination.md repeatedly cite PEA as the theory ACM operationalizes, and the Zenodo record claims PEA is the origin theory. However, the related_identifiers section only includes three DOIs (all derivedFrom relationships, all about this ACM work itself). The PEA repository itself is mentioned in text but not in structured metadata. Adding an explicit isBasedOn link to PEA makes the intellectual dependency machine-readable for citation indexing and clarifies that ACM is not independent theory but a downstream implementation. This improves discoverability and proper attribution.  
+*Risk:* low
+
+**Prediction:** In the 'related_identifiers' array, add a new entry with relationship 'isBasedOn' pointing to the PEA repository (GitHub URL or DOI if available), positioned before the existing derivedFrom entries to signal theoretical dependency.  
+*Expected outcome:* The SPEC.md and destination.md repeatedly cite PEA as the theory ACM operationalizes, and the Zenodo record claims PEA is the origin theory. However, the related_identifiers section only includes three DOIs (all derivedFrom relationships, all about this ACM work itself). The PEA repository itself is mentioned in text but not in structured metadata. Adding an explicit isBasedOn link to PEA makes the intellectual dependency machine-readable for citation indexing and clarifies that ACM is not independent theory but a downstream implementation. This improves discoverability and proper attribution.
+
+**Lenses applied:**
+- *Commander’s Intent:* Operator destination (`.acm/destination.md`) loaded — improvement selected against stated direction.
+- *Code examination:* Repository files within scope scanned for structural improvements.
+
+**Blind spot:** .github/workflows/release.yml — did not verify whether the release process validates or requires specific metadata fields (e.g., whether missing related_identifiers would cause a release to fail). A breaking validation rule could exist.
+
+**File:** `.zenodo.json`  
+**Tokens:** SCAN 16157/465 — IMPL 1483/1225 — cycle est. $0.02087 USD  
+**Harness session:** `.acm/sessions/01KVMC42N7G4KHSKBDXKDVBKRB.jsonl`  
+
+**Diff:**
+```diff
+diff --git a/.zenodo.json b/.zenodo.json
+index fa6e8c8..937b0d0 100644
+--- a/.zenodo.json
++++ b/.zenodo.json
+@@ -26,6 +26,12 @@
+     "agent safety"
+   ],
+   "related_identifiers": [
++    {
++      "identifier": "https://github.com/ntholm86/principles-of-earned-autonomy",
++      "relation": "isBasedOn",
++      "resource_type": "software",
++      "scheme": "url"
++    },
+     {
+       "identifier": "10.5281/zenodo.19732890",
+       "relation": "isDerivedFrom",
+
+```
+
+*Staged for operator review. Not committed.*
+
+---
+
+## 2026-06-21 -- scoped-memory-section-implemented
+
+**Skill:** Improve v3.10.0
+**Target:** SPEC.md
+**Trigger:** Destination run concluded scope hierarchy belongs in ACM spec as core, not implementation pattern.
+
+**Interpretation:** Scope axis is as fundamental as trust axis. An agent that reads only repo-level context is blind to coordination effects. Scoped memory enables organizational context.
+
+**Lenses applied:**
+- **Purpose:** ACM organizes memory by trust (who authored it). Missing: what it governs. Gap found.
+- **Inconsistency:** None -- new section, no prior content to conflict with.
+
+**Prediction:** Adding Section 4 (Scoped Memory) will establish scope hierarchy as a core ACM concept. Implementations (ai-steward, skills) can now conform to a standard rather than invent ad-hoc patterns.
+
+**Actions:**
+1. Inserted new Section 4 (Scoped Memory) with 8 subsections
+2. Renumbered existing Section 4 (Convergence) to Section 5
+3. All subsections renumbered (4.x -> 5.x)
+
+**Section 4 structure:**
+- 4.1 The Scope Axis -- org > workspace > repo, vocabulary-agnostic
+- 4.2 Discovery Mechanism -- parent-directory traversal
+- 4.3 Scope Resolution Rule -- higher scope always wins
+- 4.4 Why Scope Matters for Governance -- coordination visibility
+- 4.5 Mandate Gate at Multiple Scopes -- gate applies at each scope
+- 4.6 Evidence Tier and Scope -- evidence lands where changes made
+- 4.7 Conformance Criteria -- what conformant/non-conformant looks like
+- 4.8 Relationship to PEA Principles -- Commander's Intent operationalization
+
+**Outcome vs prediction:** Section added, renumbering complete, spec compiles. Markdown lint warnings are pre-existing (table spacing, list blank lines), not introduced by this change.
+
+**[!REALIZATION]** The two-axis model (trust x scope) is now explicit in the spec. Trust axis: Intent > Trace > Evidence. Scope axis: Higher > Lower. Both use the same resolution pattern (broader visibility wins). This symmetry was implicit before -- now it is stated.
+
+**Blind spot:** The spec now requires implementations to discover parent scopes, but does not specify stop conditions precisely. \"Natural boundary\" is vague. Future work: define explicit scope boundary markers.
+
+**Candidate next moves:**
+1. Update ai-steward to discover and read parent-scope ACM -- implementation follows spec
+2. Update skills to read workspace-level ACM when present -- reasoning layer follows spec
+3. Define explicit scope boundary markers -- edge case, can defer
+
+---
+
+## 2026-06-21 -- acm-scope-traversal-stop-conditions
+
+- target: ACM SPEC.md §4.2 + ai-steward scan.py + skills improve/retrospect
+- operator: Nils Wendelboe Holmager
+- agent: GitHub Copilot (Claude Sonnet 4.6)
+- skill: improve
+- outcome: Stop conditions defined, spec updated, implementation updated, tests added.
+
+### Mandate gate
+
+Workspace destination read. ACM retrospect read. Repo retro item #1 (stop-condition definition) is the trigger.
+
+### Finding (retro item #1)
+
+SPEC.md §4.2 said "natural boundary (filesystem root, mount point, or explicit scope marker)" -- three vague options, none defined. The ai-steward implementation used filesystem root + 4-level cap. The skills used a different rule ("no .acm/ for two consecutive levels"). Three surfaces, three different rules, none matching the spec.
+
+**Challenge to first read:** Is the 4-level cap sufficient on its own? No -- it doesn't give operators an explicit way to declare a ceiling. The .acm-root marker fills this gap: operators can explicitly mark the topmost scope, preventing traversal into unrelated directory trees above the workspace.
+
+**Is "two consecutive levels without .acm/" a better rule?** No -- it breaks if there's a gap in the hierarchy (e.g., a src/ subdirectory between the repo root and the workspace). It's fragile and non-obvious. The .acm-root marker is explicit and operator-controlled.
+
+### Decision
+
+Two named stop conditions:
+1. Filesystem root (hard stop, always)
+2. .acm-root marker file (operator-declared ceiling: read that level's .acm/, then stop)
+Plus: 4-level implementation ceiling (RECOMMENDED in spec, enforced in ai-steward).
+
+### Actions
+
+1. SPEC.md §4.2 rewritten: three stop conditions defined with explanatory note on .acm-root semantics.
+2. ai-steward scan.py: .acm-root marker check added after reading .acm/destination.md at each level. if (current / ".acm-root").exists(): break
+3. Two new tests added to test_scan.py:
+   - test_scan_includes_parent_scope_destination: verifies parent scope is included
+   - test_scan_stops_at_acm_root_marker: verifies traversal halts at ceiling, content above NOT included
+4. skills/improve/SKILL.md: stop conditions updated to match spec.
+5. skills/retrospect/SKILL.md: stop conditions updated to match spec.
+
+### Verification
+
+78 tests passed (was 76). mypy not run (no type changes).
+
+### [!REALIZATION]
+
+Three surfaces (spec, implementation, skills) had three different stop rules, all written at different times. The spec is now the single source of truth; all surfaces should cite it. Future changes to the stop conditions must change the spec first, then propagate.
