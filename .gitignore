@@ -1,5 +1,5 @@
-# Evidence tier — raw LLM session data (harness-captured, not part of the spec artifact)
-.acm/sessions/
+# Private trail — reasoning and session notes not for public exposure
+.acm/
 
 # Python artifacts
 .pytest_cache/
