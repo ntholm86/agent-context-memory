@@ -33,7 +33,7 @@ ACM defines a three-tier memory structure organized by **trust level**, not memo
 | Tier | Role | Author | Files |
 |------|------|--------|-------|
 | **Intent** (highest trust) | Principal's mandate — governs all sessions | Principal only | `destination.md` |
-| **Trace** (medium trust) | Agent's decision history — append-only | Agent | `audit-trail.md`, `retrospect.md` |
+| **Trace** (medium trust) | Agent's decision history — append-only | Agent | `audit-trail.md`, `orientation.md` |
 | **Evidence** (independent) | Captured LLM interactions — agent-inaccessible | Harness | `sessions/*.jsonl` |
 
 **Structural requirements:**
@@ -54,7 +54,7 @@ ACM applies established access control patterns to agent memory:
 
 - **RBAC** — authorization before action, scope defined by authorizer, actor accountable for exceeding scope. ACM applies this at the session level (mandate gate).
 - **CoALA** (Sumers et al., 2023) — episodic, semantic, procedural, working memory tiers. ACM inherits tiered structure, adds trust-based differentiation.
-- **Generative Agents** (Park et al., 2023) — observation → reflection → planning. ACM inherits reflection as a memory operation (retrospect), applies audit-log principles.
+- **Generative Agents** (Park et al., 2023) — observation → reflection → planning. ACM inherits reflection as a memory operation (orient), applies audit-log principles.
 - **MemGPT** (Packer et al., 2023) — hierarchical memory with cross-session persistence. ACM inherits persistence, adds capture-author separation.
 
 These models optimize for what the agent *can do*. ACM optimizes for whether the operator *can trust* what the agent did, and whether the agent was *authorized* to begin at all.
@@ -79,7 +79,7 @@ The `.acm/` directory pattern is the reference implementation of ACM:
 .acm/
 ├── destination.md        # Intent tier — mandate (principal-authored)
 ├── audit-trail.md        # Trace tier — append-only decision log
-├── retrospect.md         # Trace tier — current orientation (rewritten by retrospect)
+├── orientation.md        # Trace tier — current orientation (rewritten by orient)
 └── sessions/             # Evidence tier — harness-captured JSONL
     └── *.jsonl
 ```
