@@ -288,9 +288,9 @@ The structure is identical to ACM's intent tier: principal-authored, pre-existin
 
 The mandate gate is this pattern applied to agent sessions rather than individual operations.
 
-**Aviation � Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the mission parameters. The brief:
+**Aviation � Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the destination parameters. The brief:
 - Must be completed before departure (pre-work gate)
-- Covers what the mission is and what constraints apply
+- Covers what the destination is and what constraints apply
 - Requires acknowledgment from all crew members
 - Creates a shared understanding that can be referenced if things go wrong
 
@@ -317,7 +317,7 @@ A system is non-conformant if:
 
 ### 3.7 Relationship to PEA Principles
 
-The mandate gate is ACM's operationalization of **PEA Principle 1: Commander's Intent**.
+The mandate gate is ACM's operationalization of **PEA Principle 1: Operator's Intent**.
 
 PEA Principle 1 states: *Define the destination, never the route. The agent must interpret and adapt rather than execute a checklist.*
 
@@ -422,9 +422,9 @@ A system is non-conformant if:
 
 ### 4.8 Relationship to PEA Principles
 
-Scoped memory is ACM's operationalization of organizational context for **PEA Principle 1: Commander's Intent**.
+Scoped memory is ACM's operationalization of organizational context for **PEA Principle 1: Operator's Intent**.
 
-The Commander's Intent principle requires the agent to understand *what* the principal wants and *why*. When work spans multiple scopes (repos in a workspace, workspaces in an org), the "commander" at each scope provides part of the intent. Scoped memory makes this multi-level intent visible and resolvable.
+The Operator's Intent principle requires the agent to understand *what* the principal wants and *why*. When work spans multiple scopes (repos in a workspace, workspaces in an org), the "commander" at each scope provides part of the intent. Scoped memory makes this multi-level intent visible and resolvable.
 
 ---
 
@@ -838,7 +838,7 @@ ACM operationalizes the three principles of [Principles of Earned Autonomy (PEA)
 
 | PEA Principle | ACM Implementation |
 |---------------|-------------------|
-| **P1: Commander's Intent** | The Mandate Gate (Section 3) � work cannot begin without principal-authored intent |
+| **P1: Operator's Intent** | The Mandate Gate (Section 3) � work cannot begin without principal-authored intent |
 | **P2: Observable Autonomy** | Capture-Author Separation (Section 2.1) + Append-Only Trace (Section 2.2) � agent reasoning is recorded and cannot be rewritten |
 | **P3: Convergence Is Silence** | Convergence (Section 4) � completion is a memory-state property, not an agent declaration |
 
