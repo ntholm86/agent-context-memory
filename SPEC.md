@@ -424,7 +424,7 @@ A system is non-conformant if:
 
 Scoped memory is ACM's operationalization of organizational context for **PEA Principle 1: Operator's Intent**.
 
-The Operator's Intent principle requires the agent to understand *what* the principal wants and *why*. When work spans multiple scopes (repos in a workspace, workspaces in an org), the "commander" at each scope provides part of the intent. Scoped memory makes this multi-level intent visible and resolvable.
+The Operator's Intent principle requires the agent to understand *what* the principal wants and *why*. When work spans multiple scopes (repos in a workspace, workspaces in an org), the "operator" at each scope provides part of the intent. Scoped memory makes this multi-level intent visible and resolvable.
 
 ---
 
