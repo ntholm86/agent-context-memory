@@ -1,7 +1,7 @@
 # Agent Context Memory Specification
 
-**Version:** 0.3.0  
-**Date:** 2026-06-21  
+**Version:** 0.4.0  
+**Date:** 2026-08-01  
 **Author:** Nils Wendelboe Holmager  
 **License:** CC BY-SA 4.0
 
@@ -637,14 +637,20 @@ ACM starts from a different assumption: memory exists to serve the principal's g
 
 This is the governance gap:
 
-| System | Primary Concern | Mandate? | Evidence Capture? | Append-Only? |
-|--------|-----------------|----------|-------------------|--------------|
-| CoALA | Capability (what memory types does the agent need?) | No | No | No |
-| Generative Agents | Behavior (how to maintain coherent action?) | No | No | No |
-| MemGPT | Scale (how to use more memory than fits?) | No | No | No |
-| **ACM** | **Governance (was the agent authorized? can we trust its account?)** | **Yes** | **Yes** | **Yes** |
+| System | Primary Concern | Mandate? | Evidence Capture? | Append-Only? | Scale? |
+|--------|-----------------|----------|-------------------|---------------|--------|
+| CoALA | Capability (what memory types does the agent need?) | No | No | No | No |
+| Generative Agents | Behavior (how to maintain coherent action?) | No | No | No | No |
+| MemGPT | Scale (how to use more memory than fits?) | No | No | No | Yes |
+| **ACM** | **Governance (was the agent authorized? can we trust its account?)** | **Yes** | **Yes** | **Yes** | **Partial — see below** |
 
 ACM does not replace these systems. An ACM-conformant implementation may use CoALA's functional memory types internally, Generative Agents' reflection loop, or MemGPT's hierarchical memory management. The trust-tier organization is an additional layer that addresses questions the capability-focused systems do not ask.
+
+**Scale within the trace tier.** ACM does not treat scale as orthogonal to governance. As a trace tier accumulates entries over a long-running agent relationship, the append-only constraint (§2.2) that makes the tier trustworthy also makes it grow monotonically — the same property that protects history from rewriting also means nothing is ever removed. Left unaddressed, this creates a tension: the mandate gate requires the agent's interpretation to be checked against accumulated context, but reading a large trace tier in full on every session stops being viable as it grows.
+
+A conformant pattern for resolving this without weakening trust: split derived (non-authoritative) trace-tier artifacts into a bounded *recent window* plus an *archive* of older material, both regenerated from the authoritative append-only source rather than pruned from it. The append-only source itself (e.g. `audit-trail.md`) is never truncated; only a *derived* reading surface is windowed. This differs from MemGPT's promotion/demotion model in one respect worth naming: MemGPT's agent actively decides what moves to archival memory, which is a capability decision made by the party being observed; ACM-conformant windowing should instead be a mechanical, content-blind operation (e.g. most-recent-N markers) precisely so that no governance-relevant content can be selectively hidden by the agent whose trace is being read. Scale is addressed without reopening capture-author separation (§2.1) or trust-tiered conflict resolution (§2.3) — the derived window is a convenience surface over the trace tier, not a new tier with its own trust semantics.
+
+*Reference implementation:* the Principles of Earned Autonomy Skills Suite's `learning.md` (a bounded recent window of `[!REALIZATION]`/`[!REVERSAL]` markers extracted from `audit-trail.md`) plus `learning-archive.md` (the overflow, regenerated alongside it). Both are optional derived artifacts — §6.1's required-files list and §6.3's minimal-conformance criteria are unaffected by whether an implementation adopts this pattern; it is a recommended answer to the Scale question for implementations whose trace tier has grown large enough to need one, not a new conformance requirement.
 
 ### 5.6 Contribution Claims
 
