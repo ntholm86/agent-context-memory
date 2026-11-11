@@ -98,3 +98,6 @@ If you use ACM, please cite it using the metadata in [CITATION.cff](./CITATION.c
 
 [CC BY-SA 4.0](./LICENSE) — Nils Wendelboe Holmager, 2026
 
+---
+
+Author: [Nils Wendelboe Holmager](https://nilsholmager.com/) · [Project context and connected work](https://nilsholmager.com/research/agent-context-memory/)
