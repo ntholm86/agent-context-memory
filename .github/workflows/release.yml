@@ -30,39 +30,55 @@ jobs:
             exit 1
           fi
 
-      - name: Ensure tag exists
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          git config user.email "action@github.com"
-          git config user.name "GitHub Actions"
-          if git ls-remote --exit-code --tags origin "refs/tags/${VERSION}" >/dev/null 2>&1; then
-            echo "Tag ${VERSION} already exists on origin; reusing."
-          else
-            if git rev-parse "${VERSION}" >/dev/null 2>&1; then
-              echo "Tag ${VERSION} already exists locally; pushing."
-            else
-              git tag "${VERSION}"
-            fi
-            git push origin "${VERSION}"
-          fi
-
-      - name: Create or update GitHub Release
+      - name: Refuse to re-release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           VERSION="${{ github.event.inputs.version }}"
-          TITLE="Agent Context Memory ${VERSION}"
-          NOTES="${{ github.event.inputs.notes }}"
-
+          # A release of an existing tag republishes that snapshot, including to the archive record.
           if gh release view "${VERSION}" >/dev/null 2>&1; then
-            echo "Release ${VERSION} already exists; updating metadata."
-            gh release edit "${VERSION}" \
-              --title "${TITLE}" \
-              --notes "${NOTES:-Release ${VERSION}}"
-          else
-            echo "Creating release ${VERSION}."
-            gh release create "${VERSION}" \
-              --title "${TITLE}" \
-              --notes "${NOTES:-Release ${VERSION}}" \
-              --generate-notes
+            echo "Release ${VERSION} already exists; releases are never re-published."
+            exit 1
           fi
+
+      - name: Create or reuse tag
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          if ! git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
+            git tag "${VERSION}"
+          fi
+
+      - name: Check release contents
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          NUMBER="${VERSION#v}"
+          FAIL=0
+          # Development memory belongs in the separate private memory repository, never in a release.
+          if git ls-tree -r --name-only "${VERSION}" | grep -E '^\.(acm|trail)/' ; then
+            echo "Tag ${VERSION} contains development memory (.acm/ or .trail/)."
+            FAIL=1
+          fi
+          SPEC_V=$(git show "${VERSION}:SPEC.md" | sed -n 's/^\*\*Version:\*\* *\([0-9.]*\).*/\1/p' | head -n1)
+          CFF_V=$(git show "${VERSION}:CITATION.cff" | sed -n 's/^version: *"\{0,1\}\([0-9.]*\)"\{0,1\}.*/\1/p' | head -n1)
+          ZEN_V=$(git show "${VERSION}:.zenodo.json" | sed -n 's/^ *"version": *"\([0-9.]*\)".*/\1/p' | head -n1)
+          for PAIR in "SPEC.md:${SPEC_V}" "CITATION.cff:${CFF_V}" ".zenodo.json:${ZEN_V}"; do
+            if [ "${PAIR#*:}" != "${NUMBER}" ]; then
+              echo "${PAIR%%:*} states version '${PAIR#*:}', expected ${NUMBER}."
+              FAIL=1
+            fi
+          done
+          exit $FAIL
+
+      - name: Push tag
+        run: git push origin "${{ github.event.inputs.version }}"
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          NOTES="${{ github.event.inputs.notes }}"
+          gh release create "${VERSION}" \
+            --title "Agent Context Memory ${VERSION}" \
+            --notes "${NOTES:-Release ${VERSION}}" \
+            --generate-notes
