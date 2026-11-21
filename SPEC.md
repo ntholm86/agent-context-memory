@@ -136,7 +136,8 @@ backup, cache or public clone can be recalled.
 
 **R-09.** Before an ACM-governed work interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
 and be read. The agent's interpretation, scope, mandate revisions and authority to proceed MUST be visible in accepted trace
-before substantive action. Binding validation and mandate reading are preflight, not authorization to alter the work.
+before the first change or other consequential action. Examination that changes nothing may precede that record, and its
+findings are recorded afterward. Binding validation and mandate reading are preflight, not authorization to alter the work.
 
 A host conversation can contain setup or mandate articulation before a governed interval. Such activity does not retroactively
 validate earlier unauthorized work. The governed interval starts only after the gate passes; an agent cannot authorize itself
@@ -313,7 +314,7 @@ memory-repository/            memory-wide scope; .acm-root marks the top
   .acm-root
   destination.md              intent: the mandate (principal-confirmed)
   orientation.md              trace, derived and replaceable
-  records/<record-id>.md        trace source: records, one file each; closed months sealed (R-25)
+  records/<time>-<slug>.md      trace source: records, one file each, identified by their path (R-18); closed months sealed (R-25)
   tasks/<task-id>/            named task scope; the same three entries (a task may sit under any scope)
   repositories/
     <repository-id>/          repository scope; the same three entries, plus:
@@ -330,7 +331,7 @@ summaries, recent windows) are not part of the layout: they are regenerated on d
 derived view is `orientation.md`, labelled derived (R-19).
 
 The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
-repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`), or beginning with `_`, is written under `paths/` with one extra leading `_`, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
+repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`destination.md`, `orientation.md`, `records`, `tasks`, `evidence`), or beginning with `_`, is written under `paths/` with one extra leading `_`, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
 
@@ -359,7 +360,7 @@ This version has been adopted for the specification's own development memory, by
 That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
 through a user-level registry; the public repository holds no memory and no pointer to it. The reference skills were changed
 to resolve that binding, to write one record per file and to seal closed months. Neither change demonstrates R-07 access enforcement, concurrent
-writers, cross-machine identity or newcomer adoption, and the evidence statuses above are unchanged by it.
+writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by it.
 No operational or full-conformance claim is made for this repository.
 
 ### 7.5 Implementation provenance
@@ -401,8 +402,8 @@ or be retried after it was sealed. Acceptance therefore compares a submitted rec
 accepted, and different content under that identifier is a collision that fails explicitly (R-18). A record that belongs to a
 sealed month is accepted only under a new identifier of the current time. Readers read `records/` in file-name order, sealed and
 open files alike. Sealing needs only version control and a byte-count and SHA-256 tool: an agent following the reference skills,
-or a person, can perform and verify it. The memory repository must store records byte for byte; normalizing line endings in
-`records/` (for Git, mark them `-text`) makes the markers stop matching. A deployment where commits are not permitted does not meet the bound for closed periods until they are sealed, and reports that.
+or a person, can perform and verify it. The memory repository must store records byte for byte. Normalizing line endings in
+`records/` makes the markers stop matching; for Git, mark them `-text`. A deployment where commits are not permitted does not meet the bound for closed periods until they are sealed, and reports that.
 
 ### 8.2 Derived views and freshness
 
@@ -481,7 +482,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-13 | Proposed | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; with root-commit binding, a clone or fork sharing a root commit resolves to the same binding (another mechanism states its own fork rule), and the others preserve intended identity or fail, with no guessed reads/writes. |
 | R-14 | Proposed | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the explicitly selected applicable scope. |
 | R-15 | Proposed | Containment and completeness | Test parent escape, absolute paths, link redirects, an inaccessible parent and depth exhaustion; no escaped access or silent omission occurs. |
-| R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present in ordinary records, only a preflight record may leave work identity and mandate revision unresolved, and unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
+| R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present in ordinary records with their record identifier and verification references, only a preflight record may leave work identity and mandate revision unresolved, and unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
 | R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
 | R-18 | Proposed | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
 | R-19 | Proposed | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
