@@ -18,7 +18,7 @@ ACM is the operationalization of [Principles of Earned Autonomy (PEA)](https://g
 
 ## The core contribution: the mandate gate
 
-A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval; the agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether work can begin at all.
+A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval; the agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether ACM-governed work can begin.
 
 ---
 
@@ -28,7 +28,7 @@ Memory is organized by **trust level**, not memory type:
 
 | Tier | Role | Author |
 |------|------|--------|
-| **Intent** (highest trust) | The principal's mandate: what, why and constraints. Governs all work | Confirmed by the principal; the agent may draft |
+| **Intent** (highest trust) | The principal's mandate: what, why and constraints. Governs ACM-governed work | Confirmed by the principal; the agent may draft |
 | **Trace** (medium trust) | The agent's decisions, interpretations and outcomes. Source records are append-only | The agent |
 | **Evidence** (independent) | Execution observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
@@ -36,7 +36,7 @@ Version 0.5.0 specifies 25 numbered requirements (R-01 to R-25), each with a che
 
 **What 0.5.0 adds to 0.4.0:**
 
-- **Memory in a repository of its own.** The memory is not a folder inside each repository of work. A binding connects a repository of work to its memory by identity (its root commit), never by folder or remote name; unbound, ambiguous or unavailable memory is reported, and nothing is guessed.
+- **Memory in a repository of its own.** The memory is not a folder inside each repository of work. A binding connects a repository of work to its memory by identity (in the reference skills, its root commit), never by folder or remote name; unbound, ambiguous or unavailable memory is reported, and nothing is guessed.
 - **One rule for scopes.** A scope is a folder holding `destination.md`, `orientation.md` and `records/`. The same shape serves the whole memory, a repository, a path and a task; higher mandates govern lower ones.
 - **Shared recording.** One file per record, so concurrent writers do not share a file to merge, with create-only acceptance that detects identifier collisions, and closed months sealed into one verifiable file so the number of files grows with months, not records.
 - **Testable requirements and a conformance statement**, instead of prose guidance.
@@ -78,7 +78,7 @@ These models optimize for what the agent *can do*. ACM optimizes for whether the
 
 ## Citation and archive
 
-Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.5.0 has no archive record yet; the latest archived release is v0.3.2 ([DOI 10.5281/zenodo.20785506](https://doi.org/10.5281/zenodo.20785506)).
+Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.5.0 has no archive record yet; the archived versions are v0.3.2 ([DOI 10.5281/zenodo.20785506](https://doi.org/10.5281/zenodo.20785506)) and an earlier v0.1.0 snapshot, under the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505).
 
 ## License
 

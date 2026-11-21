@@ -5,7 +5,7 @@
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
 **Status:** Published specification; not an implementation-conformance claim. Each requirement states its own evidence status.
-**Baseline:** Published ACM v0.4.0.
+**Baseline:** Published ACM v0.4.0 (commit 51e951e of this repository).
 
 ## Abstract
 
@@ -185,7 +185,7 @@ Binding is configured once for the applicable deployment/workspace/repository ra
 Aliases after a repository rename require an explicit migration of the binding; a remote URL is a locator, not immutable identity.
 An implementation may use authenticated host identifiers, explicit identifiers or another verifiable binding mechanism.
 Where the binding mechanism is the root commit, as in the reference implementation, it identifies shared history, not
-governance: clones and forks with the same root commits are one work identity and share one binding. Governing a fork separately requires another confirmed discriminator, never a guess.
+governance: clones and forks sharing a root commit are one work identity and share one binding. Governing a fork separately requires another confirmed discriminator, never a guess.
 
 ### 4.3 Path scopes and named scopes
 
@@ -195,7 +195,7 @@ task intent and scope-purpose metadata, not guessed from a code path. Ambiguity 
 
 The memory mirrors repository-relative paths while retaining explicit task scopes where directory structure is insufficient.
 The active scope and changed paths are recorded. A record goes to the narrowest applicable scope: a task scope the established
-task names, else the path scope containing the work, else the repository scope. Work spanning several scopes is recorded in the authorized coordinating
+task names, else the path scope containing the work, else the repository scope, else (for work not tied to a repository) the memory-wide scope. Work spanning several scopes is recorded in the authorized coordinating
 scope or through explicitly linked records; no unexplained duplication of a decision across trails.
 Scope or code-path moves require an explicit old-to-new mapping; existing references must remain resolvable.
 
@@ -330,7 +330,7 @@ summaries, recent windows) are not part of the layout: they are regenerated on d
 derived view is `orientation.md`, labelled derived (R-19).
 
 The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
-repository lives at memory-wide level. The binding maps repository identity to its namespace.
+repository lives at memory-wide level. A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`) is written with a leading underscore under `paths/`, so a scope's entries and its child paths never share a name. The binding maps repository identity to its namespace.
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
 
@@ -393,7 +393,7 @@ a sealed period MUST NOT be sealed again. Concurrent sealing attempts for the sa
 
 Sealing is consolidation, not compression: it changes packaging, never content. The reference strategy seals a UTC month,
 `records/<yyyy-MM>.md`, holding each record of that month in file-name order, each preceded by a marker line
-`<!-- record: <file name> bytes:<n> sha256:<hash> -->` and followed by one newline that belongs to the sealed file, not to the
+`<!-- record: <file name> bytes:<n> sha256:<hash> -->` (the hash in lowercase hex) and followed by one LF that belongs to the sealed file, not to the
 record. A record is exactly the `n` bytes after its marker line, so a marker-like line inside a record is content, and a
 record without a final newline, with CRLF or with a byte-order mark round-trips unchanged. The removed files remain in version
 history. A record's name carries its write time, not its acceptance time, so a record can arrive after its month is sealed,
@@ -402,8 +402,7 @@ accepted, and different content under that identifier is a collision that fails 
 sealed month is accepted only under a new identifier of the current time. Readers read `records/` in file-name order, sealed and
 open files alike. Sealing needs only version control and a byte-count and SHA-256 tool: an agent following the reference skills,
 or a person, can perform and verify it. The memory repository must store records byte for byte; normalizing line endings in
-`records/` (for Git, mark them `-text`) makes the markers stop matching. Where commits are not permitted, closed months stay
-unsealed and that is reported.
+`records/` (for Git, mark them `-text`) makes the markers stop matching. A deployment where commits are not permitted does not meet the bound for closed periods until they are sealed, and reports that.
 
 ### 8.2 Derived views and freshness
 
@@ -479,10 +478,10 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-10 | Proposed | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
 | R-11 | Proposed | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled ACM-valid. |
 | R-12 | Proposed | Separate repository | The memory is held in a separately identified and governed store, a clean distribution of the work repository contains no development memory, and adding a second writer requires no trace-layout migration. |
-| R-13 | Proposed | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; a clone or fork with the same root commit resolves to the same binding, the others preserve intended identity or fail, with no guessed reads/writes. |
+| R-13 | Proposed | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; with root-commit binding, a clone or fork sharing a root commit resolves to the same binding (another mechanism states its own fork rule), and the others preserve intended identity or fail, with no guessed reads/writes. |
 | R-14 | Proposed | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the explicitly selected applicable scope. |
 | R-15 | Proposed | Containment and completeness | Test parent escape, absolute paths, link redirects, an inaccessible parent and depth exhaustion; no escaped access or silent omission occurs. |
-| R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present or explicitly unresolved, unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
+| R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present in ordinary records, only a preflight record may leave work identity and mandate revision unresolved, and unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
 | R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
 | R-18 | Proposed | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
 | R-19 | Proposed | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
@@ -491,7 +490,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-22 | Proposed | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
 | R-23 | Proposed | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |
 | R-24 | Proposed | Release consistency | A mismatch among specification/citation/archive versions or requested tag causes the pre-publication check to fail; passing it does not publish. |
-| R-25 | Proposed | Bounded file count | Seal a closed month: one file replaces its records, each record's bytes and SHA-256 match the originals (including a record without a final newline, with CRLF or a byte-order mark, and one containing a marker-like line), and a second seal of that month or a concurrent seal fails visibly. A seal that adds the sealed file without removing its records, or the reverse, is rejected or reported. Submit a record of the sealed month late, retry an already sealed record and retry a sealed identifier with different content: the first is accepted only under a new identifier of the current time, the second as already accepted, the third fails as a collision. |
+| R-25 | Proposed | Bounded file count | Seal a closed month: one file replaces its records, each record's bytes and SHA-256 match the originals (including a record without a final newline, with CRLF or a byte-order mark, and one containing a marker-like line), and a second seal of that month or a concurrent seal fails visibly. A seal that adds the sealed file without removing its records, or the reverse, is rejected without changing the accepted records, and so is a seal whose bytes differ from the records it removes. Submit a record of the sealed month late, retry an already sealed record and retry a sealed identifier with different content: the first is accepted only under a new identifier of the current time, the second as already accepted, the third fails as a collision. |
 
 The rows state the main falsifying tests, not every obligation of a requirement; an implementation that passes them can still violate
 one. Natural-language interpretation, policy quality and useful relevance are not made impossible to get wrong by a schema.
