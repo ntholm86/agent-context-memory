@@ -195,7 +195,7 @@ task intent and scope-purpose metadata, not guessed from a code path. Ambiguity 
 
 The memory mirrors repository-relative paths while retaining explicit task scopes where directory structure is insufficient.
 The active scope and changed paths are recorded. A record goes to the narrowest applicable scope: a task scope the established
-task names, else the path scope containing the work, else the repository scope, else (for work not tied to a repository) the memory-wide scope. Work spanning several scopes is recorded in the authorized coordinating
+task names, else the path scope containing the work, else the repository scope, else (for work not tied to a repository) the memory-wide scope (of the one registered memory, or of the one the principal names when several are registered). Work spanning several scopes is recorded in the authorized coordinating
 scope or through explicitly linked records; no unexplained duplication of a decision across trails.
 Scope or code-path moves require an explicit old-to-new mapping; existing references must remain resolvable.
 
@@ -330,7 +330,7 @@ summaries, recent windows) are not part of the layout: they are regenerated on d
 derived view is `orientation.md`, labelled derived (R-19).
 
 The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
-repository lives at memory-wide level. A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`) is written with a leading underscore under `paths/`, so a scope's entries and its child paths never share a name. The binding maps repository identity to its namespace.
+repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`), or beginning with `_`, is written under `paths/` with one extra leading `_`, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
 
@@ -374,7 +374,7 @@ new shared-memory contract or justify stronger novelty claims.
 ### 8.1 Concurrent acceptance
 
 **R-18.** Source recording MUST use the same collision-safe acceptance model for one writer and many. Every record MUST
-have an identifier unique within the memory source. Acceptance MUST be atomic and create-only: a repeated identical
+have an identifier unique within the memory source (in the reference layout, the record's path in the memory repository, so the same time and slug in two scopes are two records). Acceptance MUST be atomic and create-only: a repeated identical
 submission is idempotent; a repeated identifier with different content MUST fail explicitly, never replace or line-merge.
 Concurrent distinct records MUST remain complete, attributable and individually retrievable.
 
@@ -385,7 +385,7 @@ alone is not a uniqueness guarantee. Publication of a local record is distinct f
 A monolithic legacy trail may be retained read-only and referenced. A migration must account for every old record without
 silently rewriting it. Ordinary writers do not concurrently regenerate and commit the same derived reading surface.
 
-**R-25.** The number of source files MUST be bounded by the closed periods plus the current period's records, not by the total number
+**R-25.** The number of source files in a scope MUST be bounded by the closed periods plus the current period's records, not by the total number
 of records ever written. The records of a closed period MUST
 be sealable into one immutable file in the same scope, in one atomic change that adds the sealed file and removes exactly the
 records it contains. Every record's content MUST be preserved byte for byte and be individually verifiable after sealing, and
@@ -485,7 +485,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
 | R-18 | Proposed | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
 | R-19 | Proposed | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
-| R-20 | Proposed | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not. |
+| R-20 | Proposed | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not; the context needed to answer does not grow with unrelated history. |
 | R-21 | Proposed | Measured usefulness | Compare a fixed cold-start question set with and without scoped views; report context cost, time, correctness and unresolved why-questions, not entry volume. |
 | R-22 | Proposed | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
 | R-23 | Proposed | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |

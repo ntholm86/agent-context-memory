@@ -38,7 +38,7 @@ Version 0.5.0 specifies 25 numbered requirements (R-01 to R-25), each with a che
 
 - **Memory in a repository of its own.** The memory is not a folder inside each repository of work. A binding connects a repository of work to its memory by identity (in the reference skills, its root commit), never by folder or remote name; unbound, ambiguous or unavailable memory is reported, and nothing is guessed.
 - **One rule for scopes.** A scope is a folder holding `destination.md`, `orientation.md` and `records/`. The same shape serves the whole memory, a repository, a path and a task; higher mandates govern lower ones.
-- **Shared recording.** One file per record, so concurrent writers do not share a file to merge, with create-only acceptance that detects identifier collisions, and closed months sealed into one verifiable file so the number of files grows with months, not records.
+- **Shared recording.** One file per record, so concurrent writers do not share a file to merge, with create-only acceptance that detects identifier collisions, and closed months sealed into one verifiable file so a scope's number of files grows with months, not records.
 - **Testable requirements and a conformance statement**, instead of prose guidance.
 
 ---
