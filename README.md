@@ -28,9 +28,9 @@ Memory is organized by **trust level**, not memory type:
 
 | Tier | Role | Author |
 |------|------|--------|
-| **Intent** (highest trust) | The principal's mandate: what, why and constraints. Governs ACM-governed work | Confirmed by the principal; the agent may draft |
-| **Trace** (medium trust) | The agent's decisions, interpretations and outcomes. Source records are append-only | The agent |
-| **Evidence** (independent) | Execution observations the agent cannot author, filter, alter or delete | A component separate from the agent |
+| **Intent** (authorization) | The principal's mandate: what, why and constraints. Governs ACM-governed work | Confirmed by the principal; the agent may draft |
+| **Trace** (self-report) | The agent's decisions, interpretations and outcomes. Source records are append-only | The agent |
+| **Evidence** (independent observation) | Execution observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
 Version 0.5.0 specifies 25 numbered requirements (R-01 to R-25), each with a check in Appendix A, and marks each as inherited, proposed, observed or deferred. Nothing is claimed as implemented or conformant beyond what its status says.
 
