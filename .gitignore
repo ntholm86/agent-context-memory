@@ -1,8 +1,3 @@
-# Private trail — reasoning and session notes not for public exposure
+# Development memory lives in a separate private memory repository, never in this public one.
+# Guard against an accidental local copy.
 .acm/
-
-# Python artifacts
-.pytest_cache/
-__pycache__/
-*.pyc
-*.pyo
