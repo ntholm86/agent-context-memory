@@ -331,7 +331,7 @@ summaries, recent windows) are not part of the layout: they are regenerated on d
 derived view is `orientation.md`, labelled derived (R-19).
 
 The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
-repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`, or any name ending in `.md`), or beginning with `_`, is written under `paths/` with one extra leading `_`, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
+repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`, or any name ending in `.md`), or beginning with `_` (names compared without regard to letter case), is written under `paths/` with one extra leading `_` and its original spelling, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
 
@@ -359,14 +359,14 @@ Conformance reports identify version, deployment boundary, checks, results, limi
 This version has been adopted for the specification's own development memory, by one author on one machine.
 That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
 through a user-level registry; the public repository holds no memory and no pointer to it. The reference skills were changed
-to resolve that binding, to write one record per file and to seal closed months. Neither change demonstrates R-07 access enforcement, concurrent
-writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by it.
+to resolve that binding, to write one record per file and to seal closed months. None of these changes demonstrates R-07 access enforcement, concurrent
+writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by them.
 No operational or full-conformance claim is made for this repository.
 
 ### 7.5 Implementation provenance
 
 The `.acm/` pattern preceded this specification in the Principles of Earned Autonomy Skills Suite,
-[DOI:10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), released April 24, 2026.
+[DOI:10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), released April 24, 2026 (archived under its former name, the Autonomous Development Skills Suite).
 Experience from using reference skills informs the living specification; earlier observations do not demonstrate the
 new shared-memory contract or justify stronger novelty claims.
 
@@ -387,7 +387,8 @@ A monolithic legacy trail may be retained read-only and referenced. A migration 
 silently rewriting it. Ordinary writers do not concurrently regenerate and commit the same derived reading surface.
 
 **R-25.** The number of source files in a scope MUST be bounded by the closed periods plus the current period's records, not by the total number
-of records ever written. The records of a closed period MUST
+of records ever written. The bound holds whenever a record is accepted into the scope: earlier closed periods are sealed first, and a
+scope that receives no more records may exceed it until then. The records of a closed period MUST
 be sealable into one immutable file in the same scope, in one atomic change that adds the sealed file and removes exactly the
 records it contains. Every record's content MUST be preserved byte for byte and be individually verifiable after sealing, and
 a sealed period MUST NOT be sealed again. Concurrent sealing attempts for the same period MUST fail visibly for all but one.
@@ -483,7 +484,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-14 | Proposed | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the explicitly selected applicable scope; a code folder named like a scope entry resolves to a distinct, reversible path. |
 | R-15 | Proposed | Containment and completeness | Test parent escape, absolute paths, link redirects, an inaccessible parent and depth exhaustion; no escaped access or silent omission occurs. |
 | R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present in ordinary records with their record identifier and verification references, only a preflight record may leave work identity and mandate revision unresolved, and unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
-| R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
+| R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, an independent report that contains an actionable finding, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
 | R-18 | Proposed | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
 | R-19 | Proposed | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
 | R-20 | Proposed | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not; the context needed to answer does not grow with unrelated history. |
@@ -491,7 +492,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-22 | Proposed | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
 | R-23 | Proposed | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |
 | R-24 | Proposed | Release consistency | A mismatch among specification/citation/archive versions or requested tag causes the pre-publication check to fail; passing it does not publish. |
-| R-25 | Proposed | Bounded file count | Seal a closed month: one file replaces its records, each record's bytes and SHA-256 match the originals (including a record without a final newline, with CRLF or a byte-order mark, and one containing a marker-like line), and a second seal of that month or a concurrent seal fails visibly. A seal that adds the sealed file without removing its records, or the reverse, is rejected without changing the accepted records, and so is a seal whose bytes differ from the records it removes. Submit a record of the sealed month late, retry an already sealed record and retry a sealed identifier with different content: the first is accepted only under a new identifier of the current time, the second as already accepted, the third fails as a collision. |
+| R-25 | Proposed | Bounded file count | Seal a closed month: one file replaces its records, each record's bytes and SHA-256 match the originals (including a record without a final newline, with CRLF or a byte-order mark, and one containing a marker-like line), and a second seal of that month or a concurrent seal fails visibly. A seal that adds the sealed file without removing its records, or the reverse, is rejected without changing the accepted records, and so is a seal whose bytes differ from the records it removes. Accept a record into a scope that still holds unsealed files of a closed month: sealing precedes acceptance. Submit a record of the sealed month late, retry an already sealed record and retry a sealed identifier with different content: the first is accepted only under a new identifier of the current time, the second as already accepted, the third fails as a collision. |
 
 The rows state the main falsifying tests, not every obligation of a requirement; an implementation that passes them can still violate
 one. Natural-language interpretation, policy quality and useful relevance are not made impossible to get wrong by a schema.
@@ -563,7 +564,7 @@ not by changing source history. Old prototype and profile links are not normativ
 
 Publication must separately reconcile README, citation/archive descriptions, release workflow, requested tag and version. The
 repository's release workflow rejects a tag that differs from the versions stated in `SPEC.md`, `CITATION.cff` and `.zenodo.json`,
-and rejects a tag that carries development memory (`.acm/` or `.trail/`). Release packaging must exclude private development
+and rejects a tag that carries development memory (`.acm/` or `.trail/`) at the repository root. Release packaging must exclude private development
 memory by an explicit distribution boundary. Passing a version/structure check does not prove the absence of sensitive content
 from a public release.
 
