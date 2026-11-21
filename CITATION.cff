@@ -29,7 +29,7 @@ date-released: "2026-08-01"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20785506"
-    description: "Zenodo concept DOI (resolves to latest version)"
+    description: "Zenodo version DOI of release v0.3.2 (2026-06-21)"
 keywords:
   - context memory
   - agent memory
