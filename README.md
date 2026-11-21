@@ -1,98 +1,84 @@
-﻿# Agent Context Memory (ACM)
+# Agent Context Memory (ACM)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20785506.svg)](https://doi.org/10.5281/zenodo.20785506)
-
-**A specification for governance-first context memory in autonomous AI agent systems.**
+**A specification for governance-first context memory in autonomous AI agent systems.** Version 0.5.0.
 
 📄 **[Read the full specification →](./SPEC.md)**
 
-If an agent begins work without a principal-authored mandate already in memory, the session is unauthorized. That is the mandate gate. It is what makes context memory *governance-first* rather than merely *persistent*.
+Governed work needs a principal-confirmed mandate already in memory; without one, a session is not an ACM-governed interval. That is the mandate gate. It is what makes context memory *governance-first* rather than merely *persistent*.
 
 ---
 
 ## What this is
 
-ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory. It recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns — the "authorization before action" principle common to RBAC, MAC, and capability-based security — to this domain.
+ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory, so that work accumulates across people, sessions, tools and models while the principal keeps authority. It applies established access control and audit-log patterns — "authorization before action", as in RBAC, MAC and capability-based security — to agent memory.
 
 ACM is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem. PEA is the theory; ACM is the implementation standard for memory.
 
 ---
 
-## The core contribution
+## The core contribution: the mandate gate
 
-**Principle 1 — The Mandate Gate:** A pre-work mandate must exist in memory, authored by the principal, before any agent session of work is valid. The agent must read it before touching anything else.
-
-This is the "authorization before action" principle — familiar from RBAC, MAC, and capability-based security — applied to agent sessions. Every prior context memory model (MemGPT, CoALA, Generative Agents) treats memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition* — the gate that determines whether work can begin at all. Without the mandate, the session is not authorized.
+A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval; the agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether work can begin at all.
 
 ---
 
 ## How it works
 
-ACM defines a three-tier memory structure organized by **trust level**, not memory type:
+Memory is organized by **trust level**, not memory type:
 
-| Tier | Role | Author | Files |
-|------|------|--------|-------|
-| **Intent** (highest trust) | Principal's mandate — governs all sessions | Principal only | `destination.md` |
-| **Trace** (medium trust) | Agent's decision history — append-only | Agent | `audit-trail.md`, `orientation.md` |
-| **Evidence** (independent) | Captured LLM interactions — agent-inaccessible | Harness | `sessions/*.jsonl` |
+| Tier | Role | Author |
+|------|------|--------|
+| **Intent** (highest trust) | The principal's mandate: what, why and constraints. Governs all work | Confirmed by the principal; the agent may draft |
+| **Trace** (medium trust) | The agent's decisions, interpretations and outcomes. Source records are append-only | The agent |
+| **Evidence** (independent) | Execution observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
-**Structural requirements:**
+Version 0.5.0 specifies 25 numbered requirements (R-01 to R-25), each with a check in Appendix A, and marks each as inherited, proposed, observed or deferred. Nothing is claimed as implemented or conformant beyond what its status says.
 
-- **Mandate gate** — intent tier must exist and be read before session is valid
-- **Capture-author separation** — evidence tier cannot be authored by the agent
-- **Append-only trace** — the agent extends but never rewrites its decision history
-- **Trust-tiered conflict resolution** — intent > trace > evidence when tiers disagree
-- **Scope hierarchy** — ACM memory can exist at nested scopes (repo → workspace → org). Higher-scope mandates govern lower-scope ones. Scopes are discovered by parent-directory traversal, stopping at a `.acm-root` ceiling marker or the filesystem root. See §4 Scoped Memory.
+**What 0.5.0 adds to 0.4.0:**
 
-**Convergence at the memory level:** work is done when the trace tier shows an empty work queue and independent evaluators find nothing left to change.
+- **Memory in a repository of its own.** The memory is not a folder inside each repository of work. A binding connects a repository of work to its memory by identity (its root commit), never by folder or remote name; unbound, ambiguous or unavailable memory is reported, and nothing is guessed.
+- **One rule for scopes.** A scope is a folder holding `destination.md`, `orientation.md` and `records/`. The same shape serves the whole memory, a repository, a path and a task; higher mandates govern lower ones.
+- **Shared recording.** One file per record, so concurrent writers do not share a file to merge, with create-only acceptance that detects identifier collisions, and closed months sealed into one verifiable file so the number of files grows with months, not records.
+- **Testable requirements and a conformance statement**, instead of prose guidance.
+
+---
+
+## Reference layout
+
+The specification requires properties, not a layout. The reference layout is:
+
+```
+destination.md, orientation.md, records/     the memory-wide scope
+repositories/<id>/repository.json            the binding for one repository of work
+repositories/<id>/                           that repository's scope (the same three entries)
+repositories/<id>/paths/<path>/              a path scope
+tasks/<task>/                                a task scope (under the memory, a repository or a path)
+```
+
+The reference route is the [PEA skills suite](https://github.com/ntholm86/principles-of-earned-autonomy-skills-suite) or the [Work skill](https://github.com/ntholm86/work-skill), which resolve a bound scope in a separate memory repository and write its records. Neither is required to implement ACM.
 
 ---
 
 ## Relationship to prior art
 
-ACM applies established access control patterns to agent memory:
+- **RBAC** — authorization before action, scope defined by authorizer, actor accountable for exceeding scope. ACM applies this at the session level.
+- **CoALA** (Sumers et al., 2023) — tiered memory. ACM inherits the tiers and adds trust-based differentiation.
+- **Generative Agents** (Park et al., 2023) — observation, reflection, planning. ACM inherits reflection as a memory operation and applies audit-log principles.
+- **MemGPT** (Packer et al., 2023) — hierarchical memory with cross-session persistence. ACM inherits persistence and adds capture-author separation.
 
-- **RBAC** — authorization before action, scope defined by authorizer, actor accountable for exceeding scope. ACM applies this at the session level (mandate gate).
-- **CoALA** (Sumers et al., 2023) — episodic, semantic, procedural, working memory tiers. ACM inherits tiered structure, adds trust-based differentiation.
-- **Generative Agents** (Park et al., 2023) — observation → reflection → planning. ACM inherits reflection as a memory operation (orient), applies audit-log principles.
-- **MemGPT** (Packer et al., 2023) — hierarchical memory with cross-session persistence. ACM inherits persistence, adds capture-author separation.
-
-These models optimize for what the agent *can do*. ACM optimizes for whether the operator *can trust* what the agent did, and whether the agent was *authorized* to begin at all.
+These models optimize for what the agent *can do*. ACM optimizes for whether the principal *can trust* what the agent did, and whether the agent was *authorized* to begin at all.
 
 ---
 
 ## Relationship to Augmented Individual Intelligence
 
-[Augmented Individual Intelligence (AII)](https://doi.org/10.5281/zenodo.18417872) defines five boundary conditions for when human-AI coupling qualifies as cognitive partnership. The fifth condition is **agency preservation**: the human retains final decision authority and can override AI suggestions.
-
-ACM provides the enforcement mechanism for this requirement. The mandate gate ensures the principal authors the authorization; capture-author separation ensures the agent cannot rewrite its own observation record; append-only trace ensures the agent cannot rationalize overstepping after the fact.
-
-**ACM is infrastructure for AII-qualifying practices.** Without governance-first memory, agency preservation is behavioral hope. With ACM, it is structural guarantee.
+[Augmented Individual Intelligence (AII)](https://doi.org/10.5281/zenodo.18417872) names agency preservation as a boundary condition for human-AI cognitive partnership: the human retains final decision authority. ACM states the memory structure such a condition would need: the principal authors the mandate, the agent cannot rewrite its own observation record, and source records are append-only. It does not claim an implementation that enforces this.
 
 ---
 
-## Reference implementation
+## Citation and archive
 
-The `.acm/` directory pattern is the reference implementation of ACM:
-
-```
-.acm/
-├── destination.md        # Intent tier — mandate (principal-authored)
-├── audit-trail.md        # Trace tier — append-only decision log
-├── orientation.md        # Trace tier — current orientation (rewritten by orient)
-└── sessions/             # Evidence tier — harness-captured JSONL
-    └── *.jsonl
-```
-
-The mandate gate is in force when `destination.md` exists before any session begins.
-
----
-
-## Citation
-
-If you use ACM, please cite it using the metadata in [CITATION.cff](./CITATION.cff).
-
----
+Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.5.0 has no archive record yet; the latest archived release is v0.3.2 ([DOI 10.5281/zenodo.20785506](https://doi.org/10.5281/zenodo.20785506)).
 
 ## License
 

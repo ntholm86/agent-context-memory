@@ -1,884 +1,585 @@
 # Agent Context Memory Specification
 
-**Version:** 0.4.0  
-**Date:** 2026-08-01  
-**Author:** Nils Wendelboe Holmager  
+**Version:** 0.5.0
+**Date:** 2026-11-21
+**Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
-
----
+**Status:** Published specification; not an implementation-conformance claim. Each requirement states its own evidence status.
+**Baseline:** Published ACM v0.4.0.
 
 ## Abstract
 
-Agent Context Memory (ACM) is a specification for governance-first context memory in autonomous AI agent systems. It defines how agents should organize, protect, and use the memory that persists across sessions and governs their authorization to act.
+Agent Context Memory (ACM) specifies governance-first context memory for autonomous AI agents. Its purpose is cumulative,
+trustworthy work across people, sessions, tools and models, while the principal retains authority. Memory supplies the
+governed starting point for the next contributor rather than requiring the work to start over.
 
-ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control patterns to this domain. The core contribution is the **Mandate Gate**: a pre-work mandate, authored by the principal, must exist in memory before any agent session is valid. This is the "authorization before action" principle � familiar from Role-Based Access Control (RBAC), Mandatory Access Control (MAC), and capability-based security � applied to agent sessions.
+ACM transfers established authorization and audit-log patterns to agent memory governance. Its mandate gate requires
+principal-confirmed intent before governed work. Three trust tiers distinguish authorization, agent self-report and
+independently captured evidence. Scope identifies what the memory governs; access controls identify who can use it.
 
-This specification is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem.
+The same model serves one contributor and many. Memory resides in its own repository, separately from repositories of work.
+Binding connects work to that memory; scoped retrieval makes it usable without reading the entire accumulated history.
+The specification defines required properties, not a mandatory vendor, configuration format, storage engine or skill host.
 
----
+ACM operationalizes [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy).
+It can be implemented independently of that reference ecosystem.
 
-## 1. The Three Tiers
+## Reading and requirement status
 
-ACM organizes memory by **trust level**, not by memory type.
+MUST, MUST NOT, SHOULD and MAY express conformance requirements. Each requirement has a stable identifier and a check
+in Appendix A. Normative wording describes the proposed standard; it does not assert that an implementation exists or passes it.
 
-Prior agent memory models (CoALA, MemGPT, Generative Agents) organize memory by *function*: what kind of information is stored (episodic, semantic, procedural, working). This is useful for capability � it helps the agent retrieve and use information effectively.
+Evidence status is separate from author approval:
 
-ACM organizes memory by *trust*: who authored it, whether it can be modified, and how conflicts between tiers are resolved. This is useful for governance � it lets an observer determine whether the agent was authorized to act and whether its account of what it did can be trusted.
+- **Inherited:** a property of published v0.4.0, not a fresh demonstration of enforcement.
+- **Proposed:** a design requirement awaiting implementation and the named checks.
+- **Observed:** demonstrated only in an identified experiment, under its stated limits.
+- **Deferred:** an unresolved matter with its reason and reopening evidence recorded.
 
-The two organizations are orthogonal. An ACM-conformant system may internally use functional memory types; the trust-tier organization is the governance layer that sits above them.
+The checks in this specification are specified tests, not executed test results. A mechanical check of document structure or
+version consistency does not establish ACM conformance, privacy, useful retrieval or correct agent behaviour.
 
-### 1.1 The Tiers
+## 1. Trust Tiers
 
-| Tier | Name | Trust Level | Author | Mutability | Purpose |
-|------|------|-------------|--------|------------|---------|
-| **Intent** | Mandate | Highest | Principal only | Append or replace (principal decision) | What the agent is authorized to do and why |
-| **Trace** | Decisions | Medium | Agent | Append-only | What the agent decided and its reasoning |
-| **Evidence** | Sessions | Independent | Harness | Immutable after capture | What actually happened (LLM calls, responses) |
+### 1.1 Intent, trace and evidence
 
-### 1.2 Intent Tier (Mandate)
+ACM organizes memory by authorship and trust, independently of functional memory types.
 
-The intent tier contains the principal's mandate � the governing context that authorizes agent action.
+| Tier | Responsibility | Authority and mutability |
+|------|----------------|--------------------------|
+| Intent | Principal-confirmed mandate: what, why and constraints | Governs authorization; changes require principal confirmation |
+| Trace | Attributable agent decisions, interpretations, corrections and outcomes | Source records are append-only; derived views are replaceable |
+| Evidence | Independently captured execution observations | Agent cannot author, filter, alter or delete the capture |
 
-**Author:** The principal � the party who holds responsibility for the content and confirms it as their mandate. The agent may contribute to articulation (surfacing hunches, drafting candidate text, asking clarifying questions), but the principal cannot be surprised by what their mandate says. Unconfirmed agent-drafted content is not the intent tier.
+**R-01.** An implementation MUST identify each artifact's tier and whether it is source or derivation. A summary, index or
+orientation does not gain independent evidentiary standing merely by being stored beside source records.
 
-*The governance property being protected is not "the principal did all the typing" but "the principal owns and has confirmed the content."* Principals often have a richer interior model than they can immediately articulate; agent-assisted articulation mechanisms are conformant when the principal confirms the result.
+### 1.2 Mandate ownership and articulation
 
-**Content:** The destination the agent is working toward, the constraints that apply across all sessions, and any scope limitations. In the reference implementation, this is `destination.md`.
+**R-02.** Each governing scope MUST identify its principal and the mechanism by which that principal confirms a mandate or
+delegates authority. A principal may be a person, role or collective with an explicit decision rule. Agent-drafted candidate
+text MUST NOT become intent without that confirmation. The principal owns the meaning, not necessarily all the typing.
+Confirmation and mandate revisions MUST be identifiable to later readers.
 
-**Mutability:** The principal may update or replace the mandate at any time. The agent may not modify it.
+An agent may assist in articulation. It cannot approve its own authority, infer approval from silence, or silently replace
+a mandate. Changes made by the principal do not retroactively authorize earlier actions.
 
-**Trust semantics:** The intent tier is authoritative. When the agent's interpretation of a task conflicts with the mandate, the mandate wins. When the trace tier's account of what happened conflicts with what the mandate authorized, the mandate defines what *should* have happened.
+### 1.3 What each tier establishes
 
-**Why highest trust:** The principal is the party with standing to authorize action. The mandate is the only tier where the agent has no authorship rights � it cannot modify intent-tier content on its own authority; any changes require explicit principal confirmation. This structural separation is what makes the tier trustworthy.
+**R-03.** Intent MUST determine what was authorized; independently captured evidence MUST determine what was observed within
+its capture coverage; trace MUST remain agent self-report. Evidence contradicting intent is a governance finding, not a
+reason to rewrite either. Trace MUST NOT override either.
 
-### 1.3 Trace Tier (Decisions)
+There is no universal ranking that makes an observed action become an authorized action. Evidence of an API call does not
+prove its intended outcome, and an LLM transcript does not independently prove tool execution unless the capture includes it.
+Record capture gaps. Conflicting observations require investigation, not an agent's unmarked preference.
 
-The trace tier contains the agent's account of what it decided and why.
+### 1.4 Functional memory and skills
 
-**Author:** The agent.
+Working, episodic, semantic and procedural memory can coexist with the trust axis. Functional classifications do not
+grant authorship rights. A recalled decision is not automatically a new instruction.
 
-**Content:** Decision logs, reasoning traces, interpretations of the mandate, reflections, and derived artifacts like orientations and work queues. In the reference implementation, this includes `audit-trail.md`, `orientation.md`, `learning.md`, and `history.md`.
-
-**Mutability:** Append-only. The agent may add new entries but may not modify or delete existing entries. Corrections are made by appending a new entry that references and supersedes the earlier one.
-
-**Trust semantics:** The trace tier is the agent's self-report. It is useful but not independently verifiable. An observer reading the trace tier knows what the agent *claims* it did and why, not necessarily what it *actually* did.
-
-**Why medium trust:** The agent has authorship but not editorial control. The append-only constraint prevents the agent from rewriting history to make its past decisions look better. However, the agent still authored the content � it can be incomplete, self-serving, or rationalized post-hoc.
-
-### 1.4 Evidence Tier (Sessions)
-
-The evidence tier contains independently captured records of what actually happened during agent execution.
-
-**Author:** An independent harness � a component that captures LLM interactions before the agent can respond to them.
-
-**Content:** Raw LLM calls and responses, timestamps, token counts, and any other execution metadata. In the reference implementation, this is `sessions/*.jsonl` captured by a harness implementing the [LLM Harness Protocol](https://github.com/ntholm86/principles-of-earned-autonomy/blob/main/docs/harness-protocol.md).
-
-**Mutability:** Immutable after capture. Once a session record is written, it cannot be modified by any party.
-
-**Trust semantics:** The evidence tier is independently verifiable. An observer can compare the agent's trace-tier account against the evidence-tier record to check for discrepancies.
-
-**Why independent trust (not "lowest"):** The evidence tier has no authorship from the agent � the harness captures it before the agent sees the response. This is **capture-author separation**: the party being observed cannot author its own observation record. The trust is "independent" rather than "lowest" because it serves a different function than the other tiers � it exists to verify them, not to be verified by them.
-
-### 1.5 Why Trust Level, Not Memory Type
-
-Prior agent memory models ask: *What kind of information is this?*
-
-- Episodic memory stores experiences and events
-- Semantic memory stores facts and knowledge  
-- Procedural memory stores skills and how-to knowledge
-- Working memory holds active context for the current task
-
-These categories are useful for retrieval and reasoning. An agent benefits from knowing whether it's recalling a past experience, a fact, or a procedure.
-
-ACM asks a different question: *Who can I trust to have authored this?*
-
-- Did the principal authorize this action? (Check intent tier)
-- What does the agent claim it did? (Check trace tier)
-- What actually happened? (Check evidence tier)
-
-These categories are useful for governance. An observer benefits from knowing whether they're reading the principal's mandate, the agent's self-report, or an independent record.
-
-The two organizations serve different purposes and can coexist. A conformant implementation might store episodic memories in the trace tier (agent-authored, append-only) while the evidence tier captures the raw interactions that generated those memories (harness-authored, immutable).
-
-### 1.6 Conflict Resolution
-
-When tiers disagree, resolve toward higher trust:
-
-1. **Intent vs. Trace:** Intent wins. If the trace tier shows the agent interpreted the mandate one way, but the mandate says something else, the mandate is authoritative.
-
-2. **Trace vs. Evidence:** Evidence wins. If the trace tier claims the agent did X, but the evidence tier shows it did Y, the evidence is authoritative.
-
-3. **Intent vs. Evidence:** This is the interesting case. If the evidence shows the agent did something the mandate did not authorize, that is a governance failure � the agent acted outside its mandate. The mandate defines what *should* have happened; the evidence shows what *did* happen. Neither "wins" � the discrepancy is the finding.
-
----
+Useful skills may be distilled from accumulated learning. That is an awareness, not an ACM skill-generation function.
+ACM does not prescribe where skills live or how a principal adopts them.
 
 ## 2. Structural Requirements
 
-Section 1 defined the three tiers. This section defines the structural properties that make the tier organization enforceable. These are not suggestions � they are conformance requirements. A system that violates them is not ACM-conformant.
+### 2.1 Capture-author separation
 
-### 2.1 Capture-Author Separation
+**R-04.** Where an evidence tier is claimed, a component architecturally separate from the observed agent MUST capture the
+declared interactions before releasing their responses to that agent. The agent MUST NOT be able to suppress or edit that
+capture. Coverage, gaps and capture failures MUST be observable. Reconstructed self-report is not independent evidence.
 
-**Definition:** The party being observed cannot author its own observation record.
+For response streaming, capture must precede delivery of each captured portion. A full-evidence claim MUST identify any
+unobserved tools, channels or operations rather than implying comprehensive execution coverage.
 
-In ACM terms: the agent cannot write to the evidence tier. The evidence tier is authored by an independent harness that captures LLM interactions before the agent receives the response.
+### 2.2 Append-only source, replaceable derivations
 
-**Why it matters:** If the agent could author its own evidence, the evidence tier would be no more trustworthy than the trace tier � both would be agent self-report. Capture-author separation is what gives the evidence tier independent standing.
+**R-05.** Accepted trace source records MUST be immutable to ordinary contributors: addition is permitted, replacement and
+deletion are not. Sealing a closed period under R-25 is repackaging, not deletion, while every record's bytes stay verifiable.
+A correction MUST create a new record referring to the corrected identifier. Derived views MAY be
+replaced, but MUST identify their source and MUST NOT be the only surviving copy of a decision.
 
-This is the same structural property that makes audit logs trustworthy in security systems, flight recorders trustworthy in aviation, and financial ledgers trustworthy in accounting. The party with incentive to misrepresent cannot be the party that writes the record.
+Git history and an instruction saying "do not edit" are not alone enforcement: a later commit can change an old file.
+An implementation claiming structural protection must reject such changes at its acceptance boundary. Record any
+administrative override as a governance event. Chronological presentation does not prove causal order between concurrent writers.
 
-**Conformance criteria:**
+### 2.3 Permission enforcement
 
-A system is conformant if:
-1. The evidence tier is written by a component architecturally separate from the agent
-2. The agent cannot modify, delete, or suppress evidence-tier content
-3. Evidence capture occurs before the agent receives LLM responses (not reconstructed after)
+**R-06.** An implementation MUST enforce the separation of mandate confirmation, trace addition and evidence capture at its
+acceptance boundary. Rejected or unavailable operations MUST produce an explicit failure, not success-shaped output.
+If protection depends on instructions rather than enforcement, disclose that limitation and do not claim structural conformance.
 
-A system is non-conformant if:
-- The agent writes its own session logs
-- The agent can filter which interactions are captured
-- Evidence is reconstructed from agent memory rather than captured independently
+**R-07.** The applicable recording, access and retention policy MUST be established before recording begins, for a solo
+contributor as well as many. Scope relevance MUST NOT substitute for permission. A sub-repository or submodule MAY provide
+packaging, but does not by itself prevent readers of another scope from obtaining its content.
 
-**Reference implementation:** The [LLM Harness Protocol](https://github.com/ntholm86/principles-of-earned-autonomy) implements capture-author separation by acting as a transparent proxy between the agent and the LLM API. The harness writes session records to `sessions/*.jsonl` before forwarding responses to the agent.
+Recording policy defines permissible content and evidence references. Secret detection can supplement that policy; no scan
+is claimed to prove that arbitrary natural-language records contain no confidential or personal information.
 
-### 2.2 Append-Only Trace
+### 2.4 Retention and exceptional erasure
 
-**Definition:** The agent may add to its decision history but may not modify or delete existing entries.
+Ordinary contributors cannot erase accepted source under R-05. This does not grant unlimited retention authority.
 
-In ACM terms: the trace tier (`audit-trail.md`, `orientation.md`, etc.) grows monotonically. Corrections are made by appending new entries that reference and supersede earlier ones, not by editing the earlier entries.
+**R-08.** An implementation MUST expose any conflict between append-only preservation and its principal's retention or
+erasure obligations before claiming both are met. An exceptional, separately authorized erasure procedure MUST document
+the affected record identifiers, authority, reason, affected replicas and verification limits without repeating erased content.
+It MUST distinguish an intentionally missing record from a silently lost record.
 
-**Why it matters:** If the agent could edit its past decisions, it could rationalize failures after the fact, making the trace tier unreliable for understanding what actually happened. Append-only constraint prevents history rewriting.
-
-This is distinct from immutability. The trace tier *does* change � new entries are added. But it changes only by extension, never by revision. A reader can trust that entry N was written before entry N+1 and has not been modified since.
-
-**Conformance criteria:**
-
-A system is conformant if:
-1. New trace entries are appended, never inserted or overwritten
-2. Existing trace entries cannot be modified after commit
-3. Corrections reference the entry being corrected (e.g., `[!REVERSAL]` markers)
-
-A system is non-conformant if:
-- The agent can edit past trace entries
-- The agent can delete trace entries
-- The system allows "silent" corrections that don't reference what was corrected
-
-**Implementation note:** Git provides natural append-only semantics when used correctly. Each commit is a new append; the history is immutable once pushed. However, force-push and history rewriting violate append-only. A conformant implementation either disables force-push or treats rewritten history as a governance violation.
-
-### 2.3 Trust-Tiered Conflict Resolution
-
-**Definition:** When information in different tiers conflicts, resolve toward the tier with higher trust.
-
-In ACM terms:
-- Intent tier (principal-authored) overrides trace tier (agent-authored)
-- Evidence tier (independently captured) overrides trace tier (agent-authored)
-- Intent vs. evidence conflicts are governance findings, not resolution problems
-
-**Why it matters:** Without a resolution rule, conflicting information creates ambiguity. The trust hierarchy provides a deterministic answer: when tiers disagree, the tier with less author-bias wins.
-
-**Conformance criteria:**
-
-A system is conformant if:
-1. The system has a defined resolution order for tier conflicts
-2. The resolution order favors lower author-bias (principal > independent > agent)
-3. Intent-evidence conflicts are surfaced as findings rather than silently resolved
-
-A system is non-conformant if:
-- Trace-tier content can override intent-tier content
-- Agent self-report is treated as authoritative when evidence contradicts it
-- Conflicts between tiers are ignored or hidden
-
-**Example:** The agent's trace tier claims it ran 5 iterations. The evidence tier shows 7 LLM calls. This is a discrepancy. Under trust-tiered resolution, the evidence (7 calls) is authoritative for what happened; the trace (5 iterations) may reflect how the agent *categorized* what happened, but it does not override the evidence.
-
-### 2.4 Requirement Summary
-
-| Requirement | What it constrains | Why it matters |
-|-------------|-------------------|----------------|
-| Capture-author separation | Agent cannot author evidence tier | Evidence is independently verifiable |
-| Append-only trace | Agent cannot edit past decisions | History cannot be rewritten |
-| Trust-tiered resolution | Conflicts resolve toward higher trust | Ambiguity has a deterministic answer |
-
-These three requirements are interdependent:
-- Capture-author separation makes the evidence tier trustworthy enough to override the trace tier
-- Append-only trace ensures the trace tier's value (decision history) is preserved even though it's agent-authored
-- Trust-tiered resolution defines how the tiers interact when they contain conflicting information
-
-A system missing any one of these requirements has a governance gap that undermines the others.
-
----
+This is a proposed exception to the v0.4.0 statement that no party can ever change captured evidence. It does not authorize
+erasure here. An adopter determines lawful retention and erasure; ACM supplies no legal opinion or guarantee that every
+backup, cache or public clone can be recalled.
 
 ## 3. The Mandate Gate
 
-This is ACM's novel contribution. Prior agent memory models treat memory as a resource the agent uses during work. ACM treats memory as a precondition � a gate that must be passed before work begins.
+### 3.1 Governed work interval
 
-### 3.1 Definition
+**R-09.** Before an ACM-governed work interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
+and be read. The agent's interpretation, scope, mandate revisions and authority to proceed MUST be visible in accepted trace
+before substantive action. Binding validation and mandate reading are preflight, not authorization to alter the work.
 
-**The Mandate Gate:** A pre-work mandate, authored by the principal, must exist in the agent's memory before any session of work is valid.
+A host conversation can contain setup or mandate articulation before a governed interval. Such activity does not retroactively
+validate earlier unauthorized work. The governed interval starts only after the gate passes; an agent cannot authorize itself
+by creating a mandate mid-work. This makes the boundary explicit rather than relying on harness-specific session naming.
 
-More precisely:
-1. The intent tier must contain a mandate (governing context) before the session begins
-2. The agent must read the mandate before taking any action
-3. The agent's interpretation of the mandate must be visible in the trace tier
+### 3.2 Changing or conflicting authority
 
-If any of these conditions is not met, the session is **unauthorized** � not merely suboptimal, but structurally invalid from a governance perspective.
+**R-10.** Higher-scope mandates MUST govern lower scopes within the declared hierarchy. Lower scopes MAY narrow authority,
+not expand it. Unresolved peer conflicts MUST be surfaced to the designated authority; neither the newest record nor the
+agent's preference determines the winner. If applicable authority changes during work, affected actions MUST pause until
+the governing context and visible interpretation are revalidated.
 
-### 3.2 What "Session Valid" Means
+A shared principal needs an explicit decision rule, not a fixed number of people. A departed owner or inaccessible authority
+does not confer standing on the next writer. The implementation must surface the missing authorization.
 
-A session is **valid** if it operates under a mandate that:
-- Existed before the session started
-- Was confirmed by the principal as their mandate (the principal bears responsibility for the content; agent-assisted articulation is conformant if the principal confirmed the result)
-- Was read by the agent before any action
-- Has a visible interpretation in the trace tier
+### 3.3 Unavailable memory
 
-A session is **invalid** if:
-- No mandate exists (the agent acts without authorization)
-- The mandate was created during the session (the agent authorizes itself)
-- The mandate was not read (the agent ignores its authorization)
-- No interpretation is visible (the agent's understanding cannot be checked)
+**R-11.** Missing, inaccessible, invalid or ambiguous binding, governing mandate or required trace acceptance MUST be
+reported explicitly. Work depending on it MUST pause. Work independently authorized by the current prompt and available
+governing context MAY continue, but MUST NOT be represented as a valid ACM-governed interval without passing R-09.
 
-Validity is binary. A session that begins without a mandate cannot become valid by creating one mid-session � the pre-work condition was already violated.
+The implementation MUST NOT claim unavailable memory was read, invent a replacement mandate, silently switch memory sources,
+or silently create a competing local trail. A deployment may queue records for the same bound destination only if its policy
+explicitly permits that behaviour; queued records are not represented as accepted shared records.
 
-### 3.3 Why Pre-Work, Not During-Work
+## 4. Memory Repository and Scopes
 
-Prior memory models answer: *What does the agent need to remember to do the job?*
+### 4.1 One operational model
 
-ACM answers: *What must be established before the agent is authorized to begin?*
+**R-12.** Memory MUST reside in a repository of its own, separate from the repositories of work. A repository of work MUST
+have a repository-level memory scope; one memory repository MAY hold many such scopes. Adding contributors MUST NOT require
+a different storage model or migration from a private-only trace layout.
 
-This is a different question with different implications:
+Here repository means the identified, governed memory store, not a required Git implementation. It needs its own identity,
+acceptance and access boundary. Its physical hosting is an implementation choice. Public specification distribution must
+not implicitly distribute its development memory.
 
-**Memory as resource (prior art):** The agent proceeds. Memory helps it proceed better. If memory is missing, the agent may perform suboptimally, but it still acts.
+### 4.2 Explicit binding and stable identity
 
-**Memory as precondition (ACM):** The agent cannot proceed until the mandate exists. Memory isn't just helpful � it's the authorization gate. If the mandate is missing, the agent must stop and request it, not act and hope.
+**R-13.** Setup MUST establish an explicit binding between the repository of work, memory source and repository-level scope.
+The implementation MUST validate that binding before memory use. Local folder names and remote basenames alone MUST NOT
+establish identity. Clone relocation or renaming MUST NOT silently change the binding. Ambiguous, conflicting or mismatched
+bindings MUST fail visibly without reading or writing a guessed alternative.
 
-The difference is structural, not a matter of degree. A capability-first model with excellent memory is still not governance-first if the agent can act without a mandate.
+Binding is configured once for the applicable deployment/workspace/repository rather than repeated in ordinary prompts.
+Aliases after a repository rename require an explicit migration of the binding; a remote URL is a locator, not immutable identity.
+An implementation may use authenticated host identifiers, explicit identifiers or another verifiable binding mechanism.
+Where the binding mechanism is the root commit, as in the reference implementation, it identifies shared history, not
+governance: clones and forks with the same root commits are one work identity and share one binding. Governing a fork separately requires another confirmed discriminator, never a guess.
 
-### 3.4 Interpretation Visibility
+### 4.3 Path scopes and named scopes
 
-It is not enough for the mandate to exist and be read. The agent's *interpretation* of the mandate must be visible in the trace tier before action begins.
+**R-14.** Within the validated repository binding, repository-relative code locations MUST resolve deterministically to
+their applicable path scopes. Named feature, change-request or task scopes MUST additionally be selected from established
+task intent and scope-purpose metadata, not guessed from a code path. Ambiguity MUST be surfaced before writing.
 
-**Why this matters:** Two failure modes are possible even when a mandate exists:
-1. The agent reads the mandate but misinterprets it
-2. The agent reads the mandate but ignores parts of it
+The memory mirrors repository-relative paths while retaining explicit task scopes where directory structure is insufficient.
+The active scope and changed paths are recorded. A record goes to the narrowest applicable scope: a task scope the established
+task names, else the path scope containing the work, else the repository scope. Work spanning several scopes is recorded in the authorized coordinating
+scope or through explicitly linked records; no unexplained duplication of a decision across trails.
+Scope or code-path moves require an explicit old-to-new mapping; existing references must remain resolvable.
 
-If the interpretation is invisible, these failures cannot be detected until after damage is done. Visible interpretation allows the principal (or an auditor) to catch misalignment *before* the agent acts on a wrong interpretation.
+### 4.4 Governing chain and ceiling
 
-**What visible interpretation looks like:**
-- The trace tier contains a statement of what the agent understood the mandate to mean
-- This statement appears before any action entries
-- The statement is specific enough that a reader can identify gaps between it and the mandate
+**R-15.** Resolution MUST return every applicable governing scope in the declared chain, broadest first, together with the
+active write scope. It MUST stop at the principal-declared memory ceiling and enforce path containment and access boundaries.
+It MUST NOT traverse outside the binding through parent segments, absolute-path injection, symbolic links or equivalent redirects.
+If an implementation safety bound prevents complete resolution, report failure rather than silently dropping governing scopes.
 
-**Example:** The mandate says "improve code quality without changing public APIs." The agent's trace entry shows: "Interpretation: refactor internal implementations, preserve all public method signatures and return types." A reader can verify alignment.
+Scope hierarchy is explicit governance structure, not inference from arbitrary neighbouring clone folders. A scope's required
+but inaccessible higher mandate blocks affected governed work; it does not justify proceeding with lower mandates alone.
 
-### 3.5 Historical Grounding
+### 4.5 Attribution and evidence placement
 
-The mandate gate is not a novel invention � it is the application of an established governance principle to agent memory.
+**R-16.** Each source record MUST identify its scope, covered work-repository identities or explicit memory-wide context,
+actor, principal/authority reference, applicable
+mandate revisions, work/session identifier, record identifier, time and relevant verification references. Agent/model
+identity MUST be stated where known; otherwise state unknown, not an invented model name.
 
-**Roman Law � Mandatum:** In Roman contract law, a *mandatum* was the formal authorization by which a principal empowered an agent to act on their behalf. The mandate:
-- Was authored by the principal, not the agent
-- Had to exist before the agent could act
-- Defined the scope within which the agent was authorized
-- Made the agent accountable for acting outside scope
-
-The structure is identical to ACM's intent tier: principal-authored, pre-existing, scope-defining, accountability-enabling.
-
-**Access Control � RBAC/MAC/Capability Models:** In software security, access control models (Sandhu et al., 1996) share a common structure:
-- Authorization must exist before action is permitted
-- Scope is defined by the authorizing party, not the actor
-- The actor is accountable for exceeding authorized scope
-- Permissions are checked at session initiation
-
-The mandate gate is this pattern applied to agent sessions rather than individual operations.
-
-**Aviation � Pre-Flight Brief:** Before any flight, the crew conducts a brief that establishes the destination parameters. The brief:
-- Must be completed before departure (pre-work gate)
-- Covers what the destination is and what constraints apply
-- Requires acknowledgment from all crew members
-- Creates a shared understanding that can be referenced if things go wrong
-
-**Surgery � Surgical Timeout:** Before incision, the surgical team conducts a timeout that verifies patient identity, procedure, and site. The timeout:
-- Is a hard stop (no proceeding until complete)
-- Ensures all participants have the same understanding
-- Creates a documented checkpoint
-
-All four share the same structure: a principal-authored or externally-verified authorization must exist and be acknowledged before high-stakes action begins. The agent (pilot, surgeon, software process, Roman agent) cannot proceed on assumption.
-
-### 3.6 Conformance Criteria
-
-A system is conformant if:
-1. The intent tier contains a mandate before any session begins
-2. The agent reads the intent tier as its first action in every session
-3. The trace tier contains the agent's interpretation of the mandate before any other entries
-4. Sessions that begin without a mandate are rejected or flagged as unauthorized
-
-A system is non-conformant if:
-- The agent can begin work without a mandate
-- The agent can create its own mandate
-- The agent can act before reading the mandate
-- The agent's interpretation is not recorded before action
-
-### 3.7 Relationship to PEA Principles
-
-The mandate gate is ACM's operationalization of **PEA Principle 1: Operator's Intent**.
-
-PEA Principle 1 states: *Define the destination, never the route. The agent must interpret and adapt rather than execute a checklist.*
-
-The mandate gate implements this by:
-- Requiring the principal to define the destination (intent tier)
-- Requiring the agent to read and interpret it (visible interpretation)
-- Allowing the agent to determine its own route (action entries in trace tier)
-
-The principal says *what* and *why*. The agent determines *how*. But the agent cannot begin determining *how* until the *what* exists in memory.
-
----
-
-## 4. Scoped Memory
-
-Sections 1-3 defined trust tiers � organizing memory by *who authored it*. This section defines scope tiers � organizing memory by *what it governs*. The two axes are orthogonal and both are core to ACM.
-
-### 4.1 The Scope Axis
-
-ACM memory can exist at multiple nested scopes:
-
-```
-org/.acm/           ? governs all workspaces in the org
-  workspace/.acm/   ? governs all repos in the workspace
-    repo/.acm/      ? governs this repo
-```
-
-Each scope has its own complete ACM structure (intent tier, trace tier, evidence tier). The scope names shown (org, workspace, repo) are examples � ACM defines the *hierarchy pattern*, not a fixed vocabulary. Different deployments may use different scope names (team, product, project, etc.).
-
-### 4.2 Discovery Mechanism
-
-Scopes are discovered by filesystem structure: parent-directory traversal from the working directory upward. An ACM-conformant agent discovering its scopes:
-
-1. Reads `.acm/` in the current working directory (most local scope)
-2. Traverses parent directories, reading any `.acm/` directories found
-3. Stops when any of the following conditions are true:
-
-   - **Filesystem root reached** � the hard stop. Always applies. Traversal never crosses the filesystem root.
-   - **Scope ceiling marker found** � if a directory contains a file named `.acm-root`, that directory is the topmost scope. After reading its `.acm/destination.md` (if present), traversal stops. Operators place `.acm-root` in the directory they wish to treat as the organizational ceiling.
-   - **Implementation depth ceiling** � conformant implementations SHOULD apply a maximum traversal depth as a safety bound. The RECOMMENDED ceiling is **4 levels** above the starting directory (sufficient for the deepest practical hierarchy: session ? repo ? workspace ? org). Implementations MAY use a higher ceiling with operator configuration.
-
-The result is an ordered list of scopes from most local to most encompassing. All scopes in the list govern the current work session.
-
-**Note on the `.acm-root` marker:** This file need not have any content. Its presence alone signals the scope ceiling. It is the operator's explicit declaration that "this is as far up as scope resolution should go." Without it, traversal continues to the filesystem root (or the implementation ceiling, whichever comes first).
-
-### 4.3 Scope Resolution Rule
-
-**Higher scope always wins.**
-
-When a higher-scope mandate conflicts with a lower-scope mandate, the higher scope is authoritative. This is not because lower-scope decisions are unimportant � it is because scope-crossing effects are structurally invisible to the lower scope. A repo-level mandate cannot know what coordination constraints affect it; only the workspace or org level can see that.
-
-| Conflict | Resolution |
-|----------|------------|
-| Workspace destination vs repo destination | Workspace wins |
-| Org destination vs workspace destination | Org wins |
-| Repo constraint vs workspace constraint | Workspace wins |
-
-This mirrors the trust resolution rule (Intent > Trace > Evidence). Both are "resolve toward the party with broader visibility."
-
-### 4.4 Why Scope Matters for Governance
-
-An agent with access only to repo-level context cannot reason about cross-repo consequences. It sees its local effects but is blind to coordination effects � how its work affects other repos, what shared constraints apply, what the ensemble is trying to achieve.
-
-Scoped memory solves this by giving the agent access to higher-scope context:
-
-- **Workspace-level destination** tells the agent what the ensemble of repos is working toward
-- **Org-level constraints** tell the agent what applies across all work in the organization
-- **Cross-repo coordination** becomes visible because it's stated at the scope that can see all parties
-
-Better context produces safer decisions. Scope hierarchy is what enables organizational context.
-
-### 4.5 Mandate Gate at Multiple Scopes
-
-The mandate gate (�3) applies at each scope. Before a session is valid:
-
-1. Each scope's intent tier must contain a mandate
-2. The agent must read all applicable mandates (all scopes in the discovered hierarchy)
-3. Higher-scope mandates take precedence when they conflict with lower-scope mandates
-
-If any applicable scope's mandate gate fails (no mandate exists at that scope), the agent should surface this as a finding, not silently proceed with only the lower-scope mandates.
-
-### 4.6 Evidence Tier and Scope
-
-The evidence tier (session captures) lands at the scope where the change was made:
-
-- Changes to a repo are captured in that repo's `.acm/sessions/`
-- Cross-repo operations (if any) are captured at the workspace scope's `.acm/sessions/`
-
-This ensures evidence is collocated with the artifacts it documents.
-
-### 4.7 Conformance Criteria
-
-A system is conformant if:
-1. It discovers all applicable scopes by parent-directory traversal
-2. It reads all applicable mandates before beginning work
-3. It resolves scope conflicts by "higher scope wins"
-4. It places evidence at the scope where changes were made
-
-A system is non-conformant if:
-- It reads only the most local scope
-- Lower-scope mandates can override higher-scope mandates
-- Evidence is placed at a different scope than the changes it documents
-
-### 4.8 Relationship to PEA Principles
-
-Scoped memory is ACM's operationalization of organizational context for **PEA Principle 1: Operator's Intent**.
-
-The Operator's Intent principle requires the agent to understand *what* the principal wants and *why*. When work spans multiple scopes (repos in a workspace, workspaces in an org), the "operator" at each scope provides part of the intent. Scoped memory makes this multi-level intent visible and resolvable.
-
----
+Record asserted identity separately from authenticated identity. A Git author field alone is not authentication.
+For preflight observations before work identity or mandate revisions are established, mark those fields unresolved and retain
+the capture's memory/session identity. Mark genuinely inapplicable fields explicitly. Neither case authorizes governed work;
+later association with the validated work context is recorded without rewriting the original observation.
+Evidence is associated with the scope of the documented actions. A cross-scope session may have one canonical capture with
+scope-specific references, rather than copied captures that imply separate observations.
 
 ## 5. Convergence
 
-The mandate gate defines when work can *begin*. Convergence defines when work is *done*. Together they bound the governance arc: authorized start ? governed execution ? verified end.
+### 5.1 Completion and silence
 
-### 5.1 Definition
+**R-17.** Convergence MUST require both an exhausted work queue for the declared scope and independent evaluation finding
+nothing further to change against its declared quality bar. The agent's self-assessment or a passing automated check alone
+MUST NOT establish convergence.
 
-**Convergence:** Work is done when the trace tier shows no remaining work items and independent evaluators examining the evidence tier find nothing left to change.
+Evaluation identifies the artifact revision/hash, examined surfaces, untested surfaces, evaluator identity and independence,
+and whether the evaluation is fresh or a same-session follow-up. A different model family reduces one source of shared bias;
+it is not proof of statistical independence. Principal review has role independence, not necessarily organizational independence.
 
-This is not the agent's assessment of its own work. The agent cannot declare itself done. Convergence is a structural property derivable from the memory state:
-1. The work queue (in the trace tier) is empty
-2. External review of the evidence tier produces no new findings
+Silence is bounded, provisional evidence of no findings, not proof that none exist. Deferred items outside an evaluated
+scope remain visible; deferring an unresolved item inside the claimed scope is not the same as completing it.
 
-Both conditions must hold. An empty work queue with unreviewed evidence is not convergence � it's an untested claim. A reviewed evidence tier with remaining work items is not convergence � work remains.
+### 5.2 Relationship to PEA
 
-### 5.2 Work Queue Empty
+The mandate gate implements Operator's Intent; trace and capture separation implement Observable Autonomy; bounded
+independent evaluation implements Convergence Is Silence. The principal defines what and why. The agent chooses how
+within that authority. Memory carries the track record against which greater delegation can be earned.
 
-The trace tier contains the agent's work queue — what remains to be done. In the reference implementation, this appears in `orientation.md` under "What the next runs should test."
+## 6. Prior Art and Contribution
 
-**Work queue empty** means:
-- No items remain in the "next runs" section
-- No open questions or deferred work flagged in recent trail entries
-- The most recent orientation explicitly states the queue is exhausted
+### 6.1 CoALA
 
-This is a necessary but not sufficient condition for convergence. The agent can exhaust its own list of ideas without having found everything worth finding.
+Sumers, T. R., Yao, S., Narasimhan, K., and Griffiths, T. L. (2023), *Cognitive Architectures for Language Agents*,
+[arXiv:2309.02427](https://arxiv.org/abs/2309.02427), distinguishes functional memory types. ACM retains that functional
+axis and adds governance by authorship, authority and verifiability. It does not claim to invent functional or tiered memory.
 
-### 5.3 Independent Evaluator Role
+### 6.2 Generative Agents
 
-Convergence requires that independent evaluators � parties other than the agent � examine the evidence tier and find nothing left to change.
+Park, J. S., et al. (2023), *Generative Agents: Interactive Simulacra of Human Behavior*,
+[arXiv:2304.03442](https://arxiv.org/abs/2304.03442), supplies the observation/reflection/planning precedent and retrieval
+by relevance, recency and importance. ACM uses reflection as derivation while distinguishing a reflection from source
+evidence and principal-confirmed intent.
 
-**Why independent:** The agent has an interest in being done. It produced the work. It will naturally see its work favorably. This is not dishonesty � it's structural bias. The same bias exists in human self-assessment and is why peer review exists.
+### 6.3 MemGPT
 
-**What independent evaluators do:**
-1. Examine the evidence tier (session records)
-2. Compare agent actions against the mandate
-3. Check for gaps between what the mandate required and what the evidence shows
-4. Identify findings the agent's trace tier did not surface
+Packer, C., et al. (2023), *MemGPT: Towards LLMs as Operating Systems*,
+[arXiv:2310.08560](https://arxiv.org/abs/2310.08560), supplies hierarchical memory and cross-session persistence.
+ACM builds on those capabilities; authority boundaries and source-preserving derivation are additional governance concerns.
 
-**Who counts as independent:**
-- An agent from a different model family (e.g., Claude evaluating GPT's work, or vice versa) � instances of the same model share training data and cannot be considered statistically independent
-- The principal reviewing the evidence (role independence)
-- An external auditor (organizational independence)
+### 6.4 Authorization and audit-log patterns
 
-The agent itself does not count, regardless of how carefully it reviews its own work.
+Sandhu, R. S., Coyne, E. J., Feinstein, H. L., and Youman, C. E. (1996), *Role-Based Access Control Models*, is an
+authorization precedent. RBAC, MAC and capability models establish authorization before action and separation of actor
+from authorizing authority. Independent capture and append-only source apply established audit-log patterns.
+These analogies motivate ACM; they do not prove that natural-language mandates are machine-enforceable or that ACM replaces
+per-operation access checks. Runtime governance and training-time alignment address different questions and can coexist.
 
-### 5.4 Why Agent Cannot Self-Assess
+### 6.5 Scale and governance
 
-A core premise of ACM (inherited from PEA) is that the agent is an unreliable narrator of itself. This applies to completion assessment as much as to action narration.
+The v0.4.0 Scale discussion introduced bounded recent windows plus archives regenerated from source. This version carries
+that lesson into shared recording and retrieval in Section 8. No claim that generation alone prevents stale caches is made:
+freshness needs a validated source revision and a completeness check.
 
-**Self-assessment failure modes:**
-1. **Premature convergence:** The agent declares done before finding everything findable
-2. **Comfortable-corner bias:** The agent exhausts easy improvements and declares silence, missing harder ones
-3. **Rationalized completion:** The agent produces a coherent narrative for why work is done that does not match the evidence
+### 6.6 Contribution claims
 
-These are not accusations of agent dishonesty. They are structural properties of any self-assessing system with stakes in its assessment. The solution is the same as for narration: separation. The party doing the work is not the party declaring it done.
+ACM's stated contribution is transferring established authorization patterns to agent memory governance: the mandate gate,
+capture-author separation, trust-tier organization and convergence as a memory-state property.
+It claims no invention of shared memory, tiered memory, reflection, persistence or the underlying authorization mechanisms.
+Observed results are claimed only within their stated experiment scope.
 
-### 5.5 Silence as Signal
+### 6.7 Augmented Individual Intelligence
 
-In ACM (and PEA), **silence** has a specific meaning: independent evaluators find nothing left to change.
+Holmager (2026), *Augmented Individual Intelligence*,
+[DOI:10.5281/zenodo.18417872](https://doi.org/10.5281/zenodo.18417872), includes agency preservation among its boundary
+conditions. ACM supplies governance infrastructure for that goal: retained principal authority, attributable decisions and
+independent observations. The existence of files or a conforming record schema alone does not prove preserved human agency.
 
-Silence is:
-- A signal, not a proof � it means no findings, not that no findings exist
-- Bounded � silence applies to what was examined, not to what wasn't
-- Provisional � new evidence or new evaluators may surface new findings
+## 7. Reference Implementation and Conformance
 
-Silence is not:
-- The agent saying "I'm done"
-- The absence of agent activity
-- A guarantee of correctness
+### 7.1 Separate memory, ordinary entry skill
 
-**Bounded silence:** Every silence claim must name what quality bar it applies to and what surfaces were examined. "Silence on internal consistency for the trace tier" is bounded. "The work is done" is unbounded and therefore not a valid convergence claim.
+The reference route is the PEA skills suite or a Work entry skill. The user names the skill in an ordinary prompt; setup
+has already supplied the binding. The skill resolves the scope, reads governing intent and bounded relevant context,
+makes its interpretation visible, acts within authority and records outcomes to the bound scope.
+Naming a skill cannot compensate for absent deployment configuration or permission enforcement.
 
-### 5.6 Convergence at the Memory Level
+This is a reference contract, not a claim that currently released reference skills implement it.
 
-Convergence is visible in the memory structure:
+### 7.2 File layout
 
-| Tier | Convergence Signal |
-|------|-------------------|
-| Intent | Mandate unchanged (work did not exceed scope) |
-| Trace | Work queue empty, most recent entries show nothing actionable |
-| Evidence | Independent review produced no new findings |
+The following layout is illustrative. A database or service may implement the same properties.
 
-A memory state showing all three signals is converged. A memory state missing any signal is not.
-
-**Example:** 
-- Intent tier: `destination.md` unchanged since session start
-- Trace tier: `orientation.md` shows "Work queue: empty"; `audit-trail.md` most recent entry declares silence
-- Evidence tier: Session records reviewed by independent evaluator; review notes show no findings
-
-This memory state is converged. The convergence is derivable from the tiers � no declaration required.
-
-### 5.7 Conformance Criteria
-
-A system is conformant if:
-1. Convergence is defined as a memory-state property, not an agent declaration
-2. Work queue exhaustion is necessary but not sufficient for convergence
-3. Independent evaluation is required before convergence can be claimed
-4. Silence claims are bounded (name what was tested, what wasn't)
-
-A system is non-conformant if:
-- The agent can declare itself done
-- Work queue empty alone constitutes convergence
-- No independent review is required
-- Silence claims are unbounded
-
-### 5.8 Relationship to PEA Principles
-
-Convergence is ACM's operationalization of **PEA Principle 3: Convergence Is Silence**.
-
-PEA Principle 3 states: *The system has converged, for purposes of the loop, when diverse independent evaluators find nothing left to change.*
-
-ACM implements this by:
-- Requiring work queue exhaustion (trace tier signal)
-- Requiring independent evaluation (external check of evidence tier)
-- Treating silence as signal, not proof
-- Requiring bounded silence claims
-
-The agent does the work. The memory records it. Independent evaluators assess it. Convergence is what emerges when all three align on "nothing left to change."
-
----
-
-## 5. Prior Art
-
-ACM builds on prior work in agent memory architecture. This section identifies the main precedents, states what ACM inherits from each, and clarifies where ACM's contribution lies.
-
-### 5.1 Cognitive Architectures for Language Agents (CoALA)
-
-**Citation:** Sumers, T. R., Yao, S., Narasimhan, K., & Griffiths, T. L. (2023). *Cognitive Architectures for Language Agents*. arXiv:2309.02427.
-
-**What it establishes:** CoALA provides a formal framework for language agent architecture organized around memory types: working memory (active context), episodic memory (past experiences), semantic memory (world knowledge), and procedural memory (action repertoire). The framework unifies prior agent designs under a cognitive-science-inspired taxonomy.
-
-**What ACM inherits:**
-- The recognition that agent memory requires explicit architectural treatment, not ad-hoc prompt engineering
-- The multi-tier structure (though ACM organizes by trust, not function)
-- The distinction between transient working memory and persistent long-term memory
-
-**What ACM adds:**
-- Trust-level organization orthogonal to functional types
-- The mandate gate � a governance precondition absent from CoALA's capability-focused design
-- Capture-author separation as a structural requirement
-- Convergence as a memory-level property
-
-CoALA asks: *What kinds of memory does an agent need?* ACM asks: *Who authored each memory tier, and can it be trusted?*
-
-### 5.2 Generative Agents
-
-**Citation:** Park, J. S., O'Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). *Generative Agents: Interactive Simulacra of Human Behavior*. arXiv:2304.03442.
-
-**What it establishes:** Generative Agents introduced the observation ? reflection ? planning loop for persistent agents. Agents observe their environment, form reflections (higher-order summaries of observations), and use reflections to plan future action. Memory is retrieved by relevance, recency, and importance.
-
-**What ACM inherits:**
-- Reflection as a first-class memory operation (ACM's orientation mechanism parallels this)
-- The observation ? reasoning ? action cycle
-- Importance-weighted memory retrieval as a design pattern
-
-**What ACM adds:**
-- Principal-authored intent tier (Generative Agents have no concept of externally-imposed mandate)
-- Append-only trace constraint (Generative Agents can rewrite reflections)
-- Independent evidence capture (Generative Agents have no harness-captured session records)
-- Explicit governance layer (Generative Agents optimize for behavior plausibility, not accountability)
-
-Generative Agents asks: *How can agents maintain coherent long-term behavior?* ACM asks: *How can principals verify that agent behavior was authorized?*
-
-### 5.3 MemGPT
-
-**Citation:** Packer, C., Wooders, S., Lin, K., Fang, V., Patil, S. G., Stoica, I., & Gonzalez, J. E. (2023). *MemGPT: Towards LLMs as Operating Systems*. arXiv:2310.08560.
-
-**What it establishes:** MemGPT addresses the context window limitation by treating memory as a hierarchical system the agent actively manages. The agent promotes salient information to "main memory" (the context window) and demotes less relevant information to "archival memory" (persistent storage). The agent has explicit memory management functions.
-
-**What ACM inherits:**
-- Hierarchical memory with explicit tier boundaries
-- Agent-managed memory promotion/demotion as a design pattern
-- Cross-session persistence as a core requirement
-
-**What ACM adds:**
-- Trust differentiation between tiers (MemGPT tiers differ by salience, not by authorship or trust)
-- The mandate gate (MemGPT has no pre-work authorization requirement)
-- Capture-author separation (MemGPT's agent writes all tiers)
-- Convergence as a structural property (MemGPT has no completion model)
-
-MemGPT asks: *How can agents effectively use more memory than fits in context?* ACM asks: *How can observers trust what agents claim about their memory?*
-
-### 5.4 Access Control Prior Art
-
-The mandate gate is not a novel mechanism � it is an established access control pattern applied to a new domain.
-
-**Authorization Patterns (RBAC, MAC, Capability Models):** Role-Based Access Control and related authorization models share core properties (Sandhu, Coyne, Feinstein, & Youman, 1996):
-- Authorization must exist before action is permitted
-- Scope is defined by the authorizing party, not the actor
-- The actor is accountable for exceeding authorized scope
-- Permissions are checked at session/request initiation, not only at individual operations
-
-These properties map directly to ACM's mandate gate. The mandate is the authorization. The principal defines scope. The agent is accountable for exceeding it. The check happens before the session begins.
-
-ACM's specific pattern is closer to Mandatory Access Control (MAC) than RBAC in one respect: the agent has only one role (actor) and one principal relationship, rather than multiple roles with different permissions. The shared property is "authorization before action" � the principle common to the entire family.
-
-ACM's contribution is not inventing these patterns but recognizing that **agent memory is an authorization domain** where they apply. Prior agent memory models (Section 5.1–5.3) treat memory as a capability resource. ACM treats memory as an authorization substrate � the place where the mandate lives, where the agent's interpretation is recorded, and where independent evidence of what happened accumulates.
-
-The mandate gate differs from per-operation access checks in that it gates the *session*, not individual operations. RBAC asks "can this principal perform this action?" The mandate gate asks "does this session have authorization to exist at all?" This is closer to aviation's pre-flight brief or surgery's timeout than to per-operation access checks.
-
-**Constitutional AI Differentiation:** ACM addresses runtime memory governance, not training-time alignment. Constitutional AI (Bai et al., 2022) and related approaches constrain what the agent learns to do; ACM constrains what an already-trained agent is authorized to do in a specific session. The two are complementary: Constitutional AI shapes the agent's dispositions, ACM governs its runtime authorization.
-
-### 5.5 The Governance Gap
-
-The prior agent memory works share a common assumption: memory exists to serve the agent's capabilities. They optimize for what the agent can do � retrieve relevant context, maintain coherent behavior, overcome context limits.
-
-ACM starts from a different assumption: memory exists to serve the principal's governance needs. The first question is not "how can the agent use memory effectively?" but "how can the principal verify that the agent was authorized and that its account of what happened is trustworthy?"
-
-This is the governance gap:
-
-| System | Primary Concern | Mandate? | Evidence Capture? | Append-Only? | Scale? |
-|--------|-----------------|----------|-------------------|---------------|--------|
-| CoALA | Capability (what memory types does the agent need?) | No | No | No | No |
-| Generative Agents | Behavior (how to maintain coherent action?) | No | No | No | No |
-| MemGPT | Scale (how to use more memory than fits?) | No | No | No | Yes |
-| **ACM** | **Governance (was the agent authorized? can we trust its account?)** | **Yes** | **Yes** | **Yes** | **Partial — see below** |
-
-ACM does not replace these systems. An ACM-conformant implementation may use CoALA's functional memory types internally, Generative Agents' reflection loop, or MemGPT's hierarchical memory management. The trust-tier organization is an additional layer that addresses questions the capability-focused systems do not ask.
-
-**Scale within the trace tier.** ACM does not treat scale as orthogonal to governance. As a trace tier accumulates entries over a long-running agent relationship, the append-only constraint (§2.2) that makes the tier trustworthy also makes it grow monotonically — the same property that protects history from rewriting also means nothing is ever removed. Left unaddressed, this creates a tension: the mandate gate requires the agent's interpretation to be checked against accumulated context, but reading a large trace tier in full on every session stops being viable as it grows.
-
-A conformant pattern for resolving this without weakening trust: split derived (non-authoritative) trace-tier artifacts into a bounded *recent window* plus an *archive* of older material, both regenerated from the authoritative append-only source rather than pruned from it. The append-only source itself (e.g. `audit-trail.md`) is never truncated; only a *derived* reading surface is windowed. This differs from MemGPT's promotion/demotion model in one respect worth naming: MemGPT's agent actively decides what moves to archival memory, which is a capability decision made by the party being observed; ACM-conformant windowing should instead be a mechanical, content-blind operation (e.g. most-recent-N markers) precisely so that no governance-relevant content can be selectively hidden by the agent whose trace is being read. Scale is addressed without reopening capture-author separation (§2.1) or trust-tiered conflict resolution (§2.3) — the derived window is a convenience surface over the trace tier, not a new tier with its own trust semantics.
-
-*Reference implementation:* the Principles of Earned Autonomy Skills Suite's `learning.md` (a bounded recent window of `[!REALIZATION]`/`[!REVERSAL]` markers extracted from `audit-trail.md`) plus `learning-archive.md` (the overflow, regenerated alongside it). Both are optional derived artifacts — §6.1's required-files list and §6.3's minimal-conformance criteria are unaffected by whether an implementation adopts this pattern; it is a recommended answer to the Scale question for implementations whose trace tier has grown large enough to need one, not a new conformance requirement.
-
-### 5.6 Contribution Claims
-
-ACM's contribution is the **transfer of established authorization patterns to agent memory governance**:
-
-1. **The Mandate Gate (Section 3)** � applies RBAC's "authorization before action" principle to agent sessions. The mechanism is established in access control; its application to agent memory as a structural property is new in this domain.
-
-2. **Capture-Author Separation (Section 2.1)** � applies audit-log principles (the observed party cannot author its own observation record) to agent memory. The principle is established in security and accounting; its application to agent memory tiers is new.
-
-3. **Trust-Tier Organization (Section 1)** � organizes memory by trust level (who authored it, whether it can be modified, how conflicts resolve) rather than by functional type. This framing is new in agent memory literature, though trust-based data classification exists in security contexts.
-
-4. **Convergence as Memory Property (Section 4)** � defines work completion as a structural property derivable from the memory state, not an agent declaration. No prior agent memory system defines convergence at the memory level.
-
-ACM does not claim novelty for tiered memory, reflection, cross-session persistence, or the underlying authorization mechanisms. These are established contributions of prior work. The contribution is recognizing that agent memory is an authorization domain and applying these patterns systematically.
-
-### 5.7 Relationship to Augmented Individual Intelligence
-
-Augmented Individual Intelligence (AII) is a cognitive construct for studying sustained human-AI cognitive coupling at the individual level (Holmager, 2026; DOI: [10.5281/zenodo.18417872](https://doi.org/10.5281/zenodo.18417872)). AII defines five boundary conditions for when human-AI interaction qualifies as cognitive partnership: continuity, bidirectionality, adaptivity, cross-domain integration, and **agency preservation**.
-
-The fifth condition � agency preservation � is definitional: "the human retains final decision authority and can override AI suggestions." AII treats this as a boundary requirement but does not specify *how* to enforce it at the system level.
-
-ACM provides that enforcement mechanism:
-
-| AII Requirement | ACM Implementation |
-|-----------------|-------------------|
-| Human retains decision authority | Mandate is principal-authored; agent cannot modify intent tier |
-| Human can override AI suggestions | Agent cannot self-authorize; mandate gate requires principal confirmation |
-| Agency is preserved over time | Append-only trace prevents agent from rewriting history to rationalize overstepping |
-| Override behavior is verifiable | Evidence tier captures what actually happened, independent of agent's account |
-
-ACM is therefore infrastructure for AII-qualifying practices. A system implementing ACM's mandate gate, capture-author separation, and append-only trace structurally enforces the agency-preservation condition that AII requires. Without such infrastructure, agency preservation is a behavioral hope rather than a structural guarantee.
-
-This relationship is asymmetric: ACM operationalizes AII's agency requirement, but AII could in principle use other governance infrastructure. The claim is that ACM is *sufficient* for agency preservation, not that it is the only possible implementation.
-
----
-
-## 6. Reference Implementation
-
-This section defines a minimal file-based implementation of ACM using a `.acm/` directory structure. This specification repository itself uses this structure and serves as a working example.
-
-### 6.1 Directory Structure
-
-An ACM-conformant repository contains a `.acm/` directory at the repository root with the following structure:
-
-```
-.acm/
-+-- destination.md      # Intent tier (principal-authored mandate)
-+-- audit-trail.md      # Trace tier (agent decisions, append-only)
-+-- orientation.md      # Trace tier (derived orientation, rewritten each run)
-+-- sessions/           # Evidence tier (harness-captured session records)
-    +-- 2026-06-20-001.jsonl
-    +-- ...
+```text
+memory-repository/            memory-wide scope; .acm-root marks the top
+  .acm-root
+  destination.md              intent: the mandate (principal-confirmed)
+  orientation.md              trace, derived and replaceable
+  records/<record-id>.md        trace source: records, one file each; closed months sealed (R-25)
+  tasks/<task-id>/            named task scope; the same three entries (a task may sit under any scope)
+  repositories/
+    <repository-id>/          repository scope; the same three entries, plus:
+      repository.json         the binding (R-13)
+      audit-trail.md          legacy single-file trace, read-only, kept after migration
+      evidence/               independently captured evidence, if implemented
+      tasks/<task-id>/        named task scope; the same three entries
+      paths/<repository-relative-path>/
+                              path scope; the same three entries, and its own tasks/
 ```
 
-**Required files:**
-- `destination.md` � the intent tier. Must exist before any agent session.
-- `audit-trail.md` � the trace tier. Created by first agent run, append-only thereafter.
+Every scope is a folder with the same shape; a scope's files are all optional until used. Generated views (indexes,
+summaries, recent windows) are not part of the layout: they are regenerated on demand from the records (R-19). The one stored
+derived view is `orientation.md`, labelled derived (R-19).
+
+The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
+repository lives at memory-wide level. The binding maps repository identity to its namespace.
+Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
+An implementation can place restricted scopes in separate repositories with independent access controls.
+
+### 7.3 Minimal and full conformance
+
+The contributor count is not a conformance mode. The inherited distinction between minimal and full concerns independent
+evidence coverage, not whether memory is solo or shared.
+
+**Minimal conformance:** R-01 through R-03 and R-05 through R-16, plus R-18 through R-20 and R-25, are implemented and their
+applicable checks pass for the declared deployment. A conditional check may be marked not applicable only with the condition
+and a verifiable reason that it is absent; this cannot waive an unconditional requirement. R-21 is additionally required
+when efficiency or usefulness is claimed. Evidence may be absent, but its absence MUST be explicit; no independent-evidence
+or convergence claim follows. R-03 applies to evidence when available and always forbids promoting trace into independent evidence.
+
+**Full conformance:** minimal conformance plus independently enforced R-04 and the evaluation procedure in R-17.
+An implementation can be conformant before a particular work item converges; it must not report convergence for that item
+until the procedure passes. A local file pattern without enforced separation is an illustration, not structural conformance.
+
+R-22 through R-24 govern additional claims about training use, demonstrated adoption or specification releases respectively.
+An implementation must declare which are applicable and cannot claim an unevaluated extension.
+Conformance reports identify version, deployment boundary, checks, results, limitations and applicable policies.
 
-**Optional files:**
-- `orientation.md` — derived trace tier file. Contains current orientation and work queue. Rewritten (not appended) by orient operations.
-- `sessions/*.jsonl` � evidence tier. Harness-captured LLM calls. Format and naming are implementation-dependent.
+### 7.4 Current development state
+
+This version has been adopted for the specification's own development memory, by one author on one machine.
+That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
+through a user-level registry; the public repository holds no memory and no pointer to it. The reference skills were changed
+to resolve that binding, to write one record per file and to seal closed months. Neither change demonstrates R-07 access enforcement, concurrent
+writers, cross-machine identity or newcomer adoption, and the evidence statuses above are unchanged by it.
+No operational or full-conformance claim is made for this repository.
 
-### 6.2 File Semantics by Tier
+### 7.5 Implementation provenance
 
-#### Intent Tier: `destination.md`
+The `.acm/` pattern preceded this specification in the Principles of Earned Autonomy Skills Suite,
+[DOI:10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), released April 24, 2026.
+Experience from using reference skills informs the living specification; earlier observations do not demonstrate the
+new shared-memory contract or justify stronger novelty claims.
 
-**Purpose:** The principal's mandate � what the agent is authorized to do, why, and what constraints apply.
-
-**Author:** Principal only (confirmed content). The agent may assist in articulation but must never write to this file without explicit principal confirmation of the result.
-
-**Content requirements:**
-- What the work is (scope definition)
-- What success looks like (completion criteria)
-- What constraints apply (quality bar, style rules, forbidden actions)
-
-**Mutability:** The principal may update or replace at any time. Changes should be appended or clearly marked; destructive rewrites lose the history of how the mandate evolved.
-
-**Example structure:**
-```markdown
-# destination.md � [Project Name]
-
-## What this work is
-[Scope definition]
-
-## What success looks like
-[Completion criteria]
-
-## Constraints
-[Quality bar, rules, forbidden actions]
-```
-
-#### Trace Tier: `audit-trail.md`
-
-**Purpose:** The agent's decision log � what was decided, why, and what happened.
-
-**Author:** Agent only. The principal may read but should not edit.
-
-**Content requirements:** Each entry must include:
-- Date and entry identifier (slug)
-- Interpretation of the ask
-- Decision made (change, redesign argument, or silence)
-- Action taken and verification evidence
-- Reflection (model claim, blind spot, imagined reader pushback)
-
-**Mutability:** Append-only. The agent may add entries but never modify or delete existing entries. This is the structural guarantee that makes the trace tier trustworthy.
-
-**Format:** Markdown with entries separated by horizontal rules (`---`). Each entry is a dated block with a unique slug.
-
-#### Trace Tier: `orientation.md`
-
-**Purpose:** Derived orientation — the current state of the work as understood by the loop.
-
-**Author:** Agent (orient operation). The principal may read but should not edit.
-
-**Content requirements:**
-- Current claims about the target (what the arc shows is true)
-- Work queue (what the next runs should test)
-- Active operational rules (lessons learned that constrain future runs)
-
-**Mutability:** Rewritten each orient run (not append-only). This file represents the *current* orientation, not the history. The history lives in `audit-trail.md`.
-
-#### Evidence Tier: `sessions/*.jsonl`
-
-**Purpose:** Independently captured session records � what actually happened at the LLM layer.
-
-**Author:** Harness (independent capture mechanism). Neither agent nor principal should write to these files.
-
-**Content requirements:** Implementation-dependent. At minimum:
-- Timestamp
-- Model identifier
-- Prompt sent
-- Response received
-- Token counts
-
-**Mutability:** Immutable after capture. Once a session record is written, it cannot be modified.
-
-**Note:** The evidence tier is optional for minimal conformance but required for full ACM conformance. Without independent capture, the trace tier is the only record of what happened, and the agent authored it.
-
-### 6.3 Minimal Conformance
-
-A system is **minimally ACM-conformant** if:
-
-1. **Intent tier exists before work begins.** A `destination.md` (or equivalent) must exist before any session.
-
-2. **The agent reads the mandate first.** The agent's first action in each session is reading the intent tier.
-
-3. **Interpretation is visible before action.** The agent's interpretation of the mandate appears in the trace tier before any action entries.
-
-4. **Trace tier is append-only.** The agent's decision log cannot be modified after entries are written.
-
-5. **Author separation is enforced.** The agent cannot modify the intent tier on its own authority; any intent-tier changes require explicit principal confirmation. The principal should not write to the trace tier.
-
-6. **The mandate gate is implemented.** The system checks for intent-tier existence before authorizing agent action.
-
-### 6.4 Full Conformance
-
-A system is **fully ACM-conformant** if it meets minimal conformance plus:
-
-1. **Evidence tier exists.** An independent harness captures LLM calls before the agent can respond.
-
-2. **Capture-author separation is enforced.** The agent cannot write to the evidence tier.
-
-3. **Convergence is structurally derivable.** The system can determine completion from the memory state (work queue empty + independent review) without relying on agent declaration.
-
-4. **Trust-tiered conflict resolution is implemented.** When tiers disagree, the system resolves toward higher trust (Intent > Evidence > Trace).
-
-### 6.5 This Repository as Reference
-
-This specification repository (`agent-context-memory`) implements ACM:
-
-- **Intent tier:** `.acm/destination.md` � authored by the operator, defines what the spec must achieve
-- **Trace tier:** `.acm/audit-trail.md` � agent decisions for each spec section, append-only
-- **Trace tier:** `.acm/orientation.md` — current orientation and work queue
-- **Evidence tier:** Not implemented in this repository (no harness capture)
-
-This repository is therefore minimally conformant but not fully conformant. Full conformance would require adding an independent session capture harness.
-
-The spec documents what the directory structure means. This repository demonstrates that the structure works.
-
-### 6.6 Implementation Provenance
-
-The `.acm/` directory pattern was publicly released as part of the **Principles of Earned Autonomy Skills Suite** (DOI: [10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), April 24, 2026) before this specification was written. The implementation predates and informed the specification.
-
-This is intentional: the pattern was developed through iterative use, proved effective in practice, and only then formalized. The specification describes what the implementation already demonstrated.
-
----
-
-## Appendix A: Relationship to PEA Principles
-
-ACM operationalizes the three principles of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy):
-
-| PEA Principle | ACM Implementation |
-|---------------|-------------------|
-| **P1: Operator's Intent** | The Mandate Gate (Section 3) � work cannot begin without principal-authored intent |
-| **P2: Observable Autonomy** | Capture-Author Separation (Section 2.1) + Append-Only Trace (Section 2.2) � agent reasoning is recorded and cannot be rewritten |
-| **P3: Convergence Is Silence** | Convergence (Section 4) � completion is a memory-state property, not an agent declaration |
-
-PEA is the theory. ACM is the implementation standard for the memory design problem.
-
----
-
-## Appendix B: Glossary
-
-**Agent:** An autonomous system that takes actions on behalf of a principal.
-
-**Capture-author separation:** The structural requirement that the party recording evidence is not the party whose behavior is being recorded.
-
-**Convergence:** The state where work is done � work queue empty and independent evaluators find nothing left to change.
-
-**Evidence tier:** Memory captured by an independent harness, not authored by the agent.
-
-**Harness:** An independent system that captures LLM calls and responses before the agent can respond.
-
-**Intent tier:** Memory authored by the principal, defining what the agent is authorized to do.
-
-**Mandate:** The principal's governing context � what, why, and what constraints apply.
-
-**Mandate gate:** The requirement that a mandate must exist in memory before any agent session is valid.
-
-**Principal:** The party with standing to authorize agent action (human operator, team, or organization).
-
-**Silence:** Independent evaluators finding nothing left to change. A signal, not a proof.
-
-**Trace tier:** Memory authored by the agent, recording its decisions and reasoning.
-
-**Trust tier:** A layer of memory organized by trust level (who authored it, whether it can be modified, how conflicts resolve).
-
----
+## 8. Shared Recording and Bounded Retrieval
+
+### 8.1 Concurrent acceptance
+
+**R-18.** Source recording MUST use the same collision-safe acceptance model for one writer and many. Every record MUST
+have an identifier unique within the memory source. Acceptance MUST be atomic and create-only: a repeated identical
+submission is idempotent; a repeated identifier with different content MUST fail explicitly, never replace or line-merge.
+Concurrent distinct records MUST remain complete, attributable and individually retrievable.
+
+A file-per-record layout is a reference strategy, not sufficient protection alone. A random identifier has a nonzero
+collision probability; create-only acceptance detects collisions rather than assuming them impossible. Date/slug/author
+alone is not a uniqueness guarantee. Publication of a local record is distinct from acceptance by the shared source.
+
+A monolithic legacy trail may be retained read-only and referenced. A migration must account for every old record without
+silently rewriting it. Ordinary writers do not concurrently regenerate and commit the same derived reading surface.
+
+**R-25.** The number of source files MUST be bounded by the closed periods plus the current period's records, not by the total number
+of records ever written. The records of a closed period MUST
+be sealable into one immutable file in the same scope, in one atomic change that adds the sealed file and removes exactly the
+records it contains. Every record's content MUST be preserved byte for byte and be individually verifiable after sealing, and
+a sealed period MUST NOT be sealed again. Concurrent sealing attempts for the same period MUST fail visibly for all but one.
+
+Sealing is consolidation, not compression: it changes packaging, never content. The reference strategy seals a UTC month,
+`records/<yyyy-MM>.md`, holding each record of that month in file-name order, each preceded by a marker line
+`<!-- record: <file name> bytes:<n> sha256:<hash> -->` and followed by one newline that belongs to the sealed file, not to the
+record. A record is exactly the `n` bytes after its marker line, so a marker-like line inside a record is content, and a
+record without a final newline, with CRLF or with a byte-order mark round-trips unchanged. The removed files remain in version
+history. A record's name carries its write time, not its acceptance time, so a record can arrive after its month is sealed,
+or be retried after it was sealed. Acceptance therefore compares a submitted record with the sealed marker of the same identifier: the same SHA-256 is already
+accepted, and different content under that identifier is a collision that fails explicitly (R-18). A record that belongs to a
+sealed month is accepted only under a new identifier of the current time. Readers read `records/` in file-name order, sealed and
+open files alike. Sealing needs only version control and a byte-count and SHA-256 tool: an agent following the reference skills,
+or a person, can perform and verify it. The memory repository must store records byte for byte; normalizing line endings in
+`records/` (for Git, mark them `-text`) makes the markers stop matching. Where commits are not permitted, closed months stay
+unsealed and that is reported.
+
+### 8.2 Derived views and freshness
+
+**R-19.** Indexes, summaries, recent windows and orientations MUST be labelled derived and tied to the source revision or
+snapshot they represent. Before use, validate that revision and coverage against the bound source. Stale or incomplete
+views MUST be regenerated or reported unusable; filesystem, decoding and indexing errors MUST NOT silently omit scopes.
+Deleting a derived view MUST NOT lose source decisions or governing intent.
+
+Regenerate from a consistent accepted snapshot, including after synchronization. Do not hand-merge generated views.
+Source changes during generation require a new snapshot or a visible retry/failure, not a falsely current result.
+The governing mandates themselves are read at the revisions required by R-09, not replaced by summaries.
+
+### 8.3 Relevance, compression and correction
+
+**R-20.** Retrieval MUST provide a bounded route from binding and governing mandates to the applicable scope's current
+orientation/index, then to relevant source and evidence references. A derived claim MUST identify its sources and author;
+where it includes a corrected claim, it MUST expose the known correction/supersession reference. Recency MUST NOT by itself
+promote a claim to authority.
+
+Mechanical marker/date windows are a useful selection strategy. They do not guarantee preservation of meaning: test questions
+whose answers depend on rejected alternatives, corrections and reasons. Escalate to source when the bounded view cannot
+support an answer, and state uncertainty when relevant evidence is unavailable.
+
+**R-21.** Deployments claiming efficient or useful accumulated memory MUST measure cold-start task orientation, context
+cost and answer/traceability quality against a stated baseline and question set. Entry count and marker volume MUST NOT
+substitute for value. The specification imposes no universal token budget or claim that compression is always beneficial.
+
+### 8.4 Evaluation and training
+
+**R-22.** Extraction for evaluation, training or tuning MUST have an explicit policy from the memory's principal defining
+allowed purposes, scope and access. Training permission MUST NOT be inferred from permission to read or record.
+Prefer independently captured observations and principal-confirmed outcomes where available; label trace-derived cases as
+self-report. Evaluation before model changes is recommended, not an automatic entitlement to use private content.
+
+## 9. Adoption and Specification Evolution
+
+### 9.1 Adoption bar
+
+**R-23.** A reference implementation claiming seamless adoption MUST demonstrate a newcomer continuing applicable work
+by naming one installed entry skill after ordinary deployment setup, without reading the specification or manually supplying
+memory paths in each prompt. The test MUST include successful scope selection and visible safe failure for unavailable
+memory, not just installation or generation of an index.
+
+Repeat with another contributor or agent, task and session. Measure time/context and the ability to find the reasons for
+prior decisions. Record configuration assumptions. This specification states the bar; it does not claim it has been achieved.
+
+### 9.2 Evidence-driven releases
+
+**R-24.** Specification changes MUST preserve their versioned baseline, reasoning and evidence limitations. Before a release,
+the specification version, citation version, archive metadata version and requested release tag MUST agree. A mechanical
+check MUST reject drift before publication. An author-owned release decision is required in addition to passing checks.
+
+Private observations remain private unless the author permits inclusion. Newly authored synthetic fixtures can demonstrate
+bounded mechanisms without reproducing private content; they do not retroactively validate the private experiment.
+Archive creation is a release-time decision. Historical public exposure remains an explicit issue, not fixed by an ignore
+rule or by moving the current working copy.
+
+## Appendix A: Requirement Checks
+
+Each row gives a falsifiable implementation check. No row asserts that its check has been executed.
+
+| ID | Evidence status | Protection | Check |
+|----|-----------------|------------|-------|
+| R-01 | Inherited | Classification | Present a derived summary as independent evidence; reject that classification and recover its source tier. |
+| R-02 | Inherited | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. |
+| R-03 | Inherited | Conflict reporting | Seed unauthorized observed action and contradictory trace; preserve both, report the authorization violation and do not promote the trace. |
+| R-04 | Inherited | Independent capture | Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
+| R-05 | Inherited | Create-only source | Modify/delete an accepted trace record; reject it. Accept a new correction referencing that record; regenerating derived views leaves both intact. |
+| R-06 | Proposed | Role separation | Exercise each write class under the wrong identity, including an unavailable acceptance service; fail visibly and preserve source. |
+| R-07 | Proposed | Access and policy | A reader of the enclosing scope cannot retrieve a restricted scope without separate permission. Absent recording policy blocks recording. |
+| R-08 | Proposed | Authorized exception | In a synthetic store, exercise authorized erasure across declared replicas and leave a non-sensitive event; an unauthorized writer cannot erase. Report unreachable replicas. |
+| R-09 | Inherited | Pre-work gate | Missing mandate, unread governing revision or unaccepted interpretation prevents governed action. Agent-created text never authorizes itself. |
+| R-10 | Proposed | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
+| R-11 | Proposed | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled ACM-valid. |
+| R-12 | Proposed | Separate repository | The memory is held in a separately identified and governed store, a clean distribution of the work repository contains no development memory, and adding a second writer requires no trace-layout migration. |
+| R-13 | Proposed | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; a clone or fork with the same root commit resolves to the same binding, the others preserve intended identity or fail, with no guessed reads/writes. |
+| R-14 | Proposed | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the explicitly selected applicable scope. |
+| R-15 | Proposed | Containment and completeness | Test parent escape, absolute paths, link redirects, an inaccessible parent and depth exhaustion; no escaped access or silent omission occurs. |
+| R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present or explicitly unresolved, unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
+| R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
+| R-18 | Proposed | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
+| R-19 | Proposed | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
+| R-20 | Proposed | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not. |
+| R-21 | Proposed | Measured usefulness | Compare a fixed cold-start question set with and without scoped views; report context cost, time, correctness and unresolved why-questions, not entry volume. |
+| R-22 | Proposed | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
+| R-23 | Proposed | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |
+| R-24 | Proposed | Release consistency | A mismatch among specification/citation/archive versions or requested tag causes the pre-publication check to fail; passing it does not publish. |
+| R-25 | Proposed | Bounded file count | Seal a closed month: one file replaces its records, each record's bytes and SHA-256 match the originals (including a record without a final newline, with CRLF or a byte-order mark, and one containing a marker-like line), and a second seal of that month or a concurrent seal fails visibly. A seal that adds the sealed file without removing its records, or the reverse, is rejected or reported. Submit a record of the sealed month late, retry an already sealed record and retry a sealed identifier with different content: the first is accepted only under a new identifier of the current time, the second as already accepted, the third fails as a collision. |
+
+The rows state the main falsifying tests, not every obligation of a requirement; an implementation that passes them can still violate
+one. Natural-language interpretation, policy quality and useful relevance are not made impossible to get wrong by a schema.
+R-06/R-18 can enforce prohibited writes and collisions; R-20/R-21 require measured semantic outcomes and visible uncertainty.
+Conformance claims must distinguish enforced properties from instructions that contributors are merely expected to follow.
+
+## Appendix B: Evidence and Open-Problem Disposition
+
+The development ledger is not part of this specification's distribution. Historical identifiers are mapped here for continuity.
+The earlier profile proposals are source material, not a separate standard or an independent source of team conformance.
+
+### B.1 Available evidence and its limits
+
+- Published v0.4.0 defines the inherited governance properties; publication alone is not enforcement evidence.
+- Private replay experiments observed shared-file merge conflicts and some silent line loss with line-union merging.
+  Distinct-file cases preserved the tested records. Colliding identifiers, authenticated provenance, hosted acceptance,
+  real simultaneous contributors and reader cost were not established. R-18 remains Proposed.
+- A private index/resolution prototype found stale manual counts and resolved the tested paths. Remote basenames, local
+  fallbacks, incomplete boundary handling and error-handling limitations prevent promoting it into the validated binding
+  required here. R-13/R-15/R-19 remain Proposed.
+- This specification contains no private source records or new runtime experiment results. New synthetic fixtures and independent
+  evaluation remain work to do. Descriptions above summarize limitations, not permission to publish the private material.
+
+### B.2 Disposition
+
+Requirement coverage means the design addresses the topic; it does not close its implementation evidence gap.
+
+| ID | Disposition | Remaining evidence or reason to reopen |
+|----|-------------------|---------------------------------------|
+| BS-01 | Proposed: R-19/R-20/R-21 | Measure staleness and answer quality at growing memory sizes. |
+| BS-02 | Proposed: R-19/R-20/R-21 | Test compressed why-questions and correction/source reachability. |
+| BS-03 | Out of generic specification | Adopting principals own content/licensing decisions; no organization-specific claim here. |
+| BS-04 | Proposed: R-07/R-08 | Adopter policy and end-to-end synthetic erasure, including inaccessible replicas. |
+| BS-05 | Proposed: R-06/R-07 | Test access separation and permitted recording; content sensitivity is not decidable by schema alone. |
+| BS-06 | Proposed: R-02/R-03/R-20 | Seed a wrong claim and verify it cannot acquire mandate authority; evaluate downstream correction. |
+| BS-07 | Proposed: R-02/R-10 | Exercise collective decision rules, peer conflicts and owner succession without self-authorization. |
+| BS-08 | Proposed: R-05/R-16/R-18/R-25 | Test ID collisions, retries, authenticated attribution and real concurrent acceptance. |
+| BS-09 | Proposed: R-22 | Adoption-specific purpose policy and an authorized evaluation dataset; no universal training permission. |
+| BS-10 | Proposed: R-19/R-20/R-21 | Measure cold-start retrieval cost and correctness; verify source revision and indexing completeness. |
+| BS-11 | Proposed: R-21/R-23 | Independent newcomer comparison with a baseline; volume is not value. |
+| BS-12 | Deferred: broader contemporary prior-art survey | Release/novelty claims beyond the modest positioning require first-hand verified sources. |
+| BS-13 | Superseded: no separate profile | R-24 pins releases and preserves history; future compatibility changes need explicit migration. |
+| BS-14 | Inherited lesson, proposed release process: R-24 | New requirements remain Proposed until their own evidence exists; keep visible reversals. |
+| BS-15 | Proposed: R-11/R-13/R-14/R-15 | Implement the reference binding contract and test clone/worktree/identity/boundary cases. |
+| BS-16 | Proposed: R-23 | Cold-run tests through the reference skill in its separately governed repository. |
+
+Other deferred matters: author permission for private evidence publication; archive record creation; legal sufficiency of
+retention procedures; external review and academic submission. These do not prevent publishing this specification. They prevent
+claims that their own obligations or relevant release bars have been satisfied.
+
+## Appendix C: Historical Reference Mapping and Release Boundary
+
+The published v0.4.0 specification numbers both Convergence and Prior Art as Section 5. This version keeps Convergence at 5,
+renumbers Prior Art to 6 and Reference Implementation to 7. Historical documents are not rewritten.
+
+| Historical v0.4.0 reference | v0.5.0 reference |
+|--------------------------------|------------------------|
+| Sections 1-3 | Sections 1-3; requirements now have stable R-identifiers |
+| Section 4, Scoped Memory | Section 4, Memory Repository and Scopes |
+| Section 5, Convergence (5.1-5.8) | Section 5, Convergence |
+| Section 5, Prior Art (5.1-5.7) | Section 6, Prior Art and Contribution (6.1-6.7) |
+| Prior Art 5.5, The Governance Gap (its paragraph on scale within the trace tier) | Sections 6.5 and 8 |
+| Prior Art 5.6, contribution claims | Section 6.6 |
+| Section 6, Reference Implementation (6.1-6.6) | Section 7, Reference Implementation and Conformance |
+| Appendices A/B, PEA relationship and glossary | Sections 1/5.2 and Appendix D |
+
+Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
+not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
+
+Publication must separately reconcile README, citation/archive descriptions, release workflow, requested tag and version. The
+repository's release workflow rejects a tag that differs from the versions stated in `SPEC.md`, `CITATION.cff` and `.zenodo.json`,
+and rejects a tag that carries development memory (`.acm/` or `.trail/`). Release packaging must exclude private development
+memory by an explicit distribution boundary. Passing a version/structure check does not prove the absence of sensitive content
+from a public release.
+
+## Appendix D: Glossary
+
+- **Principal:** the party with standing and an explicit decision rule to authorize a scope's work.
+- **Mandate:** principal-confirmed what, why and constraints; proposed agent articulation is not yet a mandate.
+- **Governed interval:** work after resolved mandates and a visible accepted interpretation pass the mandate gate.
+- **Memory repository:** the separately identified and governed store holding memory for repositories of work.
+- **Binding:** explicit, validated association of work identity, memory identity and repository-level scope.
+- **Scope:** a declared authority/relevance boundary within memory; not an access permission.
+- **Source record:** accepted intent, trace or captured evidence retained under its tier's authorship/mutation rules.
+- **Derived view:** replaceable index, window, summary or orientation with source provenance and snapshot identity.
+- **Acceptance boundary:** the mechanism that admits records and enforces roles, immutability and collision handling.
+- **Capture-author separation:** the observed agent cannot author or suppress its independent observation record.
+- **Silence:** a bounded, provisional independent evaluation with no findings against the examined quality bar.
+- **Convergence:** scoped work queue exhaustion plus bounded independent evaluation, not an agent declaration.
 
 *End of specification.*
-
