@@ -24,9 +24,9 @@ license: CC-BY-SA-4.0
 version: "0.5.0"
 date-released: "2026-11-21"
 identifiers:
-  - type: other
-    value: "Zenodo concept DOI 10.5281/zenodo.20785505 (archived versions: v0.3.2 is 10.5281/zenodo.20785506, v0.1.0 is 10.5281/zenodo.22042744); version 0.5.0 has no archive record"
-    description: "Archive records of earlier versions"
+  - type: doi
+    value: "10.5281/zenodo.24431974"
+    description: "Zenodo version DOI of release v0.5.0 (2026-11-22); concept DOI 10.5281/zenodo.20785505 covers all versions"
 keywords:
   - context memory
   - agent memory

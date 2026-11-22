@@ -78,7 +78,7 @@ These models optimize for what the agent *can do*. ACM optimizes for whether the
 
 ## Citation and archive
 
-Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.5.0 has no archive record yet; the archived versions are v0.3.2 ([DOI 10.5281/zenodo.20785506](https://doi.org/10.5281/zenodo.20785506)) and an earlier v0.1.0 snapshot, under the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505).
+Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.5.0 is archived as [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974); the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions (earlier: v0.3.2, 10.5281/zenodo.20785506).
 
 ## License
 
