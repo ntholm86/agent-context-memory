@@ -12,7 +12,7 @@ Governed work needs a principal-confirmed mandate already in memory; without one
 
 ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory, so that work accumulates across people, sessions, tools and models while the principal keeps authority. It applies established access control and audit-log patterns — "authorization before action", as in RBAC, MAC and capability-based security — to agent memory.
 
-ACM is the operationalization of the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem: PEA is the theory and ACM is the specification of its memory. ACM stands on its own; the PEA skills suite and the Work skill are one implementation of it, and others are possible.
+ACM implements the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem: PEA is the theory, and its principles are ACM's one dependency. ACM stands on its own; it can be implemented without the PEA skills.
 
 ---
 
@@ -48,7 +48,7 @@ repositories/<id>/paths/<path>/              a path scope
 tasks/<task>/                                a task scope (under the memory, a repository or a path)
 ```
 
-The reference route is the [PEA skills suite](https://github.com/ntholm86/principles-of-earned-autonomy-skills-suite) or the [Work skill](https://github.com/ntholm86/work-skill), which resolve a bound scope in a separate memory repository and write its records. Neither is required to implement ACM.
+**Known implementations.** The [PEA skills suite](https://github.com/ntholm86/principles-of-earned-autonomy-skills-suite) and the [Work skill](https://github.com/ntholm86/work-skill) implement this specification: they resolve a bound scope in a separate memory repository and write its records. The specification names no implementation and neither is required; another framework can implement it.
 
 ---
 

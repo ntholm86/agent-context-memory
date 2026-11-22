@@ -337,24 +337,20 @@ independent observations. The existence of files or a conforming record schema a
 
 ## 7. Reference Implementation and Conformance
 
-### 7.1 Separate memory, ordinary entry skill
+### 7.1 Separate memory, ordinary entry point
 
-The reference route is the PEA skills suite or a Work entry skill. The user names the skill in an ordinary prompt; setup
-has already supplied the binding. The skill resolves the scope, reads governing intent and bounded relevant context,
-makes its interpretation visible, acts within authority and records outcomes to the bound scope.
-Naming a skill cannot compensate for absent deployment configuration or permission controls.
+An implementation is used by a person naming it in an ordinary prompt; setup has already supplied the binding. It resolves the
+scope, reads governing intent and bounded relevant context, makes its interpretation visible, acts within authority and records
+outcomes to the bound scope. Naming an implementation cannot compensate for absent deployment configuration or permission
+controls.
 
-The PEA principles come first. This specification is the standard for agent context memory and stands on its own; the PEA
-skills suite and the Work skill are one implementation of it, not its definition, and others are possible. An implementation
-follows the specification for how memory is stored and arranged and the principles for how it works; where it differs from the
-specification, the difference is stated and the author decides which one changes.
+This specification implements the PEA principles and stands on its own; it names no implementation. An implementation follows
+the specification for how memory is kept and the principles for how it works, and states which requirements it does not meet (for
+example independent evidence capture needs a separate component, R-04, and the recording policy is the deployment's, R-07). It
+may read, and append to, an in-repository `.acm/` from an earlier version as a transitional legacy mode; that is not the separate
+memory repository of R-12.
 
-The reference skills implement the intent and trace tiers. They do not capture independent evidence (R-04) or check a recording
-policy (R-07); a deployment that needs the evidence tier adds a separate capture component. They still read, and append to, an
-in-repository `.acm/` where an unbound repository carries one from an earlier version; that is a transitional legacy mode and
-not the separate memory repository of R-12.
-
-This is a reference contract, not a claim that currently released reference skills implement it.
+This is a contract for implementations, not a claim that any implementation meets it.
 
 ### 7.2 File layout
 
@@ -399,16 +395,16 @@ A conformance report states the version, the deployment boundary, the checks, th
 
 This version has been adopted for the specification's own development memory, by one author on one machine.
 That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
-through a user-level registry; the public repository holds no memory and no pointer to it. The reference skills were changed
+through a user-level registry; the public repository holds no memory and no pointer to it. The author's implementations were changed
 to resolve that binding and to write one record per file. None of these changes demonstrates R-07 access control, concurrent
 writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by them.
 No operational or full-conformance claim is made for this repository.
 
 ### 7.5 Implementation provenance
 
-The `.acm/` pattern preceded this specification in the Principles of Earned Autonomy Skills Suite,
-[DOI:10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), released April 24, 2026 (archived under its former name, the Autonomous Development Skills Suite).
-Experience from using reference skills informs the living specification; earlier observations do not demonstrate the
+The `.acm/` pattern preceded this specification in the author's earlier work, archived as
+[DOI:10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), released April 24, 2026.
+Experience from using implementations informs the living specification; earlier observations do not demonstrate the
 new shared-memory contract or justify stronger novelty claims.
 
 ## 8. Shared Recording and Bounded Retrieval
@@ -547,7 +543,7 @@ Requirement coverage means the design addresses the topic; it does not close its
 | BS-13 | Superseded: no separate profile | Releases pin their versions (Appendix C); future compatibility changes need explicit migration. |
 | BS-14 | Release process: Appendix C | Requirements remain Proposed until their own evidence exists; keep visible reversals. |
 | BS-15 | Proposed: R-11/R-13/R-14/R-15 | Implement the reference binding contract and test clone/worktree/identity/boundary cases. |
-| BS-16 | Proposed: R-23 | Cold-run tests through the reference skill in its separately governed repository. |
+| BS-16 | Proposed: R-23 | Cold-run tests through an implementation in its separately governed repository. |
 
 Other deferred matters: author permission for private evidence publication; archive record creation; legal sufficiency of
 retention procedures; external review and academic submission. These do not prevent publishing this specification. They prevent
@@ -581,10 +577,9 @@ evidence statuses (every requirement is Proposed); and the requirement R-24, who
 confirmation is recorded with its source and a mandate revision is the hash of its content (R-02, R-16); the mandate is a confirmed
 destination or, for a run without one, the interpretation the principal confirmed for that run (Terms, Appendix D); detection
 is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
-were aligned with their text. PEA is the theory and this specification the standard for its memory; the PEA skills suite and the Work skill are one
-implementation of it, and where the specification described what they do it states their status (section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
-independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that the
-skills implement the intent and trace tiers and that legacy in-repository memory is transitional. Descriptions in the README and metadata
+were aligned with their text. This specification implements the PEA principles and stands on its own, and names no implementation
+(section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
+independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that an implementation says which requirements it does not meet and that legacy in-repository memory is transitional. Descriptions in the README and metadata
 were reduced to what the specification claims.
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
