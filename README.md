@@ -18,7 +18,7 @@ ACM follows the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm8
 
 ## The main proposal: the mandate gate
 
-A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval; the agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether ACM-governed work can begin.
+A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval: a confirmed destination or, where there is none, the interpretation of the prompt that the principal confirmed for the run, recorded at its checkpoint. The agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether ACM-governed work can begin.
 
 ---
 

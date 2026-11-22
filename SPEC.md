@@ -57,7 +57,7 @@ learning file does not gain independent evidentiary standing merely by being sto
 delegates authority. A principal may be a person, role or collective with an explicit decision rule. Agent-drafted candidate
 text MUST NOT become intent without that confirmation. The principal owns the meaning, not necessarily all the typing.
 Confirmation and mandate revisions MUST be identifiable to later readers: a confirmation MUST be recorded with its source (the principal's own commit, a host approval, or the principal's reply in the session) and never inferred from silence, and a mandate revision is identified by the hash of its content. A mandate MUST state where the human gate is (who
-reviews the work before it takes effect, or that no one does) and what the agent may do before that gate and without it.
+reviews the work before it takes effect, or that no one does) and what the agent may do before that gate and without it; for a run mandate, the confirmed interpretation names the gate and the principal's Proceed or delegation says what may happen before it.
 
 An agent may assist in articulation. It cannot approve its own authority, infer approval from silence, or silently replace
 a mandate. Changes made by the principal do not retroactively authorize earlier actions.
@@ -173,7 +173,7 @@ Not addressed: key management, multi-tenant access control, and versioning or mi
 ### 3.1 Governed work interval
 
 **R-09.** Before an ACM-governed work interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
-and be read. The agent's interpretation, scope, mandate revisions and authority to proceed MUST be visible in accepted trace
+and be read. The agent's interpretation, scope, governing mandate revision and authority to proceed MUST be visible in accepted trace
 before the first change or other consequential action. Examination that changes nothing may precede that record, and its
 findings are recorded afterward. Binding validation and mandate reading are preflight, not authorization to alter the work.
 
@@ -274,7 +274,7 @@ MUST NOT establish convergence.
 Evaluation identifies the artifact revision/hash, examined surfaces, untested surfaces, evaluator identity and independence,
 and whether the evaluation is fresh or a same-session follow-up. A different model family reduces one source of shared bias;
 it is not proof of statistical independence. Principal review has role independence, not necessarily organizational independence.
-Independent evaluation follows Principle 3 of PEA: fresh sessions, distinct model families, an unchanged artifact. An evaluation that
+Independent evaluation follows Principle 3 of PEA and its minimum bar (PRINCIPLES.md): fresh sessions, distinct model families, an unchanged artifact. An evaluation that
 is not so (a same-session follow-up, a principal review) is recorded as what it is and does not alone establish convergence.
 
 Silence is bounded, provisional evidence of no findings, not proof that none exist. Deferred items outside an evaluated
