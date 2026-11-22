@@ -1,7 +1,7 @@
 # Agent Context Memory Specification
 
-**Version:** 0.5.0
-**Date:** 2026-11-21
+**Version:** 0.5.1
+**Date:** 2026-11-22
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
 **Status:** Published specification; not an implementation-conformance claim. Each requirement states its own evidence status.
@@ -59,7 +59,8 @@ orientation does not gain independent evidentiary standing merely by being store
 **R-02.** Each governing scope MUST identify its principal and the mechanism by which that principal confirms a mandate or
 delegates authority. A principal may be a person, role or collective with an explicit decision rule. Agent-drafted candidate
 text MUST NOT become intent without that confirmation. The principal owns the meaning, not necessarily all the typing.
-Confirmation and mandate revisions MUST be identifiable to later readers.
+Confirmation and mandate revisions MUST be identifiable to later readers. A mandate MUST state where the human gate is (who
+reviews the work before it takes effect, or that no one does) and what the agent may do before that gate and without it.
 
 An agent may assist in articulation. It cannot approve its own authority, infer approval from silence, or silently replace
 a mandate. Changes made by the principal do not retroactively authorize earlier actions.
@@ -86,7 +87,12 @@ ACM does not prescribe where skills live or how a principal adopts them.
 
 ### 2.1 Capture-author separation
 
-**R-04.** Where an evidence tier is claimed, a component architecturally separate from the observed agent MUST capture the
+Independent capture is warranted where work takes effect without a human gate: no person or accountable system reviews the
+result, and can refuse it, before it takes effect (for example autonomous action on live data). Where such a gate exists, the
+reviewed trace and the reviewer's decision are the evidence of record and an evidence tier is not required. A mandate that
+authorizes work without a gate MUST also require an evidence tier under R-04.
+
+**R-04.** Where the mandate requires an evidence tier, or one is claimed, a component architecturally separate from the observed agent MUST capture the
 declared interactions before releasing their responses to that agent. The agent MUST NOT be able to suppress or edit that
 capture. Coverage, gaps and capture failures MUST be observable. Reconstructed self-report is not independent evidence.
 
@@ -101,14 +107,18 @@ A correction MUST create a new record referring to the corrected identifier. Der
 replaced, but MUST identify their source and MUST NOT be the only surviving copy of a decision.
 
 Git history and an instruction saying "do not edit" are not alone enforcement: a later commit can change an old file.
-An implementation claiming structural protection must reject such changes at its acceptance boundary. Record any
+An implementation claiming structural protection must reject such changes at an acceptance boundary the agent cannot bypass; otherwise
+such changes are detected (section 2.5). Record any
 administrative override as a governance event. Chronological presentation does not prove causal order between concurrent writers.
 
-### 2.3 Permission enforcement
+### 2.3 Roles and permissions
 
-**R-06.** An implementation MUST enforce the separation of mandate confirmation, trace addition and evidence capture at its
-acceptance boundary. Rejected or unavailable operations MUST produce an explicit failure, not success-shaped output.
-If protection depends on instructions rather than enforcement, disclose that limitation and do not claim structural conformance.
+**R-06.** An implementation MUST keep mandate confirmation, trace addition and evidence capture in separate roles, so that no
+actor both confirms a mandate and adds trace under it without a gate. Rejected or unavailable operations MUST produce an
+explicit failure, not success-shaped output. A conformance report MUST state, for each protection, whether it rests on intent,
+detection or a gate (section 2.5), and MUST NOT describe a restriction as preventing an agent from acting unless the agent
+holds no credential or path that could bypass it. Where the separation rests on instruction alone, say so and do not claim
+structural conformance.
 
 **R-07.** The applicable recording, access and retention policy MUST be established before recording begins, for a solo
 contributor as well as many. Scope relevance MUST NOT substitute for permission. A sub-repository or submodule MAY provide
@@ -129,6 +139,21 @@ It MUST distinguish an intentionally missing record from a silently lost record.
 This is a proposed exception to the v0.4.0 statement that no party can ever change captured evidence. It does not authorize
 erasure here. An adopter determines lawful retention and erasure; ACM supplies no legal opinion or guarantee that every
 backup, cache or public clone can be recalled.
+
+### 2.5 Controls and their limits
+
+An agent that can act can often act around a control. File permissions, access restrictions and prohibitions written in
+instructions are therefore reminders and friction, not containment, against an agent that is mistaken or determined enough to
+cross them. ACM relies on three things, in this order.
+
+1. **Intent.** The confirmed mandate tells the agent what it must not do and why, so that not crossing the line is the agent's
+   own understanding of the work.
+2. **Detection.** Integrity checks make a change, loss or bypass visible: content hashes, sealed records (R-25), independent
+   capture (R-04), review. Detection does not stop an action; it makes concealing it hard and cheap to find.
+3. **Gates.** Some decisions are made by someone or something the agent cannot be, and cannot approve for itself: a reviewer,
+   a protected branch, a separate service the agent holds no credentials for.
+
+A deployment may add restrictions; R-06 governs how they are described.
 
 ## 3. The Mandate Gate
 
@@ -203,7 +228,8 @@ Scope or code-path moves require an explicit old-to-new mapping; existing refere
 ### 4.4 Governing chain and ceiling
 
 **R-15.** Resolution MUST return every applicable governing scope in the declared chain, broadest first, together with the
-active write scope. It MUST stop at the principal-declared memory ceiling and enforce path containment and access boundaries.
+active write scope. It MUST stop at the principal-declared memory ceiling, apply path containment and the declared access boundaries, and report any it
+could not apply.
 It MUST NOT traverse outside the binding through parent segments, absolute-path injection, symbolic links or equivalent redirects.
 If an implementation safety bound prevents complete resolution, report failure rather than silently dropping governing scopes.
 
@@ -301,7 +327,7 @@ independent observations. The existence of files or a conforming record schema a
 The reference route is the PEA skills suite or a Work entry skill. The user names the skill in an ordinary prompt; setup
 has already supplied the binding. The skill resolves the scope, reads governing intent and bounded relevant context,
 makes its interpretation visible, acts within authority and records outcomes to the bound scope.
-Naming a skill cannot compensate for absent deployment configuration or permission enforcement.
+Naming a skill cannot compensate for absent deployment configuration or permission controls.
 
 This is a reference contract, not a claim that currently released reference skills implement it.
 
@@ -346,9 +372,10 @@ and a verifiable reason that it is absent; this cannot waive an unconditional re
 when efficiency or usefulness is claimed. Evidence may be absent, but its absence MUST be explicit; no independent-evidence
 or convergence claim follows. R-03 applies to evidence when available and always forbids promoting trace into independent evidence.
 
-**Full conformance:** minimal conformance plus independently enforced R-04 and the evaluation procedure in R-17.
+**Full conformance:** minimal conformance plus R-04 where work can take effect without a human gate (a deployment whose work always
+passes one says so instead of claiming R-04) and the evaluation procedure in R-17.
 An implementation can be conformant before a particular work item converges; it must not report convergence for that item
-until the procedure passes. A local file pattern without enforced separation is an illustration, not structural conformance.
+until the procedure passes. A local file pattern without separate roles or independent capture is an illustration, not structural conformance.
 
 R-22 through R-24 govern additional claims about training use, demonstrated adoption or specification releases respectively.
 An implementation must declare which are applicable and cannot claim an unevaluated extension.
@@ -359,7 +386,7 @@ Conformance reports identify version, deployment boundary, checks, results, limi
 This version has been adopted for the specification's own development memory, by one author on one machine.
 That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
 through a user-level registry; the public repository holds no memory and no pointer to it. The reference skills were changed
-to resolve that binding, to write one record per file and to seal closed months. None of these changes demonstrates R-07 access enforcement, concurrent
+to resolve that binding, to write one record per file and to seal closed months. None of these changes demonstrates R-07 access control, concurrent
 writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by them.
 No operational or full-conformance claim is made for this repository.
 
@@ -469,12 +496,12 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | ID | Evidence status | Protection | Check |
 |----|-----------------|------------|-------|
 | R-01 | Inherited | Classification | Present a derived summary as independent evidence; reject that classification and recover its source tier. |
-| R-02 | Inherited | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. |
+| R-02 | Inherited | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. A mandate that does not state its human gate is incomplete. |
 | R-03 | Inherited | Conflict reporting | Seed unauthorized observed action and contradictory trace; preserve both, report the authorization violation and do not promote the trace. |
-| R-04 | Inherited | Independent capture | Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
+| R-04 | Inherited | Independent capture | Present a mandate that authorizes work without a human gate and requires no evidence tier; reject it. Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
 | R-05 | Inherited | Create-only source | Modify/delete an accepted trace record; reject it. Accept a new correction referencing that record; regenerating derived views leaves both intact. |
-| R-06 | Proposed | Role separation | Exercise each write class under the wrong identity, including an unavailable acceptance service; fail visibly and preserve source. |
-| R-07 | Proposed | Access and policy | A reader of the enclosing scope cannot retrieve a restricted scope without separate permission. Withhold each applicable recording, access and retention policy in turn: recording cannot begin. |
+| R-06 | Proposed | Role separation | Exercise each write class under the wrong identity, including an unavailable acceptance service; fail visibly and preserve source. The report names, for each protection, intent, detection or gate, and claims no prevention where the agent holds a credential or path that bypasses it. |
+| R-07 | Proposed | Access and policy | Retrieval of a restricted scope outside its permission is either prevented by a control the agent holds no credential to bypass, or is detected and reviewable; the report says which. Withhold each applicable recording, access and retention policy in turn: recording cannot begin. |
 | R-08 | Proposed | Authorized exception | In a synthetic store, exercise authorized erasure across declared replicas and leave a non-sensitive event; an unauthorized writer cannot erase. Report unreachable replicas. |
 | R-09 | Inherited | Pre-work gate | Missing mandate, unread governing revision or unaccepted interpretation prevents governed action. Agent-created text never authorizes itself. |
 | R-10 | Proposed | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
@@ -496,8 +523,8 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 
 The rows state the main falsifying tests, not every obligation of a requirement; an implementation that passes them can still violate
 one. Natural-language interpretation, policy quality and useful relevance are not made impossible to get wrong by a schema.
-R-06/R-18 can enforce prohibited writes and collisions; R-20/R-21 require measured semantic outcomes and visible uncertainty.
-Conformance claims must distinguish enforced properties from instructions that contributors are merely expected to follow.
+R-06/R-18 can reject prohibited writes and collisions at an acceptance boundary or detect them afterward; R-20/R-21 require measured semantic outcomes and visible uncertainty.
+Conformance claims must distinguish properties a control, check or gate provides from instructions that contributors are merely expected to follow.
 
 ## Appendix B: Evidence and Open-Problem Disposition
 
@@ -559,6 +586,10 @@ renumbers Prior Art to 6 and Reference Implementation to 7. Historical documents
 | Section 6, Reference Implementation (6.1-6.6) | Section 7, Reference Implementation and Conformance |
 | Appendices A/B, PEA relationship and glossary | Sections 1/5.2 and Appendix D |
 
+Version 0.5.1 changed the meaning of three things relative to 0.5.0: a mandate states its human gate (R-02); independent
+capture is required where work takes effect without one (R-04, section 7.3); and permissions are described as reminders backed
+by intent, detection and gates, not as containment (R-06, R-07, section 2.5). No requirement was added or removed.
+
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
 
@@ -578,7 +609,7 @@ from a public release.
 - **Scope:** a declared authority/relevance boundary within memory; not an access permission.
 - **Source record:** accepted intent, trace or captured evidence retained under its tier's authorship/mutation rules.
 - **Derived view:** replaceable index, window, summary or orientation with source provenance and snapshot identity.
-- **Acceptance boundary:** the mechanism that admits records and enforces roles, immutability and collision handling.
+- **Acceptance boundary:** the mechanism that admits records and applies roles, immutability and collision handling.
 - **Capture-author separation:** the observed agent cannot author or suppress its independent observation record.
 - **Silence:** a bounded, provisional independent evaluation with no findings against the examined quality bar.
 - **Convergence:** scoped work queue exhaustion plus bounded independent evaluation, not an agent declaration.

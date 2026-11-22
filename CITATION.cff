@@ -21,12 +21,12 @@ authors:
     orcid: "https://orcid.org/0009-0009-7157-9084"
 repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
-version: "0.5.0"
-date-released: "2026-11-21"
+version: "0.5.1"
+date-released: "2026-11-22"
 identifiers:
   - type: doi
-    value: "10.5281/zenodo.24431974"
-    description: "Zenodo version DOI of release v0.5.0 (2026-11-22); concept DOI 10.5281/zenodo.20785505 covers all versions"
+    value: "10.5281/zenodo.20785505"
+    description: "Zenodo concept DOI covering all versions (v0.5.0 is 10.5281/zenodo.24431974)"
 keywords:
   - context memory
   - agent memory
