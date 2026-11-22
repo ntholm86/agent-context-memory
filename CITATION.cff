@@ -11,17 +11,17 @@ abstract: >
   is a governed interval. ACM defines three memory tiers organized by trust level
   (intent / trace / evidence), structural capture-author separation, a memory kept in
   a repository of its own and bound to repositories of work by identity, a one-rule
-  scope layout, collision-safe shared recording with sealed months, and 25 numbered
+  scope layout, collision-safe shared recording (one file per record), and 23 numbered
   requirements with specified checks. ACM is the operationalization of Principles of
   Earned Autonomy (PEA) for the context memory design problem. The specification claims
-  no implementation conformance beyond the evidence status stated for each requirement.
+  no implementation conformance: every requirement is Proposed.
 authors:
   - family-names: Holmager
     given-names: Nils Wendelboe
     orcid: "https://orcid.org/0009-0009-7157-9084"
 repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
-version: "0.6.0"
+version: "0.7.0"
 date-released: "2026-11-22"
 identifiers:
   - type: doi

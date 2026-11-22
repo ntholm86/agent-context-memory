@@ -1,6 +1,6 @@
 # Agent Context Memory (ACM)
 
-**A specification for governance-first context memory in autonomous AI agent systems.** Version 0.6.0.
+**A specification for governance-first context memory in autonomous AI agent systems.** Version 0.7.0 (a working draft).
 
 📄 **[Read the full specification →](./SPEC.md)**
 
@@ -32,16 +32,7 @@ Memory is organized by **trust level**, not memory type:
 | **Trace** (self-report) | The agent's decisions, interpretations and outcomes. Source records are append-only | The agent |
 | **Evidence** (independent observation) | Execution observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
-Version 0.6.0 specifies 25 numbered requirements (R-01 to R-25), each with a check in Appendix A, and marks each as inherited, proposed, observed or deferred. Nothing is claimed as implemented or conformant beyond what its status says.
-
-**What 0.6.0 changes:** a mandate states where the human gate is; independent evidence capture is required only where work takes effect without one; access restrictions are described as reminders, backed by intent, integrity checks and gates, because an agent can often act around a restriction; and a scope's synthesis is `learning.md` (it was `orientation.md`), with an optional `generated/` folder for machine-made reading aids.
-
-**What 0.5.0 added to 0.4.0:**
-
-- **Memory in a repository of its own.** The memory is not a folder inside each repository of work. A binding connects a repository of work to its memory by identity (in the reference skills, its root commit), never by folder or remote name; unbound, ambiguous or unavailable memory is reported, and nothing is guessed.
-- **One rule for scopes.** A scope is a folder holding `destination.md`, `learning.md` and `records/`. The same shape serves the whole memory, a repository, a path and a task; higher mandates govern lower ones.
-- **Shared recording.** One file per record, so concurrent writers do not share a file to merge, with create-only acceptance that detects identifier collisions, and closed months sealed into one verifiable file so a scope's number of files grows with months, not records.
-- **Testable requirements and a conformance statement**, instead of prose guidance.
+Version 0.7.0 specifies 23 numbered requirements (R-01 to R-23), each with a check in Appendix A. Every one is Proposed: nothing is claimed as implemented or conformant. The specification's Appendix C lists what each version changed.
 
 ---
 
@@ -80,7 +71,7 @@ These models optimize for what the agent *can do*. ACM optimizes for whether the
 
 ## Citation and archive
 
-Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.6.0 has no archive record yet; version 0.5.0 is archived as [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974); the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions (earlier: v0.3.2, 10.5281/zenodo.20785506).
+Cite ACM using [CITATION.cff](./CITATION.cff). Version 0.7.0 has no archive record yet; version 0.5.0 is archived as [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974); the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions (earlier: v0.3.2, 10.5281/zenodo.20785506).
 
 ## License
 

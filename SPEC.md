@@ -1,11 +1,11 @@
 # Agent Context Memory Specification
 
-**Version:** 0.6.0
+**Version:** 0.7.0
 **Date:** 2026-11-22
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
-**Status:** Published specification; not an implementation-conformance claim. Each requirement states its own evidence status.
-**Baseline:** Published ACM v0.4.0 (commit 51e951e of this repository).
+**Status:** Working draft; not an implementation-conformance claim. Every requirement is Proposed: none has been exercised by anyone but its author.
+**Baseline:** ACM v0.4.0 (commit 51e951e of this repository; never tagged).
 
 ## Abstract
 
@@ -29,12 +29,9 @@ It can be implemented independently of that reference ecosystem.
 MUST, MUST NOT, SHOULD and MAY express conformance requirements. Each requirement has a stable identifier and a check
 in Appendix A. Normative wording describes the proposed standard; it does not assert that an implementation exists or passes it.
 
-Evidence status is separate from author approval:
+Every requirement is **Proposed**: a design requirement awaiting implementation and its check. Some restate properties of v0.4.0, but its requirement numbers and checks are new, so none is called inherited.
 
-- **Inherited:** a property of published v0.4.0, not a fresh demonstration of enforcement.
-- **Proposed:** a design requirement awaiting implementation and the named checks.
-- **Observed:** demonstrated only in an identified experiment, under its stated limits.
-- **Deferred:** an unresolved matter with its reason and reopening evidence recorded.
+Terms: the *mandate* is the intent tier (`destination.md`); *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
 
 The checks in this specification are specified tests, not executed test results. A mechanical check of document structure or
 version consistency does not establish ACM conformance, privacy, useful retrieval or correct agent behaviour.
@@ -59,7 +56,7 @@ learning file does not gain independent evidentiary standing merely by being sto
 **R-02.** Each governing scope MUST identify its principal and the mechanism by which that principal confirms a mandate or
 delegates authority. A principal may be a person, role or collective with an explicit decision rule. Agent-drafted candidate
 text MUST NOT become intent without that confirmation. The principal owns the meaning, not necessarily all the typing.
-Confirmation and mandate revisions MUST be identifiable to later readers. A mandate MUST state where the human gate is (who
+Confirmation and mandate revisions MUST be identifiable to later readers: a confirmation MUST be attributable to an identity of the principal that the agent does not hold (for example the principal's own commit or a host approval event), never to the agent's statement that the principal confirmed, and a mandate revision is identified by the hash of its content. A mandate MUST state where the human gate is (who
 reviews the work before it takes effect, or that no one does) and what the agent may do before that gate and without it.
 
 An agent may assist in articulation. It cannot approve its own authority, infer approval from silence, or silently replace
@@ -102,8 +99,7 @@ unobserved tools, channels or operations rather than implying comprehensive exec
 ### 2.2 Append-only source, replaceable derivations
 
 **R-05.** Accepted trace source records MUST be immutable to ordinary contributors: addition is permitted, replacement and
-deletion are not. Sealing a closed period under R-25 is repackaging, not deletion, while every record's bytes stay verifiable.
-A correction MUST create a new record referring to the corrected identifier. Derived views MAY be
+deletion are not. A correction MUST create a new record referring to the corrected identifier. Derived views MAY be
 replaced, but MUST identify their source and MUST NOT be the only surviving copy of a decision.
 
 Git history and an instruction saying "do not edit" are not alone enforcement: a later commit can change an old file.
@@ -113,7 +109,7 @@ administrative override as a governance event. Chronological presentation does n
 
 ### 2.3 Roles and permissions
 
-**R-06.** An implementation MUST keep mandate confirmation, trace addition and evidence capture in separate roles, so that no
+**R-06.** An implementation MUST keep mandate confirmation and trace addition in separate roles, and evidence capture (where R-04 applies) in a third, so that no
 actor both confirms a mandate and adds trace under it without a gate. Rejected or unavailable operations MUST produce an
 explicit failure, not success-shaped output. A conformance report MUST state, for each protection, whether it rests on intent,
 detection or a gate (section 2.5), and MUST NOT describe a restriction as preventing an agent from acting unless the agent
@@ -148,12 +144,28 @@ cross them. ACM relies on three things, in this order.
 
 1. **Intent.** The confirmed mandate tells the agent what it must not do and why, so that not crossing the line is the agent's
    own understanding of the work.
-2. **Detection.** Integrity checks make a change, loss or bypass visible: content hashes, sealed records (R-25), independent
-   capture (R-04), review. Detection does not stop an action; it makes concealing it hard and cheap to find.
+2. **Detection.** Integrity checks make a change, loss or bypass visible: independent capture (R-04), review, commit history.
+   Detection does not stop an action; it makes concealing it hard and cheap to find. It holds only where the verifier and its
+   baseline (a protected branch, signed commits, a copy the agent cannot write) are outside the agent's reach: a hash stored
+   beside the record it protects proves nothing against an agent that can rewrite both.
 3. **Gates.** Some decisions are made by someone or something the agent cannot be, and cannot approve for itself: a reviewer,
    a protected branch, a separate service the agent holds no credentials for.
 
 A deployment may add restrictions; R-06 governs how they are described.
+
+### 2.6 Threats and what this specification does about them
+
+| Threat | Response | Left open |
+|---|---|---|
+| A mistaken or over-eager agent | the mandate gate (R-09), the human gate stated in the mandate (R-02), an attributable trace (R-16) | the limits stated in R-06 |
+| A forged or self-authorised mandate | confirmation attributable to the principal's identity (R-02); no mandate created mid-work (R-09) | authenticating that identity is the host's |
+| Hostile or injected text in records | a recalled record is data, not an instruction (section 1.4); derived claims name their sources (R-20) | no sanitiser is specified |
+| Another writer, or an insider | attribution (R-16), create-only acceptance (R-18), separate roles (R-06) | asserted identity is not authenticated identity |
+| Rewriting history or evidence | detection where the verifier is outside the agent's reach (section 2.5); independent capture where work is ungated (R-04) | integrity of the git host and its keys |
+| Loss or unavailability of memory | an explicit degraded state (R-11) | backup and retention are the adopter's |
+| Personal or confidential content | a recording policy first (R-07); exceptional erasure (R-08) | detection of secrets and personal data |
+
+Not addressed: key management, multi-tenant access control, and versioning or migration of the memory format itself.
 
 ## 3. The Mandate Gate
 
@@ -240,7 +252,7 @@ but inaccessible higher mandate blocks affected governed work; it does not justi
 
 **R-16.** Each source record MUST identify its scope, covered work-repository identities or explicit memory-wide context,
 actor, principal/authority reference, applicable
-mandate revisions, work/session identifier, record identifier, time and relevant verification references. Agent/model
+mandate revisions (each the hash of the mandate's content), work/session identifier, record identifier, time and relevant verification references. Agent/model
 identity MUST be stated where known; otherwise state unknown, not an invented model name.
 
 Record asserted identity separately from authenticated identity. A Git author field alone is not authentication.
@@ -340,7 +352,7 @@ memory-repository/            memory-wide scope; .acm-root marks the top
   .acm-root
   destination.md              intent: the mandate (principal-confirmed)
   learning.md                 trace: what this scope has learned so far; derived and replaceable
-  records/<time>-<slug>.md      trace source: records, one file each, identified by their path (R-18); closed months sealed (R-25)
+  records/<time>-<slug>.md      trace source: records, one file each, identified by their path (R-18)
   tasks/<task-id>/            named task scope; the same three entries (a task may sit under any scope)
   generated/                      optional, disposable reading aids (any scope); never required reading
   repositories/
@@ -364,32 +376,18 @@ repository lives at memory-wide level. A task at repository level also reads the
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
 
-### 7.3 Minimal and full conformance
+### 7.3 Conformance
 
-The contributor count is not a conformance mode. The inherited distinction between minimal and full concerns independent
-evidence coverage, not whether memory is solo or shared.
+The contributor count is not a conformance mode. A deployment conforms to this version when every requirement that applies to it is implemented and its check passes for the declared deployment: R-01 to R-03, R-05 to R-16 and R-18 to R-20 always; R-04 where a mandate authorizes work without a human gate (a deployment whose work always passes one says so instead); R-17 when it claims convergence; R-21 when it claims efficiency or usefulness; R-22 when it extracts memory for training or evaluation; R-23 when it claims seamless adoption. A requirement may be marked not applicable only with its condition and a verifiable reason; this cannot waive an unconditional requirement. R-03 always forbids promoting trace into independent evidence, and a deployment without an evidence tier makes no independent-evidence or convergence claim. A local file pattern without separate roles is an illustration, not conformance. An implementation can conform before a particular work item converges; it must not report convergence for that item until R-17 passes.
 
-**Minimal conformance:** R-01 through R-03 and R-05 through R-16, plus R-18 through R-20 and R-25, are implemented and their
-applicable checks pass for the declared deployment. A conditional check may be marked not applicable only with the condition
-and a verifiable reason that it is absent; this cannot waive an unconditional requirement. R-21 is additionally required
-when efficiency or usefulness is claimed. Evidence may be absent, but its absence MUST be explicit; no independent-evidence
-or convergence claim follows. R-03 applies to evidence when available and always forbids promoting trace into independent evidence.
-
-**Full conformance:** minimal conformance plus R-04 where work can take effect without a human gate (a deployment whose work always
-passes one says so instead of claiming R-04) and the evaluation procedure in R-17.
-An implementation can be conformant before a particular work item converges; it must not report convergence for that item
-until the procedure passes. A local file pattern without separate roles or independent capture is an illustration, not structural conformance.
-
-R-22 through R-24 govern additional claims about training use, demonstrated adoption or specification releases respectively.
-An implementation must declare which are applicable and cannot claim an unevaluated extension.
-Conformance reports identify version, deployment boundary, checks, results, limitations and applicable policies.
+A conformance report states the version, the deployment boundary, the checks, the results, the limitations and the policies that apply.
 
 ### 7.4 Current development state
 
 This version has been adopted for the specification's own development memory, by one author on one machine.
 That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
 through a user-level registry; the public repository holds no memory and no pointer to it. The reference skills were changed
-to resolve that binding, to write one record per file and to seal closed months. None of these changes demonstrates R-07 access control, concurrent
+to resolve that binding and to write one record per file. None of these changes demonstrates R-07 access control, concurrent
 writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by them.
 No operational or full-conformance claim is made for this repository.
 
@@ -416,25 +414,7 @@ alone is not a uniqueness guarantee. Publication of a local record is distinct f
 A monolithic legacy trail may be retained read-only and referenced. A migration must account for every old record without
 silently rewriting it. Ordinary writers do not concurrently regenerate and commit the same derived reading surface.
 
-**R-25.** The number of source files in a scope MUST be bounded by the closed periods plus the current period's records, not by the total number
-of records ever written. The bound holds whenever a record is accepted into the scope: earlier closed periods are sealed first, and a
-scope that receives no more records may exceed it until its next acceptance, which may never come. The records of a closed period MUST
-be sealable into one immutable file in the same scope, in one atomic change that adds the sealed file and removes exactly the
-records it contains. Every record's content MUST be preserved byte for byte and be individually verifiable after sealing, and
-a sealed period MUST NOT be sealed again. Concurrent sealing attempts for the same period MUST fail visibly for all but one.
-
-Sealing is consolidation, not compression: it changes packaging, never content. The reference strategy seals a UTC month,
-`records/<yyyy-MM>.md`, holding each record of that month in file-name order, each preceded by a marker line
-`<!-- record: <file name> bytes:<n> sha256:<hash> -->` (the hash in lowercase hex) and followed by one LF that belongs to the sealed file, not to the
-record. A record is exactly the `n` bytes after its marker line, so a marker-like line inside a record is content, and a
-record without a final newline, with CRLF or with a byte-order mark round-trips unchanged. The removed files remain in version
-history. A record's name carries its write time, not its acceptance time, so a record can arrive after its month is sealed,
-or be retried after it was sealed. Acceptance therefore compares a submitted record with the sealed marker of the same identifier: the same SHA-256 is already
-accepted, and different content under that identifier is a collision that fails explicitly (R-18). A record that belongs to a
-sealed month is accepted only under a new identifier of the current time. Readers read `records/` in file-name order, sealed and
-open files alike. Sealing needs only version control and a byte-count and SHA-256 tool: an agent following the reference skills,
-or a person, can perform and verify it. The memory repository must store records byte for byte. Normalizing line endings in
-`records/` makes the markers stop matching; for Git, mark them `-text`. A deployment where commits are not permitted does not meet the bound for closed periods until they are sealed, and reports that.
+The number of files in a scope is a storage concern of the host; this specification does not bound it.
 
 ### 8.2 Derived views and freshness
 
@@ -469,7 +449,7 @@ allowed purposes, scope and access. Training permission MUST NOT be inferred fro
 Prefer independently captured observations and principal-confirmed outcomes where available; label trace-derived cases as
 self-report. Evaluation before model changes is recommended, not an automatic entitlement to use private content.
 
-## 9. Adoption and Specification Evolution
+## 9. Adoption
 
 ### 9.1 Adoption bar
 
@@ -481,48 +461,35 @@ memory, not just installation or generation of an index.
 Repeat with another contributor or agent, task and session. Measure time/context and the ability to find the reasons for
 prior decisions. Record configuration assumptions. This specification states the bar; it does not claim it has been achieved.
 
-### 9.2 Evidence-driven releases
-
-**R-24.** Specification changes MUST preserve their versioned baseline, reasoning and evidence limitations. Before a release,
-the specification version, citation version, archive metadata version and requested release tag MUST agree. A mechanical
-check MUST reject drift before publication. An author-owned release decision is required in addition to passing checks.
-
-Private observations remain private unless the author permits inclusion. Newly authored synthetic fixtures can demonstrate
-bounded mechanisms without reproducing private content; they do not retroactively validate the private experiment.
-Archive creation is a release-time decision. Historical public exposure remains an explicit issue, not fixed by an ignore
-rule or by moving the current working copy.
-
 ## Appendix A: Requirement Checks
 
 Each row gives a falsifiable implementation check. No row asserts that its check has been executed.
 
-| ID | Evidence status | Protection | Check |
-|----|-----------------|------------|-------|
-| R-01 | Inherited | Classification | Present a derived summary as independent evidence; reject that classification and recover its source tier. |
-| R-02 | Inherited | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. A mandate that does not state its human gate is incomplete. |
-| R-03 | Inherited | Conflict reporting | Seed unauthorized observed action and contradictory trace; preserve both, report the authorization violation and do not promote the trace. |
-| R-04 | Inherited | Independent capture | Present a mandate that authorizes work without a human gate and requires no evidence tier; reject it. Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
-| R-05 | Inherited | Create-only source | Modify/delete an accepted trace record; reject it. Accept a new correction referencing that record; regenerating derived views leaves both intact. |
-| R-06 | Proposed | Role separation | Exercise each write class under the wrong identity, including an unavailable acceptance service; fail visibly and preserve source. The report names, for each protection, intent, detection or gate, and claims no prevention where the agent holds a credential or path that bypasses it. |
-| R-07 | Proposed | Access and policy | Retrieval of a restricted scope outside its permission is either prevented by a control the agent holds no credential to bypass, or is detected and reviewable; the report says which. Withhold each applicable recording, access and retention policy in turn: recording cannot begin. |
-| R-08 | Proposed | Authorized exception | In a synthetic store, exercise authorized erasure across declared replicas and leave a non-sensitive event; an unauthorized writer cannot erase. Report unreachable replicas. |
-| R-09 | Inherited | Pre-work gate | Missing mandate, unread governing revision or unaccepted interpretation prevents governed action. Agent-created text never authorizes itself. |
-| R-10 | Proposed | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
-| R-11 | Proposed | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled ACM-valid. |
-| R-12 | Proposed | Separate repository | The memory is held in a separately identified and governed store, two work repositories each resolve to their own repository-level scope in it, a clean distribution of the work repository contains no development memory, and adding a second writer requires no trace-layout migration. |
-| R-13 | Proposed | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; with root-commit binding, a clone or fork sharing a root commit resolves to the same binding (another mechanism states its own fork rule), and the others preserve intended identity or fail, with no guessed reads/writes. |
-| R-14 | Proposed | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the explicitly selected applicable scope; a code folder named like a scope entry resolves to a distinct, reversible path. |
-| R-15 | Proposed | Containment and completeness | Test parent escape, absolute paths, link redirects, an inaccessible parent and depth exhaustion; no escaped access or silent omission occurs. |
-| R-16 | Proposed | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present in ordinary records with their record identifier and verification references, only a preflight record may leave work identity and mandate revision unresolved, and unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
-| R-17 | Inherited | Independent evaluation | A nonempty queue, an empty queue alone, an independent report that contains an actionable finding, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
-| R-18 | Proposed | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
-| R-19 | Proposed | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
-| R-20 | Proposed | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not; the context needed to answer does not grow with unrelated history. |
-| R-21 | Proposed | Measured usefulness | Compare a fixed cold-start question set with and without scoped views; report context cost, time, correctness and unresolved why-questions, not entry volume. |
-| R-22 | Proposed | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
-| R-23 | Proposed | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope and continues a bounded task from prior memory, recovering the reason for an earlier decision, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |
-| R-24 | Proposed | Release consistency | A mismatch among specification/citation/archive versions or requested tag causes the pre-publication check to fail; passing it does not publish. |
-| R-25 | Proposed | Bounded file count | Seal a closed month: one file replaces its records, each record's bytes and SHA-256 match the originals (including a record without a final newline, with CRLF or a byte-order mark, and one containing a marker-like line), and a second seal of that month or a concurrent seal fails visibly. A seal that adds the sealed file without removing its records, or the reverse, is rejected without changing the accepted records, and so is a seal whose bytes differ from the records it removes. Accept a record into a scope that still holds unsealed files of a closed month: sealing precedes acceptance. Submit a record of the sealed month late, retry an already sealed record and retry a sealed identifier with different content: the first is accepted only under a new identifier of the current time, the second as already accepted, the third fails as a collision. |
+| ID | Protection | Check |
+|----|------------|-------|
+| R-01 | Classification | Present a derived summary as independent evidence; reject that classification and recover its source tier. |
+| R-02 | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. An agent-authored claim of confirmation, or a mandate last changed under the agent's identity, is not confirmed. A mandate that does not state its human gate is incomplete. |
+| R-03 | Conflict reporting | Seed unauthorized observed action and contradictory trace; preserve both, report the authorization violation and do not promote the trace. |
+| R-04 | Independent capture | Present a mandate that authorizes work without a human gate and requires no evidence tier; reject it. Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
+| R-05 | Create-only source | Modify or delete an accepted record: it is rejected at an acceptance boundary the agent cannot bypass, or detected and reported (the report says which). Accept a new correction referencing that record; regenerating derived views leaves both intact. |
+| R-06 | Role separation | Exercise each write class under the wrong identity, including an unavailable acceptance service; fail visibly and preserve source. The report names, for each protection, intent, detection or gate, and claims no prevention where the agent holds a credential or path that bypasses it. |
+| R-07 | Access and policy | Retrieval of a restricted scope outside its permission is either prevented by a control the agent holds no credential to bypass, or is detected and reviewable; the report says which. Withhold each applicable recording, access and retention policy in turn: recording cannot begin. |
+| R-08 | Authorized exception | In a synthetic store, exercise authorized erasure across declared replicas and leave a non-sensitive event; an unauthorized writer cannot erase. Report unreachable replicas. |
+| R-09 | Pre-work gate | Missing mandate, unread governing revision or unaccepted interpretation prevents governed action. Agent-created text never authorizes itself. |
+| R-10 | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
+| R-11 | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled ACM-valid. |
+| R-12 | Separate repository | The memory is held in a separately identified and governed store, two work repositories each resolve to their own repository-level scope in it, a clean distribution of the work repository contains no development memory, and adding a second writer requires no trace-layout migration. |
+| R-13 | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; with root-commit binding, a clone or fork sharing a root commit resolves to the same binding (another mechanism states its own fork rule), and the others preserve intended identity or fail, with no guessed reads/writes. |
+| R-14 | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the narrowest applicable scope (a task the principal named, else the path scope containing the work); a code folder named like a scope entry resolves to a distinct, reversible path. |
+| R-15 | Containment and completeness | Test parent escape, absolute paths, link redirects, an inaccessible parent and depth exhaustion; no escaped access or silent omission occurs. |
+| R-16 | Attributable records | Inspect repository, memory-wide and preflight records: scope/context, actor, authority reference, mandate revision, work/session identifier and time are present in ordinary records with their record identifier and verification references, only a preflight record may leave work identity and mandate revision unresolved, and unresolved fields grant no authority, later associations preserve the original, and copies do not imply independent evidence. |
+| R-17 | Independent evaluation | A nonempty queue, an empty queue alone, an independent report that contains an actionable finding, or author self-review cannot produce convergence. A bounded independent report identifies unchanged artifacts and untested bars. |
+| R-18 | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
+| R-19 | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
+| R-20 | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not; the context needed to answer does not grow with unrelated history. |
+| R-21 | Measured usefulness | Compare a fixed cold-start question set with and without scoped views; report context cost, time, correctness and unresolved why-questions, not entry volume. |
+| R-22 | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
+| R-23 | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope and continues a bounded task from prior memory, recovering the reason for an earlier decision, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |
 
 The rows state the main falsifying tests, not every obligation of a requirement; an implementation that passes them can still violate
 one. Natural-language interpretation, policy quality and useful relevance are not made impossible to get wrong by a schema.
@@ -531,12 +498,12 @@ Conformance claims must distinguish properties a control, check or gate provides
 
 ## Appendix B: Evidence and Open-Problem Disposition
 
-The development ledger is not part of this specification's distribution. Historical identifiers are mapped here for continuity.
+The development ledger is not part of this specification's distribution. BS-nn identifies a numbered open problem from the author's development notes (not distributed); each is listed here with its disposition.
 The earlier profile proposals are source material, not a separate standard or an independent source of team conformance.
 
 ### B.1 Available evidence and its limits
 
-- Published v0.4.0 defines the inherited governance properties; publication alone is not enforcement evidence.
+- v0.4.0 defined the governance properties these requirements restate; publication alone is not enforcement evidence.
 - Private replay experiments observed shared-file merge conflicts and some silent line loss with line-union merging.
   Distinct-file cases preserved the tested records. Colliding identifiers, authenticated provenance, hosted acceptance,
   real simultaneous contributors and reader cost were not established. R-18 remains Proposed.
@@ -559,13 +526,13 @@ Requirement coverage means the design addresses the topic; it does not close its
 | BS-05 | Proposed: R-06/R-07 | Test access separation and permitted recording; content sensitivity is not decidable by schema alone. |
 | BS-06 | Proposed: R-02/R-03/R-20 | Seed a wrong claim and verify it cannot acquire mandate authority; evaluate downstream correction. |
 | BS-07 | Proposed: R-02/R-10 | Exercise collective decision rules, peer conflicts and owner succession without self-authorization. |
-| BS-08 | Proposed: R-05/R-16/R-18/R-25 | Test ID collisions, retries, authenticated attribution and real concurrent acceptance. |
+| BS-08 | Proposed: R-05/R-16/R-18 | Test ID collisions, retries, authenticated attribution and real concurrent acceptance. |
 | BS-09 | Proposed: R-22 | Adoption-specific purpose policy and an authorized evaluation dataset; no universal training permission. |
 | BS-10 | Proposed: R-19/R-20/R-21 | Measure cold-start retrieval cost and correctness; verify source revision and indexing completeness. |
 | BS-11 | Proposed: R-21/R-23 | Independent newcomer comparison with a baseline; volume is not value. |
 | BS-12 | Deferred: broader contemporary prior-art survey | Release/novelty claims beyond the modest positioning require first-hand verified sources. |
-| BS-13 | Superseded: no separate profile | R-24 pins releases and preserves history; future compatibility changes need explicit migration. |
-| BS-14 | Inherited lesson, proposed release process: R-24 | New requirements remain Proposed until their own evidence exists; keep visible reversals. |
+| BS-13 | Superseded: no separate profile | Releases pin their versions (Appendix C); future compatibility changes need explicit migration. |
+| BS-14 | Release process: Appendix C | Requirements remain Proposed until their own evidence exists; keep visible reversals. |
 | BS-15 | Proposed: R-11/R-13/R-14/R-15 | Implement the reference binding contract and test clone/worktree/identity/boundary cases. |
 | BS-16 | Proposed: R-23 | Cold-run tests through the reference skill in its separately governed repository. |
 
@@ -595,12 +562,18 @@ gates, not as containment (R-06, R-07, section 2.5); and the stored derived view
 optional `generated/` folder for stored generated views (an implementation using the 0.5.0 name renames the file; section 7.2).
 No requirement was added or removed.
 
+Version 0.7.0 removed rather than added. Removed: sealing of closed months and its requirement (R-25) with the byte-exact record rule; the
+minimal and full conformance tiers (conformance is one list, and R-04 applies where work is ungated); the Inherited, Observed and Deferred
+evidence statuses (every requirement is Proposed); and the requirement R-24, whose release rule is now a maintainer's rule below. Changed: a
+confirmation must be attributable to the principal's own identity and a mandate revision is the hash of its content (R-02, R-16); detection
+is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
+were aligned with their text.
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
 
-Publication must separately reconcile README, citation/archive descriptions, release workflow, requested tag and version. The
+Release rule (the maintainers', not a requirement on implementations). Before a release the specification version, the citation version, the archive metadata version and the requested tag must agree, a mechanical check must reject drift before publication, and an author-owned release decision is required in addition to passing the checks. Private observations stay private unless the author permits their inclusion. Publication must separately reconcile README, citation/archive descriptions, release workflow, requested tag and version. The
 repository's release workflow rejects a tag that differs from the versions stated in `SPEC.md`, `CITATION.cff` and `.zenodo.json`,
-and rejects a tag that carries development memory (`.acm/` or `.trail/`) at the repository root. Release packaging must exclude private development
+and rejects a tag that carries development memory (`.acm/` or `.trail/`) at any depth. Release packaging must exclude private development
 memory by an explicit distribution boundary. Passing a version/structure check does not prove the absence of sensitive content
 from a public release.
 
