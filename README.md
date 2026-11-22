@@ -18,7 +18,7 @@ ACM implements the [Principles of Earned Autonomy (PEA)](https://github.com/ntho
 
 ## The main proposal: the mandate gate
 
-A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval: a confirmed destination or, where there is none, the interpretation of the prompt that the principal confirmed for the run, recorded at its checkpoint. The agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether ACM-governed work can begin.
+A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval: a confirmed mission or, where there is none, the interpretation of the prompt that the principal confirmed for the run, recorded at its checkpoint. The agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether ACM-governed work can begin.
 
 ---
 
@@ -41,7 +41,7 @@ Version 0.7.0 specifies 23 numbered requirements (R-01 to R-23), each with a che
 The specification requires properties, not a layout. The reference layout is:
 
 ```
-destination.md, learning.md, records/        the memory-wide scope
+mission.md, learning.md, records/        the memory-wide scope
 repositories/<id>/repository.json            the binding for one repository of work
 repositories/<id>/                           that repository's scope (the same three entries)
 repositories/<id>/paths/<path>/              a path scope

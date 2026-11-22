@@ -31,7 +31,7 @@ in Appendix A. Normative wording describes the proposed standard; it does not as
 
 Every requirement is **Proposed**: a design requirement awaiting implementation and its check. Some restate properties of v0.4.0, but its requirement numbers and checks are new, so none is called inherited.
 
-Terms: the *mandate* is the intent tier: a confirmed `destination.md` or, for a run that has none, the interpretation of the prompt that the principal confirmed for that run (or delegated in the prompt or a destination), stated in the run's checkpoint or single record; *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
+Terms: the *mandate* is the intent tier: a confirmed `mission.md` (older memories call it `destination.md`) or, for a run that has none, the interpretation of the prompt that the principal confirmed for that run (or delegated in the prompt or a mission), stated in the run's checkpoint or single record; *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
 
 The checks in this specification are specified tests, not executed test results. A mechanical check of document structure or
 version consistency does not establish ACM conformance, privacy, useful retrieval or correct agent behaviour.
@@ -359,7 +359,7 @@ The following layout is illustrative. A database or service may implement the sa
 ```text
 memory-repository/            memory-wide scope; .acm-root marks the top
   .acm-root
-  destination.md              intent: the mandate (principal-confirmed)
+  mission.md                  intent: the mandate (principal-confirmed)
   learning.md                 trace: what this scope has learned so far; derived and replaceable
   records/<time>-<slug>.md      trace source: records, one file each, identified by their path (R-18)
   tasks/<task-id>/            named task scope; the same three entries (a task may sit under any scope)
@@ -380,7 +380,7 @@ implementation that stores them keeps them together in an optional `generated/` 
 never required reading and not part of the memory's source. The one stored derived view that a scope normally carries is
 `learning.md`, labelled derived (R-19).
 
-The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
+The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `mission.md`; a task not tied to one
 repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`, `generated`, or any name ending in `.md`), or beginning with `_` (names compared without regard to letter case), is written under `paths/` with one extra leading `_` and its original spelling, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
@@ -575,7 +575,7 @@ Version 0.7.0 removed rather than added. Removed: sealing of closed months and i
 minimal and full conformance tiers (conformance is one list, and R-04 applies where work is ungated); the Inherited, Observed and Deferred
 evidence statuses (every requirement is Proposed); and the requirement R-24, whose release rule is now a maintainer's rule below. Changed: a
 confirmation is recorded with its source and a mandate revision is the hash of its content (R-02, R-16); the mandate is a confirmed
-destination or, for a run without one, the interpretation the principal confirmed for that run (Terms, Appendix D); detection
+mission or, for a run without one, the interpretation the principal confirmed for that run (Terms, Appendix D); the intent-tier file is `mission.md` (formerly `destination.md`; the artifact markers are `<!-- current-mission: complete -->` and `<!-- mission-history -->`); detection
 is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
 were aligned with their text. This specification implements the PEA principles and stands on its own, and names no implementation
 (section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
@@ -593,7 +593,7 @@ from a public release.
 ## Appendix D: Glossary
 
 - **Principal:** the party with standing and an explicit decision rule to authorize a scope's work.
-- **Mandate:** principal-confirmed what, why and constraints: a confirmed destination, or the interpretation of a prompt the principal confirmed for one run; proposed agent articulation is not yet a mandate.
+- **Mandate:** principal-confirmed what, why and constraints: a confirmed mission, or the interpretation of a prompt the principal confirmed for one run; proposed agent articulation is not yet a mandate.
 - **Governed interval:** work after resolved mandates and a visible accepted interpretation pass the mandate gate.
 - **Memory repository:** the separately identified and governed store holding memory for repositories of work.
 - **Binding:** explicit, validated association of work identity, memory identity and repository-level scope.
