@@ -21,7 +21,7 @@ authors:
     orcid: "https://orcid.org/0009-0009-7157-9084"
 repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
-version: "0.5.1"
+version: "0.6.0"
 date-released: "2026-11-22"
 identifiers:
   - type: doi

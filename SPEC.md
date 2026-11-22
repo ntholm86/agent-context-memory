@@ -1,6 +1,6 @@
 # Agent Context Memory Specification
 
-**Version:** 0.5.1
+**Version:** 0.6.0
 **Date:** 2026-11-22
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
@@ -52,7 +52,7 @@ ACM organizes memory by authorship and trust, independently of functional memory
 | Evidence | Independently captured execution observations | Agent cannot author, filter, alter or delete the capture |
 
 **R-01.** An implementation MUST identify each artifact's tier and whether it is source or derivation. A summary, index or
-orientation does not gain independent evidentiary standing merely by being stored beside source records.
+learning file does not gain independent evidentiary standing merely by being stored beside source records.
 
 ### 1.2 Mandate ownership and articulation
 
@@ -339,9 +339,10 @@ The following layout is illustrative. A database or service may implement the sa
 memory-repository/            memory-wide scope; .acm-root marks the top
   .acm-root
   destination.md              intent: the mandate (principal-confirmed)
-  orientation.md              trace, derived and replaceable
+  learning.md                 trace: what this scope has learned so far; derived and replaceable
   records/<time>-<slug>.md      trace source: records, one file each, identified by their path (R-18); closed months sealed (R-25)
   tasks/<task-id>/            named task scope; the same three entries (a task may sit under any scope)
+  generated/                      optional, disposable reading aids (any scope); never required reading
   repositories/
     <repository-id>/          repository scope; the same three entries, plus:
       repository.json         the binding (R-13)
@@ -353,11 +354,13 @@ memory-repository/            memory-wide scope; .acm-root marks the top
 ```
 
 Every scope is a folder with the same shape; a scope's files are all optional until used. Generated views (indexes,
-summaries, recent windows) are not part of the layout: they are regenerated on demand from the records (R-19). The one stored
-derived view is `orientation.md`, labelled derived (R-19).
+summaries, recent windows) are not required by the layout: they are regenerated on demand from the records (R-19). An
+implementation that stores them keeps them together in an optional `generated/` folder in the scope, each marked as generated,
+never required reading and not part of the memory's source. The one stored derived view that a scope normally carries is
+`learning.md`, labelled derived (R-19).
 
 The governing chain is the folder nesting: memory-wide, repository, path, task. A scope's mandate narrows its parent's and never contradicts it. A task that works inside one path lives under that path; a task that spans paths lives at repository level and names those paths in its own `destination.md`; a task not tied to one
-repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`, or any name ending in `.md`), or beginning with `_` (names compared without regard to letter case), is written under `paths/` with one extra leading `_` and its original spelling, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
+repository lives at memory-wide level. A task at repository level also reads the mandates of the paths it names, as peers: a conflict between them pauses the affected action until authorized resolution (R-10). A code folder named like one of a scope's own entries (`records`, `tasks`, `evidence`, `generated`, or any name ending in `.md`), or beginning with `_` (names compared without regard to letter case), is written under `paths/` with one extra leading `_` and its original spelling, so a scope's entries and its child paths never share a name and the mapping stays reversible. The binding maps repository identity to its namespace.
 Labels such as `<repository-id>` are not instructions to derive identity from a folder basename.
 An implementation can place restricted scopes in separate repositories with independent access controls.
 
@@ -435,7 +438,7 @@ or a person, can perform and verify it. The memory repository must store records
 
 ### 8.2 Derived views and freshness
 
-**R-19.** Indexes, summaries, recent windows and orientations MUST be labelled derived and tied to the source revision or
+**R-19.** Indexes, summaries, recent windows and learning files MUST be labelled derived and tied to the source revision or
 snapshot they represent. Before use, validate that revision and coverage against the bound source. Stale or incomplete
 views MUST be regenerated or reported unusable; filesystem, decoding and indexing errors MUST NOT silently omit scopes.
 Deleting a derived view MUST NOT lose source decisions or governing intent.
@@ -447,7 +450,7 @@ The governing mandates themselves are read at the revisions required by R-09, no
 ### 8.3 Relevance, compression and correction
 
 **R-20.** Retrieval MUST provide a bounded route from binding and governing mandates to the applicable scope's current
-orientation/index, then to relevant source and evidence references. A derived claim MUST identify its sources and author;
+learning/index, then to relevant source and evidence references. A derived claim MUST identify its sources and author;
 where it includes a corrected claim, it MUST expose the known correction/supersession reference. Recency MUST NOT by itself
 promote a claim to authority.
 
@@ -586,9 +589,11 @@ renumbers Prior Art to 6 and Reference Implementation to 7. Historical documents
 | Section 6, Reference Implementation (6.1-6.6) | Section 7, Reference Implementation and Conformance |
 | Appendices A/B, PEA relationship and glossary | Sections 1/5.2 and Appendix D |
 
-Version 0.5.1 changed the meaning of three things relative to 0.5.0: a mandate states its human gate (R-02); independent
-capture is required where work takes effect without one (R-04, section 7.3); and permissions are described as reminders backed
-by intent, detection and gates, not as containment (R-06, R-07, section 2.5). No requirement was added or removed.
+Version 0.6.0 changed four things relative to 0.5.0: a mandate states its human gate (R-02); independent capture is required
+where work takes effect without one (R-04, section 7.3); permissions are described as reminders backed by intent, detection and
+gates, not as containment (R-06, R-07, section 2.5); and the stored derived view `orientation.md` is now `learning.md`, with an
+optional `generated/` folder for stored generated views (an implementation using the 0.5.0 name renames the file; section 7.2).
+No requirement was added or removed.
 
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
@@ -608,7 +613,8 @@ from a public release.
 - **Binding:** explicit, validated association of work identity, memory identity and repository-level scope.
 - **Scope:** a declared authority/relevance boundary within memory; not an access permission.
 - **Source record:** accepted intent, trace or captured evidence retained under its tier's authorship/mutation rules.
-- **Derived view:** replaceable index, window, summary or orientation with source provenance and snapshot identity.
+- **Derived view:** replaceable index, window, summary or learning file with source provenance and snapshot identity.
+- **Learning:** what a scope has learned so far, written as a derived view (`learning.md`) from its mandate and records; unrelated to training a model (R-22).
 - **Acceptance boundary:** the mechanism that admits records and applies roles, immutability and collision handling.
 - **Capture-author separation:** the observed agent cannot author or suppress its independent observation record.
 - **Silence:** a bounded, provisional independent evaluation with no findings against the examined quality bar.
