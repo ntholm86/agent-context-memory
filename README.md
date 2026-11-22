@@ -12,7 +12,7 @@ Governed work needs a principal-confirmed mandate already in memory; without one
 
 ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory, so that work accumulates across people, sessions, tools and models while the principal keeps authority. It applies established access control and audit-log patterns — "authorization before action", as in RBAC, MAC and capability-based security — to agent memory.
 
-ACM follows the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) and the PEA skills suite: the principles come first, the skills second, ACM third. ACM says how their memory is stored and arranged and never changes how a skill works.
+ACM is the operationalization of the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem: PEA is the theory and ACM is the specification of its memory. ACM stands on its own; the PEA skills suite and the Work skill are one implementation of it, and others are possible.
 
 ---
 

@@ -344,9 +344,10 @@ has already supplied the binding. The skill resolves the scope, reads governing 
 makes its interpretation visible, acts within authority and records outcomes to the bound scope.
 Naming a skill cannot compensate for absent deployment configuration or permission controls.
 
-The PEA principles come first, the skills suite second and this specification third. The specification adapts to them: it
-says how their memory is stored and arranged and does not change what a skill does. Where it differs from a skill, this text
-is corrected to describe the skill.
+The PEA principles come first. This specification is the standard for agent context memory and stands on its own; the PEA
+skills suite and the Work skill are one implementation of it, not its definition, and others are possible. An implementation
+follows the specification for how memory is stored and arranged and the principles for how it works; where it differs from the
+specification, the difference is stated and the author decides which one changes.
 
 The reference skills implement the intent and trace tiers. They do not capture independent evidence (R-04) or check a recording
 policy (R-07); a deployment that needs the evidence tier adds a separate capture component. They still read, and append to, an
@@ -442,7 +443,7 @@ The governing mandates themselves are read at the revisions required by R-09, no
 ### 8.3 Relevance, compression and correction
 
 **R-20.** Retrieval MUST provide a bounded route from binding and governing mandates to the applicable scope's current
-learning/index, then to relevant source and evidence references. A derived claim MUST identify its sources and author;
+learning/index, then to relevant source and evidence references. A derived claim MUST identify its sources and author (for a derived view, the source revision it is tied to under R-19 and who wrote it);
 where it includes a corrected claim, it MUST expose the known correction/supersession reference. Recency MUST NOT by itself
 promote a claim to authority.
 
@@ -580,8 +581,8 @@ evidence statuses (every requirement is Proposed); and the requirement R-24, who
 confirmation is recorded with its source and a mandate revision is the hash of its content (R-02, R-16); the mandate is a confirmed
 destination or, for a run without one, the interpretation the principal confirmed for that run (Terms, Appendix D); detection
 is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
-were aligned with their text. The order of authority was stated (PEA principles, then the skills suite, then this specification, which adapts to
-both). The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
+were aligned with their text. PEA is the theory and this specification the standard for its memory; the PEA skills suite and the Work skill are one
+implementation of it, and where the specification described what they do it states their status (section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
 independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that the
 skills implement the intent and trace tiers and that legacy in-repository memory is transitional. Descriptions in the README and metadata
 were reduced to what the specification claims.
