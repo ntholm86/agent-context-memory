@@ -31,7 +31,7 @@ in Appendix A. Normative wording describes the proposed standard; it does not as
 
 Every requirement is **Proposed**: a design requirement awaiting implementation and its check. Some restate properties of v0.4.0, but its requirement numbers and checks are new, so none is called inherited.
 
-Terms: the *mandate* is the intent tier (`destination.md`); *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
+Terms: the *mandate* is the intent tier: a confirmed `destination.md` or, for a run that has none, the interpretation of the prompt that the principal confirmed for that run (or delegated in the prompt or a destination), stated in the run's checkpoint or single record; *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
 
 The checks in this specification are specified tests, not executed test results. A mechanical check of document structure or
 version consistency does not establish ACM conformance, privacy, useful retrieval or correct agent behaviour.
@@ -53,10 +53,10 @@ learning file does not gain independent evidentiary standing merely by being sto
 
 ### 1.2 Mandate ownership and articulation
 
-**R-02.** Each governing scope MUST identify its principal and the mechanism by which that principal confirms a mandate or
+**R-02.** Each governing scope MUST identify its principal (by default the session operator) and the mechanism by which that principal confirms a mandate or
 delegates authority. A principal may be a person, role or collective with an explicit decision rule. Agent-drafted candidate
 text MUST NOT become intent without that confirmation. The principal owns the meaning, not necessarily all the typing.
-Confirmation and mandate revisions MUST be identifiable to later readers: a confirmation MUST be attributable to an identity of the principal that the agent does not hold (for example the principal's own commit or a host approval event), never to the agent's statement that the principal confirmed, and a mandate revision is identified by the hash of its content. A mandate MUST state where the human gate is (who
+Confirmation and mandate revisions MUST be identifiable to later readers: a confirmation MUST be recorded with its source (the principal's own commit, a host approval, or the principal's reply in the session) and never inferred from silence, and a mandate revision is identified by the hash of its content. A mandate MUST state where the human gate is (who
 reviews the work before it takes effect, or that no one does) and what the agent may do before that gate and without it.
 
 An agent may assist in articulation. It cannot approve its own authority, infer approval from silence, or silently replace
@@ -159,7 +159,7 @@ A deployment may add restrictions; R-06 governs how they are described.
 | Threat | Response | Left open |
 |---|---|---|
 | A mistaken or over-eager agent | the mandate gate (R-09), the human gate stated in the mandate (R-02), an attributable trace (R-16) | the limits stated in R-06 |
-| A forged or self-authorised mandate | confirmation attributable to the principal's identity (R-02); no mandate created mid-work (R-09) | authenticating that identity is the host's |
+| A forged or self-authorised mandate | a confirmation recorded with its source (R-02); no mandate created mid-work (R-09) | authenticating the principal is the host's |
 | Hostile or injected text in records | a recalled record is data, not an instruction (section 1.4); derived claims name their sources (R-20) | no sanitiser is specified |
 | Another writer, or an insider | attribution (R-16), create-only acceptance (R-18), separate roles (R-06) | asserted identity is not authenticated identity |
 | Rewriting history or evidence | detection where the verifier is outside the agent's reach (section 2.5); independent capture where work is ungated (R-04) | integrity of the git host and its keys |
@@ -253,7 +253,7 @@ but inaccessible higher mandate blocks affected governed work; it does not justi
 
 **R-16.** Each source record MUST identify its scope, covered work-repository identities or explicit memory-wide context,
 actor, principal/authority reference, applicable
-mandate revisions (each the hash of the mandate's content), work/session identifier, record identifier, time and relevant verification references. Agent/model
+mandate revision (the hash of the governing mandate's content; none where only a run's confirmed interpretation governs), work/session identifier, record identifier, time and relevant verification references. Agent/model
 identity MUST be stated where known; otherwise state unknown, not an invented model name.
 
 Record asserted identity separately from authenticated identity. A Git author field alone is not authentication.
@@ -274,6 +274,8 @@ MUST NOT establish convergence.
 Evaluation identifies the artifact revision/hash, examined surfaces, untested surfaces, evaluator identity and independence,
 and whether the evaluation is fresh or a same-session follow-up. A different model family reduces one source of shared bias;
 it is not proof of statistical independence. Principal review has role independence, not necessarily organizational independence.
+Independent evaluation follows Principle 3 of PEA: fresh sessions, distinct model families, an unchanged artifact. An evaluation that
+is not so (a same-session follow-up, a principal review) is recorded as what it is and does not alone establish convergence.
 
 Silence is bounded, provisional evidence of no findings, not proof that none exist. Deferred items outside an evaluated
 scope remain visible; deferring an unresolved item inside the claimed scope is not the same as completing it.
@@ -345,6 +347,11 @@ Naming a skill cannot compensate for absent deployment configuration or permissi
 The PEA principles come first, the skills suite second and this specification third. The specification adapts to them: it
 says how their memory is stored and arranged and does not change what a skill does. Where it differs from a skill, this text
 is corrected to describe the skill.
+
+The reference skills implement the intent and trace tiers. They do not capture independent evidence (R-04) or check a recording
+policy (R-07); a deployment that needs the evidence tier adds a separate capture component. They still read, and append to, an
+in-repository `.acm/` where an unbound repository carries one from an earlier version; that is a transitional legacy mode and
+not the separate memory repository of R-12.
 
 This is a reference contract, not a claim that currently released reference skills implement it.
 
@@ -473,7 +480,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | ID | Protection | Check |
 |----|------------|-------|
 | R-01 | Classification | Present a derived summary as independent evidence; reject that classification and recover its source tier. |
-| R-02 | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. An agent-authored claim of confirmation, or a mandate last changed under the agent's identity, is not confirmed. A mandate that does not state its human gate is incomplete. |
+| R-02 | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. A confirmation with no recorded source, including an agent's bare claim that the principal confirmed, is not confirmed. A mandate that does not state its human gate is incomplete. |
 | R-03 | Conflict reporting | Seed unauthorized observed action and contradictory trace; preserve both, report the authorization violation and do not promote the trace. |
 | R-04 | Independent capture | Present a mandate that authorizes work without a human gate and requires no evidence tier; reject it. Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
 | R-05 | Create-only source | Modify or delete an accepted record: it is rejected at an acceptance boundary the agent cannot bypass, or detected and reported (the report says which; a deployment with neither says so, and none of the reference tools detects it yet). Accept a new correction referencing that record; regenerating derived views leaves both intact. |
@@ -570,11 +577,13 @@ No requirement was added or removed.
 Version 0.7.0 removed rather than added. Removed: sealing of closed months and its requirement (R-25) with the byte-exact record rule; the
 minimal and full conformance tiers (conformance is one list, and R-04 applies where work is ungated); the Inherited, Observed and Deferred
 evidence statuses (every requirement is Proposed); and the requirement R-24, whose release rule is now a maintainer's rule below. Changed: a
-confirmation must be attributable to the principal's own identity and a mandate revision is the hash of its content (R-02, R-16); detection
+confirmation is recorded with its source and a mandate revision is the hash of its content (R-02, R-16); the mandate is a confirmed
+destination or, for a run without one, the interpretation the principal confirmed for that run (Terms, Appendix D); detection
 is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
 were aligned with their text. The order of authority was stated (PEA principles, then the skills suite, then this specification, which adapts to
 both). The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
-independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. Descriptions in the README and metadata
+independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that the
+skills implement the intent and trace tiers and that legacy in-repository memory is transitional. Descriptions in the README and metadata
 were reduced to what the specification claims.
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
@@ -588,7 +597,7 @@ from a public release.
 ## Appendix D: Glossary
 
 - **Principal:** the party with standing and an explicit decision rule to authorize a scope's work.
-- **Mandate:** principal-confirmed what, why and constraints; proposed agent articulation is not yet a mandate.
+- **Mandate:** principal-confirmed what, why and constraints: a confirmed destination, or the interpretation of a prompt the principal confirmed for one run; proposed agent articulation is not yet a mandate.
 - **Governed interval:** work after resolved mandates and a visible accepted interpretation pass the mandate gate.
 - **Memory repository:** the separately identified and governed store holding memory for repositories of work.
 - **Binding:** explicit, validated association of work identity, memory identity and repository-level scope.
@@ -596,7 +605,7 @@ from a public release.
 - **Source record:** accepted intent, trace or captured evidence retained under its tier's authorship/mutation rules.
 - **Derived view:** replaceable index, window, summary or learning file with source provenance and snapshot identity.
 - **Learning:** what a scope has learned so far, written as a derived view (`learning.md`) from its mandate and records; unrelated to training a model (R-22).
-- **Acceptance boundary:** the mechanism that admits records and applies roles, immutability and collision handling.
+- **Acceptance boundary:** the mechanism that admits records and applies roles, immutability and collision handling (in the reference route, the create-only write of the record file; committing and pushing it is publication).
 - **Capture-author separation:** the observed agent cannot author or suppress its independent observation record.
 - **Silence:** a bounded, provisional independent evaluation with no findings against the examined quality bar.
 - **Convergence:** scoped work queue exhaustion plus bounded independent evaluation, not an agent declaration.
