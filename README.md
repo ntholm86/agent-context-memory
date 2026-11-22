@@ -12,13 +12,13 @@ Governed work needs a principal-confirmed mandate already in memory; without one
 
 ACM is a specification for how autonomous AI agents should organize, protect, and use their context memory, so that work accumulates across people, sessions, tools and models while the principal keeps authority. It applies established access control and audit-log patterns — "authorization before action", as in RBAC, MAC and capability-based security — to agent memory.
 
-ACM is the operationalization of [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) for the context memory design problem. PEA is the theory; ACM is the implementation standard for memory.
+ACM follows the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy) and the PEA skills suite: the principles come first, the skills second, ACM third. ACM says how their memory is stored and arranged and never changes how a skill works.
 
 ---
 
-## The core contribution: the mandate gate
+## The main proposal: the mandate gate
 
-A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval; the agent may help draft it but cannot confirm its own authority. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition*: the gate that determines whether ACM-governed work can begin.
+A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval; the agent may help draft it but cannot confirm its own authority. Work without one is not stopped by ACM; it is reported as not ACM-governed. The three context memory models ACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. ACM treats memory as a *precondition* of governed work.
 
 ---
 
@@ -55,9 +55,9 @@ The reference route is the [PEA skills suite](https://github.com/ntholm86/princi
 ## Relationship to prior art
 
 - **RBAC** — authorization before action, scope defined by authorizer, actor accountable for exceeding scope. ACM applies this at the session level.
-- **CoALA** (Sumers et al., 2023) — tiered memory. ACM inherits the tiers and adds trust-based differentiation.
-- **Generative Agents** (Park et al., 2023) — observation, reflection, planning. ACM inherits reflection as a memory operation and applies audit-log principles.
-- **MemGPT** (Packer et al., 2023) — hierarchical memory with cross-session persistence. ACM inherits persistence and adds capture-author separation.
+- **CoALA** (Sumers et al., 2023) — tiered memory. ACM builds on the tiers and adds trust-based differentiation.
+- **Generative Agents** (Park et al., 2023) — observation, reflection, planning. ACM builds on reflection as a memory operation and applies audit-log principles.
+- **MemGPT** (Packer et al., 2023) — hierarchical memory with cross-session persistence. ACM builds on persistence and adds capture-author separation.
 
 These models optimize for what the agent *can do*. ACM optimizes for whether the principal *can trust* what the agent did, and whether the agent was *authorized* to begin at all.
 

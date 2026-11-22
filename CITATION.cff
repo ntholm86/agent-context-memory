@@ -6,14 +6,14 @@ abstract: >
   ACM (Agent Context Memory) is a specification for governance-first context memory
   in autonomous AI agent systems. It recognizes that agent memory is fundamentally
   an authorization problem and applies established access control and audit-log
-  patterns to this domain. The core contribution is the Mandate Gate: a pre-work
+  patterns to this domain. The main proposal is the Mandate Gate: a pre-work
   mandate, confirmed by the principal, must exist in the agent's memory before work
   is a governed interval. ACM defines three memory tiers organized by trust level
-  (intent / trace / evidence), structural capture-author separation, a memory kept in
+  (intent / trace / evidence), capture-author separation where work is ungated, a memory kept in
   a repository of its own and bound to repositories of work by identity, a one-rule
   scope layout, collision-safe shared recording (one file per record), and 23 numbered
-  requirements with specified checks. ACM is the operationalization of Principles of
-  Earned Autonomy (PEA) for the context memory design problem. The specification claims
+  requirements with specified checks. ACM follows the Principles of Earned
+  Autonomy (PEA) and the PEA skills suite: it says how their memory is stored and arranged. The specification claims
   no implementation conformance: every requirement is Proposed.
 authors:
   - family-names: Holmager

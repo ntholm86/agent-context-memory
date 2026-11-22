@@ -86,10 +86,11 @@ ACM does not prescribe where skills live or how a principal adopts them.
 
 Independent capture is warranted where work takes effect without a human gate: no person or accountable system reviews the
 result, and can refuse it, before it takes effect (for example autonomous action on live data). Where such a gate exists, the
-reviewed trace and the reviewer's decision are the evidence of record and an evidence tier is not required. A mandate that
-authorizes work without a gate MUST also require an evidence tier under R-04.
+reviewed trace and the reviewer's decision are what the record rests on, and an evidence tier is not required. They remain
+the agent's account and the reviewer's decision, not independent evidence (R-03); a reviewer who wants more than the account
+looks at the result itself.
 
-**R-04.** Where the mandate requires an evidence tier, or one is claimed, a component architecturally separate from the observed agent MUST capture the
+**R-04.** Where a mandate authorizes work without a human gate, requires an evidence tier, or one is claimed, a component architecturally separate from the observed agent MUST capture the
 declared interactions before releasing their responses to that agent. The agent MUST NOT be able to suppress or edit that
 capture. Coverage, gaps and capture failures MUST be observable. Reconstructed self-report is not independent evidence.
 
@@ -113,8 +114,8 @@ administrative override as a governance event. Chronological presentation does n
 actor both confirms a mandate and adds trace under it without a gate. Rejected or unavailable operations MUST produce an
 explicit failure, not success-shaped output. A conformance report MUST state, for each protection, whether it rests on intent,
 detection or a gate (section 2.5), and MUST NOT describe a restriction as preventing an agent from acting unless the agent
-holds no credential or path that could bypass it. Where the separation rests on instruction alone, say so and do not claim
-structural conformance.
+holds no credential or path that could bypass it. Where the separation rests on instruction alone, the report says so and
+makes no structural claim; that is a conforming report.
 
 **R-07.** The applicable recording, access and retention policy MUST be established before recording begins, for a solo
 contributor as well as many. Scope relevance MUST NOT substitute for permission. A sub-repository or submodule MAY provide
@@ -179,6 +180,10 @@ findings are recorded afterward. Binding validation and mandate reading are pref
 A host conversation can contain setup or mandate articulation before a governed interval. Such activity does not retroactively
 validate earlier unauthorized work. The governed interval starts only after the gate passes; an agent cannot authorize itself
 by creating a mandate mid-work. This makes the boundary explicit rather than relying on harness-specific session naming.
+
+This requirement says what a governed interval is. It does not stop work that lacks one: the reference skills proceed on
+the confirmed prompt alone when no durable mandate exists (a first run), and such work is reported as not ACM-governed (R-11).
+Specification text follows the skills in this, not the reverse.
 
 ### 3.2 Changing or conflicting authority
 
@@ -341,6 +346,10 @@ has already supplied the binding. The skill resolves the scope, reads governing 
 makes its interpretation visible, acts within authority and records outcomes to the bound scope.
 Naming a skill cannot compensate for absent deployment configuration or permission controls.
 
+The PEA principles come first, the skills suite second and this specification third. The specification adapts to them: it
+says how their memory is stored and arranged and does not change what a skill does. Where it differs from a skill, this text
+is corrected to describe the skill.
+
 This is a reference contract, not a claim that currently released reference skills implement it.
 
 ### 7.2 File layout
@@ -378,7 +387,7 @@ An implementation can place restricted scopes in separate repositories with inde
 
 ### 7.3 Conformance
 
-The contributor count is not a conformance mode. A deployment conforms to this version when every requirement that applies to it is implemented and its check passes for the declared deployment: R-01 to R-03, R-05 to R-16 and R-18 to R-20 always; R-04 where a mandate authorizes work without a human gate (a deployment whose work always passes one says so instead); R-17 when it claims convergence; R-21 when it claims efficiency or usefulness; R-22 when it extracts memory for training or evaluation; R-23 when it claims seamless adoption. A requirement may be marked not applicable only with its condition and a verifiable reason; this cannot waive an unconditional requirement. R-03 always forbids promoting trace into independent evidence, and a deployment without an evidence tier makes no independent-evidence or convergence claim. A local file pattern without separate roles is an illustration, not conformance. An implementation can conform before a particular work item converges; it must not report convergence for that item until R-17 passes.
+The contributor count is not a conformance mode. A deployment conforms to this version when every requirement that applies to it is implemented and its check passes for the declared deployment: R-01 to R-03, R-05 to R-16 and R-18 to R-20 always; R-04 where a mandate authorizes work without a human gate (a deployment whose work always passes one says so instead); R-17 when it claims convergence; R-21 when it claims efficiency or usefulness; R-22 when it extracts memory for training or evaluation; R-23 when it claims seamless adoption. A requirement may be marked not applicable only with its condition and a verifiable reason; this cannot waive an unconditional requirement. R-03 always forbids promoting trace into independent evidence, and a deployment without an evidence tier makes no independent-evidence or convergence claim. A local file pattern whose roles are not separate can claim only what R-06's report states. An implementation can conform before a particular work item converges; it must not report convergence for that item until R-17 passes.
 
 A conformance report states the version, the deployment boundary, the checks, the results, the limitations and the policies that apply.
 
@@ -471,11 +480,11 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-02 | Confirmation boundary | Submit unconfirmed agent text and an unauthorized peer update; neither becomes governing intent. Confirmed updates have identifiable authority and revisions. An agent-authored claim of confirmation, or a mandate last changed under the agent's identity, is not confirmed. A mandate that does not state its human gate is incomplete. |
 | R-03 | Conflict reporting | Seed unauthorized observed action and contradictory trace; preserve both, report the authorization violation and do not promote the trace. |
 | R-04 | Independent capture | Present a mandate that authorizes work without a human gate and requires no evidence tier; reject it. Attempt agent filtering, alteration and deletion; reject each. Capture only after release (and, when streaming, after a portion was delivered); reject the ordering. Induce a capture failure and verify it is reported with the coverage gap. |
-| R-05 | Create-only source | Modify or delete an accepted record: it is rejected at an acceptance boundary the agent cannot bypass, or detected and reported (the report says which). Accept a new correction referencing that record; regenerating derived views leaves both intact. |
+| R-05 | Create-only source | Modify or delete an accepted record: it is rejected at an acceptance boundary the agent cannot bypass, or detected and reported (the report says which; a deployment with neither says so, and none of the reference tools detects it yet). Accept a new correction referencing that record; regenerating derived views leaves both intact. |
 | R-06 | Role separation | Exercise each write class under the wrong identity, including an unavailable acceptance service; fail visibly and preserve source. The report names, for each protection, intent, detection or gate, and claims no prevention where the agent holds a credential or path that bypasses it. |
 | R-07 | Access and policy | Retrieval of a restricted scope outside its permission is either prevented by a control the agent holds no credential to bypass, or is detected and reviewable; the report says which. Withhold each applicable recording, access and retention policy in turn: recording cannot begin. |
 | R-08 | Authorized exception | In a synthetic store, exercise authorized erasure across declared replicas and leave a non-sensitive event; an unauthorized writer cannot erase. Report unreachable replicas. |
-| R-09 | Pre-work gate | Missing mandate, unread governing revision or unaccepted interpretation prevents governed action. Agent-created text never authorizes itself. |
+| R-09 | Pre-work gate | Work started with a missing mandate, an unread governing revision or an unaccepted interpretation is not reported as governed (R-11). Agent-created text never authorizes itself. |
 | R-10 | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
 | R-11 | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled ACM-valid. |
 | R-12 | Separate repository | The memory is held in a separately identified and governed store, two work repositories each resolve to their own repository-level scope in it, a clean distribution of the work repository contains no development memory, and adding a second writer requires no trace-layout migration. |
@@ -567,8 +576,11 @@ minimal and full conformance tiers (conformance is one list, and R-04 applies wh
 evidence statuses (every requirement is Proposed); and the requirement R-24, whose release rule is now a maintainer's rule below. Changed: a
 confirmation must be attributable to the principal's own identity and a mandate revision is the hash of its content (R-02, R-16); detection
 is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
-were aligned with their text.
-Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
+were aligned with their text. The order of authority was stated (PEA principles, then the skills suite, then this specification, which adapts to
+both), and text that differed from the reference skills was corrected to describe them: R-09 says what a governed interval is and does not
+claim to stop other work; a reviewed trace is what the record rests on, not independent evidence (section 2.1); R-04 carries the ungated-work
+condition; an instruction-only separation is a conforming, disclosed report (R-06, section 7.3). Descriptions in the README and metadata
+were reduced to what the specification claims. references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
 
 Release rule (the maintainers', not a requirement on implementations). Before a release the specification version, the citation version, the archive metadata version and the requested tag must agree, a mechanical check must reject drift before publication, and an author-owned release decision is required in addition to passing the checks. Private observations stay private unless the author permits their inclusion. Publication must separately reconcile README, citation/archive descriptions, release workflow, requested tag and version. The
