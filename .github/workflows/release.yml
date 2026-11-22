@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      VERSION: ${{ github.event.inputs.version }}
+      NOTES: ${{ github.event.inputs.notes }}
 
     steps:
       - name: Checkout
@@ -25,7 +28,7 @@ jobs:
 
       - name: Validate version format
         run: |
-          if [[ ! "${{ github.event.inputs.version }}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ ! "${VERSION}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "Version must be in format vX.Y.Z"
             exit 1
           fi
@@ -34,7 +37,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="${{ github.event.inputs.version }}"
           # A release of an existing tag republishes that snapshot, including to the archive record.
           if gh release view "${VERSION}" >/dev/null 2>&1; then
             echo "Release ${VERSION} already exists; releases are never re-published."
@@ -43,18 +45,16 @@ jobs:
 
       - name: Create or reuse tag
         run: |
-          VERSION="${{ github.event.inputs.version }}"
           if ! git rev-parse -q --verify "refs/tags/${VERSION}" >/dev/null; then
             git tag "${VERSION}"
           fi
 
       - name: Check release contents
         run: |
-          VERSION="${{ github.event.inputs.version }}"
           NUMBER="${VERSION#v}"
           FAIL=0
           # Development memory belongs in the separate private memory repository, never in a release.
-          if git ls-tree -r --name-only "${VERSION}" | grep -E '^\.(acm|trail)/' ; then
+          if git ls-tree -r --name-only "${VERSION}" | grep -E '(^|/)\.(acm|trail)/' ; then
             echo "Tag ${VERSION} contains development memory (.acm/ or .trail/)."
             FAIL=1
           fi
@@ -70,14 +70,12 @@ jobs:
           exit $FAIL
 
       - name: Push tag
-        run: git push origin "${{ github.event.inputs.version }}"
+        run: git push origin "${VERSION}"
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          NOTES="${{ github.event.inputs.notes }}"
           gh release create "${VERSION}" \
             --title "Agent Context Memory ${VERSION}" \
             --notes "${NOTES:-Release ${VERSION}}" \
