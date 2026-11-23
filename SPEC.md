@@ -92,6 +92,11 @@ reviewed trace and the reviewer's decision are what the record rests on, and an 
 the agent's account and the reviewer's decision, not independent evidence (R-03); a reviewer who wants more than the account
 looks at the result itself.
 
+Behind such a gate an implementation may run without independent capture, for example because no capture component works with
+its host. That is acceptable when the absence is declared, not hidden (the conformance report says so, section 7.3), and the
+person at the gate remains responsible for the result. Work that takes effect without such a gate is the case in which capture is
+required (R-04).
+
 **R-04.** Where a mandate authorizes work without a human gate, requires an evidence tier, or one is claimed, a component architecturally separate from the observed agent MUST capture the
 declared interactions before releasing their responses to that agent. The agent MUST NOT be able to suppress or edit that
 capture. Coverage, gaps and capture failures MUST be observable. Reconstructed self-report is not independent evidence.
@@ -396,10 +401,12 @@ A conformance report states the version, the deployment boundary, the checks, th
 ### 7.4 Current development state
 
 This version has been adopted for the specification's own development memory, by one author on one machine.
-That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit
-through a user-level registry; the public repository holds no memory and no pointer to it. The author's implementations were changed
+That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit;
+the public repository holds no memory and no pointer to it. The author's implementations were changed
 to resolve that binding and to write one record per file. None of these changes demonstrates R-07 access control, concurrent
 writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by them.
+The development runs behind a human pull-request gate and without independent capture (section 2.1). No deployment yet runs an
+autonomous agent on a shared memory without such a gate; that would require independent capture (R-04).
 No operational or full-conformance claim is made for this repository.
 
 ### 7.5 Implementation provenance
@@ -582,7 +589,7 @@ is stated to hold only outside the agent's reach (section 2.5); a short threat t
 were aligned with their text. This specification implements the PEA principles and stands on its own, and names no implementation
 (section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
 independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that an implementation says which requirements it does not meet and that legacy in-repository memory is transitional. Descriptions in the README and metadata
-were reduced to what the specification claims.
+were reduced to what the specification claims. The name is Shared Agent Context Memory (SACM) and the abstract opens with the shared purpose; section 2.1 states that running without independent capture behind a human gate is acceptable when the absence is declared and the person at the gate remains responsible, and section 7.4 no longer names a binding mechanism.
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
 
