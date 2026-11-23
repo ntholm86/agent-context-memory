@@ -6,6 +6,8 @@
 
 An agent starting a task begins from what earlier work learned, found and was corrected on, read from a memory kept apart from the code and organised by scope. One person is a team of one; only the number of people and agents writing changes.
 
+![Illustration: without a shared memory each person and agent can start from zero; with one, the team's people and agents read a mission, what has been learned and the records first, and keep records as they work.](./images/shared-agent-context-memory.svg)
+
 ## The mandate gate
 
 Governed work needs a principal-confirmed mandate already in memory, read by the agent before it acts, with the agent's interpretation visible in the trace. The agent may help draft it but cannot confirm its own authority.

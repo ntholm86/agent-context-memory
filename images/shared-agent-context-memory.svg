@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" width="1600" height="1040" role="img" aria-labelledby="t d" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Liberation Sans', sans-serif">
+  <title id="t">Shared Agent Context Memory: one memory for the whole team</title>
+  <desc id="d">Without a shared memory, each person and agent can start from zero and ask the same questions again. With one, the team keeps a memory of its own, in a separate repository apart from its code, holding a mission that a person confirms, what the team knows now, and a record of what was done and why. People and their agents read it first and keep records as they work. It can let a team learn once, let a newcomer or another agent continue from the records, keep a person in charge, and make review a matter of exceptions. Agents can use it through a skill: the PEA skills suite or the Work skill, the author's own.</desc>
+
+  <defs>
+    <g id="person">
+      <circle cx="0" cy="-30" r="16" fill="#F6D3B6"/>
+      <path d="M-27 20 C-27 -2 -15 -11 0 -11 C15 -11 27 -2 27 20 Z" fill="currentColor"/>
+    </g>
+    <g id="agent">
+      <line x1="0" y1="-18" x2="0" y2="-27" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="0" cy="-30" r="4.5" fill="currentColor"/>
+      <rect x="-22" y="-18" width="44" height="34" rx="10" fill="currentColor"/>
+      <circle cx="-9" cy="-3" r="4.5" fill="#fff"/>
+      <circle cx="9" cy="-3" r="4.5" fill="#fff"/>
+      <rect x="-8" y="7" width="16" height="3" rx="1.5" fill="#fff" opacity=".75"/>
+    </g>
+  </defs>
+
+  <rect width="1600" height="1040" fill="#F4F6FA"/>
+
+  <!-- Header -->
+  <text x="800" y="84" text-anchor="middle" font-size="58" font-weight="700" fill="#1F2937">Shared Agent Context Memory</text>
+  <text x="800" y="136" text-anchor="middle" font-size="30" fill="#4B5563">One memory for the whole team, so work need not start from zero.</text>
+
+  <!-- Panel 1: today -->
+  <rect x="40" y="170" width="460" height="700" rx="26" fill="#FFFFFF" stroke="#E2E6EE" stroke-width="2"/>
+  <rect x="70" y="198" width="150" height="36" rx="18" fill="#ECEEF3"/>
+  <text x="145" y="223" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="2" fill="#4B5563">WITHOUT IT</text>
+  <text x="70" y="290" font-size="35" font-weight="700" fill="#1F2937">Starting from zero</text>
+  <text x="70" y="326" font-size="22" fill="#4B5563">The same questions, again and again.</text>
+
+  <use href="#person" transform="translate(104 428) scale(1.2)" color="#4C6EF5"/>
+  <use href="#agent" transform="translate(180 432) scale(1.2)" color="#7048E8"/>
+  <path d="M236 424 l-16 8 l16 8 z" fill="#EEF1F8"/>
+  <rect x="236" y="384" width="234" height="86" rx="18" fill="#EEF1F8"/>
+  <text x="254" y="422" font-size="22" fill="#1F2937">Why was it built</text>
+  <text x="254" y="450" font-size="22" fill="#1F2937">this way?</text>
+
+  <use href="#person" transform="translate(104 558) scale(1.2)" color="#12B886"/>
+  <use href="#agent" transform="translate(180 562) scale(1.2)" color="#7048E8"/>
+  <path d="M236 554 l-16 8 l16 8 z" fill="#EEF1F8"/>
+  <rect x="236" y="514" width="234" height="86" rx="18" fill="#EEF1F8"/>
+  <text x="254" y="552" font-size="22" fill="#1F2937">Has this been</text>
+  <text x="254" y="580" font-size="22" fill="#1F2937">tried before?</text>
+
+  <use href="#person" transform="translate(104 688) scale(1.2)" color="#F59F00"/>
+  <use href="#agent" transform="translate(180 692) scale(1.2)" color="#7048E8"/>
+  <path d="M236 684 l-16 8 l16 8 z" fill="#EEF1F8"/>
+  <rect x="236" y="644" width="234" height="86" rx="18" fill="#EEF1F8"/>
+  <text x="254" y="682" font-size="22" fill="#1F2937">What did we decide</text>
+  <text x="254" y="710" font-size="22" fill="#1F2937">last time?</text>
+
+  <text x="70" y="782" font-size="22" fill="#4B5563">What one person or agent</text>
+  <text x="70" y="812" font-size="22" fill="#4B5563">learned can stay in a closed chat.</text>
+
+  <!-- connector 1 -->
+  <circle cx="520" cy="520" r="15" fill="#FFFFFF" stroke="#C9D0DE" stroke-width="2"/>
+  <path d="M515 511 L526 520 L515 529" fill="none" stroke="#4B5563" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Panel 2: the idea -->
+  <rect x="540" y="170" width="520" height="700" rx="26" fill="#FFFFFF" stroke="#3B5BDB" stroke-width="3"/>
+  <rect x="570" y="198" width="270" height="36" rx="18" fill="#E7ECFF"/>
+  <text x="705" y="223" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="2" fill="#3B5BDB">WITH A SHARED MEMORY</text>
+  <text x="570" y="290" font-size="35" font-weight="700" fill="#1F2937">One shared memory</text>
+  <text x="570" y="326" font-size="22" fill="#4B5563">For example: files in their own repository.</text>
+
+  <rect x="570" y="350" width="460" height="332" rx="20" fill="#F4F6FA" stroke="#DDE2EC" stroke-width="2"/>
+
+  <!-- Mission -->
+  <rect x="588" y="366" width="424" height="88" rx="16" fill="#FFFFFF" stroke="#C5D0FF" stroke-width="2"/>
+  <rect x="588" y="366" width="9" height="88" rx="4.5" fill="#3B5BDB"/>
+  <circle cx="640" cy="410" r="26" fill="#E7ECFF"/>
+  <g transform="translate(640 410) scale(1.15)" fill="#3B5BDB"><rect x="-8" y="-12" width="3" height="24" rx="1.5"/><path d="M-5 -12 L12 -6 L-5 0 Z"/></g>
+  <text x="684" y="402" font-size="28" font-weight="700" fill="#1F2937">Mission</text>
+  <text x="996" y="402" text-anchor="end" font-size="17" font-family="Consolas, 'Courier New', monospace" fill="#4B5563">mission.md</text>
+  <text x="684" y="434" font-size="21" fill="#4B5563">The goal and the limits</text>
+
+  <!-- Learning -->
+  <rect x="588" y="466" width="424" height="88" rx="16" fill="#FFFFFF" stroke="#B8EBD9" stroke-width="2"/>
+  <rect x="588" y="466" width="9" height="88" rx="4.5" fill="#0CA678"/>
+  <circle cx="640" cy="510" r="26" fill="#E3F7EF"/>
+  <g transform="translate(640 510) scale(1.15)" fill="#0CA678"><path d="M-12 -8 L-1 -4 L-1 10 L-12 6 Z"/><path d="M12 -8 L1 -4 L1 10 L12 6 Z"/></g>
+  <text x="684" y="502" font-size="28" font-weight="700" fill="#1F2937">Learning</text>
+  <text x="996" y="502" text-anchor="end" font-size="17" font-family="Consolas, 'Courier New', monospace" fill="#4B5563">learning.md</text>
+  <text x="684" y="534" font-size="21" fill="#4B5563">What we have learned so far</text>
+
+  <!-- Records -->
+  <rect x="588" y="566" width="424" height="88" rx="16" fill="#FFFFFF" stroke="#FFD9A0" stroke-width="2"/>
+  <rect x="588" y="566" width="9" height="88" rx="4.5" fill="#F08C00"/>
+  <circle cx="640" cy="610" r="26" fill="#FFF1DB"/>
+  <g transform="translate(640 610) scale(1.15)"><rect x="-9" y="-12" width="18" height="24" rx="3" fill="#F08C00"/><rect x="-5" y="-6" width="10" height="2.5" rx="1.2" fill="#fff"/><rect x="-5" y="0" width="10" height="2.5" rx="1.2" fill="#fff"/><rect x="-5" y="6" width="6" height="2.5" rx="1.2" fill="#fff"/></g>
+  <text x="684" y="602" font-size="28" font-weight="700" fill="#1F2937">Records</text>
+  <text x="996" y="602" text-anchor="end" font-size="17" font-family="Consolas, 'Courier New', monospace" fill="#4B5563">records/</text>
+  <text x="684" y="634" font-size="21" fill="#4B5563">What was done, and why</text>
+
+  <!-- read / write -->
+  <line x1="724" y1="728" x2="724" y2="708" stroke="#3B5BDB" stroke-width="5" stroke-linecap="round"/>
+  <path d="M724 692 L712 710 L736 710 Z" fill="#3B5BDB" stroke="#3B5BDB" stroke-width="2" stroke-linejoin="round"/>
+  <text x="696" y="720" text-anchor="end" font-size="22" font-weight="700" fill="#3B5BDB">read first</text>
+  <line x1="876" y1="694" x2="876" y2="714" stroke="#3B5BDB" stroke-width="5" stroke-linecap="round"/>
+  <path d="M876 730 L864 712 L888 712 Z" fill="#3B5BDB" stroke="#3B5BDB" stroke-width="2" stroke-linejoin="round"/>
+  <text x="904" y="720" font-size="22" font-weight="700" fill="#3B5BDB">keep records</text>
+
+  <use href="#person" transform="translate(612 788) scale(1.1)" color="#4C6EF5"/>
+  <use href="#agent" transform="translate(668 792) scale(1.1)" color="#7048E8"/>
+  <use href="#person" transform="translate(772 788) scale(1.1)" color="#12B886"/>
+  <use href="#agent" transform="translate(828 792) scale(1.1)" color="#7048E8"/>
+  <use href="#person" transform="translate(932 788) scale(1.1)" color="#F59F00"/>
+  <use href="#agent" transform="translate(988 792) scale(1.1)" color="#7048E8"/>
+  <text x="800" y="856" text-anchor="middle" font-size="21" fill="#4B5563">Different people, agents, tools or models</text>
+
+  <!-- connector 2 -->
+  <circle cx="1080" cy="520" r="15" fill="#FFFFFF" stroke="#C9D0DE" stroke-width="2"/>
+  <path d="M1075 511 L1086 520 L1075 529" fill="none" stroke="#4B5563" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Panel 3: what the team gets -->
+  <rect x="1100" y="170" width="460" height="700" rx="26" fill="#FFFFFF" stroke="#E2E6EE" stroke-width="2"/>
+  <rect x="1130" y="198" width="196" height="36" rx="18" fill="#E3F7EF"/>
+  <text x="1228" y="223" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="2" fill="#087F5B">WHAT IT UNLOCKS</text>
+  <text x="1130" y="290" font-size="35" font-weight="700" fill="#1F2937">Work that adds up</text>
+
+  <!-- 1 -->
+  <circle cx="1160" cy="364" r="29" fill="#FFF4D6"/>
+  <g transform="translate(1160 362) scale(1.2)"><circle cx="0" cy="-3" r="9" fill="#F59F00"/><rect x="-5" y="6" width="10" height="5" rx="2" fill="#F59F00"/></g>
+  <text x="1208" y="370" font-size="27" font-weight="700" fill="#1F2937">Learn once</text>
+  <text x="1208" y="400" font-size="21" fill="#4B5563">What one person or agent</text>
+  <text x="1208" y="426" font-size="21" fill="#4B5563">records, others can use.</text>
+
+  <!-- 2 -->
+  <circle cx="1160" cy="486" r="29" fill="#E7ECFF"/>
+  <g transform="translate(1160 486) scale(1.2)"><circle cx="-12" cy="0" r="4.5" fill="#3B5BDB"/><circle cx="12" cy="0" r="4.5" fill="#3B5BDB"/><path d="M-6 0 H5 M1 -5 L6 0 L1 5" fill="none" stroke="#3B5BDB" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <text x="1208" y="492" font-size="27" font-weight="700" fill="#1F2937">Pick up later</text>
+  <text x="1208" y="522" font-size="21" fill="#4B5563">A newcomer or a new agent can</text>
+  <text x="1208" y="548" font-size="21" fill="#4B5563">continue from the records.</text>
+
+  <!-- 3 -->
+  <circle cx="1160" cy="608" r="29" fill="#E3F7EF"/>
+  <g transform="translate(1160 609) scale(1.2)"><path d="M0 -13 L12 -8 V2 C12 9 6 13 0 15 C-6 13 -12 9 -12 2 V-8 Z" fill="#0CA678"/><path d="M-5 1 L-1 5 L6 -3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+  <text x="1208" y="614" font-size="27" font-weight="700" fill="#1F2937">You stay in charge</text>
+  <text x="1208" y="644" font-size="21" fill="#4B5563">A person confirms the</text>
+  <text x="1208" y="670" font-size="21" fill="#4B5563">mission. An agent cannot</text>
+  <text x="1208" y="696" font-size="21" fill="#4B5563">give itself authority.</text>
+
+  <!-- 4 -->
+  <circle cx="1160" cy="750" r="29" fill="#F1E8FF"/>
+  <g transform="translate(1160 750) scale(1.2)"><circle cx="-2" cy="-2" r="8.5" fill="none" stroke="#7048E8" stroke-width="3"/><line x1="4.5" y1="4.5" x2="11" y2="11" stroke="#7048E8" stroke-width="3.4" stroke-linecap="round"/></g>
+  <text x="1208" y="756" font-size="27" font-weight="700" fill="#1F2937">Review by exception</text>
+  <text x="1208" y="786" font-size="21" fill="#4B5563">Check marked decisions and</text>
+  <text x="1208" y="812" font-size="21" fill="#4B5563">reversals, with samples, not</text>
+  <text x="1208" y="838" font-size="21" fill="#4B5563">every record.</text>
+  <!-- Footer -->
+  <rect x="40" y="900" width="1520" height="116" rx="26" fill="#FFFFFF" stroke="#E2E6EE" stroke-width="2"/>
+  <text x="70" y="934" font-size="16" font-weight="700" letter-spacing="2" fill="#4B5563">THE AUTHOR'S SKILLS</text>
+  <rect x="70" y="950" width="240" height="46" rx="23" fill="#F1E8FF"/>
+  <text x="190" y="982" text-anchor="middle" font-size="23" font-weight="700" fill="#5F3DC4">PEA skills suite</text>
+  <text x="338" y="982" text-anchor="middle" font-size="22" fill="#4B5563">or</text>
+  <rect x="366" y="950" width="170" height="46" rx="23" fill="#F1E8FF"/>
+  <text x="451" y="982" text-anchor="middle" font-size="23" font-weight="700" fill="#5F3DC4">Work skill</text>
+  <text x="580" y="954" font-size="22" fill="#1F2937">Tell your agent to use one. It is built to</text>
+  <text x="580" y="986" font-size="22" fill="#1F2937">read the memory first and keep records.</text>
+  <text x="1530" y="954" text-anchor="end" font-size="22" font-weight="700" fill="#3B5BDB">Both are the author's own;</text>
+  <text x="1530" y="986" text-anchor="end" font-size="22" font-weight="700" fill="#3B5BDB">none yet claimed conformant.</text>
+</svg>
