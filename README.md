@@ -40,7 +40,7 @@ Memory is organized by **trust level**, not memory type:
 | **Trace** (self-report) | The agent's decisions, interpretations and outcomes. Source records are append-only | The agent |
 | **Evidence** (independent observation) | Execution observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
-Version 0.7.0 specifies 23 numbered requirements (R-01 to R-23), each with a check in Appendix A. Every one is Proposed: nothing is claimed as implemented or conformant. The specification's Appendix C lists what each version changed.
+Version 0.7.0 specifies 21 numbered requirements (R-01 to R-21), each with a check in Appendix A. Every one is Proposed: nothing is claimed as implemented or conformant.
 
 ---
 
@@ -79,7 +79,11 @@ These models optimize for what the agent *can do*. SACM optimizes for whether th
 
 ## Citation and archive
 
-Cite SACM using [CITATION.cff](./CITATION.cff). Version 0.7.0 has no archive record yet; version 0.5.0 is archived as [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974); the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions (earlier: v0.3.2, 10.5281/zenodo.20785506).
+Cite SACM using [CITATION.cff](./CITATION.cff). Version 0.7.0 has no archive record yet; version 0.5.0 is archived as [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974); the concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions (earlier: v0.3.2, 10.5281/zenodo.20785506). The `.acm/` pattern preceded this specification in the author's earlier work, archived as [DOI 10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827) (released April 24, 2026).
+
+## Releasing
+
+A release needs the author's go. The version in `SPEC.md`, `CITATION.cff` and `.zenodo.json` and the tag must agree (the release workflow rejects a tag that differs, and a tag that carries development memory, `.acm/` or `.trail/`). A passing check does not prove the absence of sensitive content: private observations stay private unless the author permits them.
 
 ## License
 

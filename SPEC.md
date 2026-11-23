@@ -28,33 +28,20 @@ one dependency. It can be implemented without any particular skills or tools.
 
 ## What the shared model is for (informative)
 
-These are the outcomes the requirements aim at. They are intentions, not demonstrated results (section 7.4).
-
-- **Learning that accumulates across people.** A correction made once becomes everyone's starting point.
-- **Continuity across sessions, tools and models.** The memory carries the work when the person, agent, tool or model changes.
-- **Earned autonomy at team scale.** A shared, auditable record of what agents were authorized to do and did is what lets a team
-  decide how much to delegate; an agent that works from the team's accumulated context for its product is safer to delegate to.
-- **Orientation.** A newcomer, human or agent, starts from what is already recorded.
-- **Accountability.** Attributable, append-only records of who authorized what and why can serve as audit evidence.
-- **Memory the principal can own.** Nothing ties the memory to a particular tool or vendor. Whether recorded cases may be used
-  for evaluation or training is the memory owner's decision (R-22).
-
-The model does not change when more people write; what has to be decided is who the principal is (R-02: a person, role or
-collective with a decision rule), the recording and access policy (R-07) and how peer conflicts are resolved (R-10). Attribution
-(R-16) and collision-safe acceptance (R-18) work the same for one writer and many, and adding a contributor needs no migration
-(R-12).
+Intended outcomes, not demonstrated results (section 7.4): learning that accumulates across people; continuity across sessions,
+tools and models; earned autonomy at team scale (a shared, auditable record lets a team decide how much to delegate, and an agent
+working from the team's accumulated context is safer to delegate to); orientation for a newcomer; attributable records usable as
+audit evidence; and memory the principal owns (use for evaluation or training is the owner's decision, R-21). The model does not
+change when more people write; what must be decided is who the principal is (R-02), the recording and access policy (R-07) and
+how peer conflicts are resolved (R-10).
 
 ## Reading and requirement status
 
-MUST, MUST NOT, SHOULD and MAY express conformance requirements. Each requirement has a stable identifier and a check
-in Appendix A. Normative wording describes the proposed standard; it does not assert that an implementation exists or passes it.
-
-Every requirement is **Proposed**: a design requirement awaiting implementation and its check. Some restate properties of v0.4.0, but its requirement numbers and checks are new, so none is called inherited.
+MUST, MUST NOT, SHOULD and MAY express conformance requirements; each has a stable identifier and a check in Appendix A.
+Every requirement is Proposed (see Status above). The checks are specified tests, not executed results; a structure or version
+check does not establish SACM conformance, privacy, useful retrieval or correct agent behaviour.
 
 Terms: the *mandate* is the intent tier: a confirmed `mission.md` (older memories call it `destination.md`) or, for a run that has none, the interpretation of the prompt that the principal confirmed for that run (or delegated in the prompt or a mission), stated in the run's checkpoint or single record; *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
-
-The checks in this specification are specified tests, not executed test results. A mechanical check of document structure or
-version consistency does not establish SACM conformance, privacy, useful retrieval or correct agent behaviour.
 
 ## 1. Trust Tiers
 
@@ -290,8 +277,6 @@ scope-specific references, rather than copied captures that imply separate obser
 
 ## 5. Convergence
 
-### 5.1 Completion and silence
-
 **R-17.** Convergence MUST require both an exhausted work queue for the declared scope and independent evaluation finding
 nothing further to change against its declared quality bar. The agent's self-assessment or a passing automated check alone
 MUST NOT establish convergence.
@@ -305,60 +290,23 @@ is not so (a same-session follow-up, a principal review) is recorded as what it 
 Silence is bounded, provisional evidence of no findings, not proof that none exist. Deferred items outside an evaluated
 scope remain visible; deferring an unresolved item inside the claimed scope is not the same as completing it.
 
-### 5.2 Relationship to PEA
-
-The mandate gate implements Operator's Intent; trace and capture separation implement Observable Autonomy; bounded
-independent evaluation implements Convergence Is Silence. The principal defines what and why. The agent chooses how
-within that authority. Memory carries the track record against which greater delegation can be earned.
-
 ## 6. Prior Art and Contribution
 
-### 6.1 CoALA
-
-Sumers, T. R., Yao, S., Narasimhan, K., and Griffiths, T. L. (2023), *Cognitive Architectures for Language Agents*,
-[arXiv:2309.02427](https://arxiv.org/abs/2309.02427), distinguishes functional memory types. SACM retains that functional
-axis and adds governance by authorship, authority and verifiability. It does not claim to invent functional or tiered memory.
-
-### 6.2 Generative Agents
-
-Park, J. S., et al. (2023), *Generative Agents: Interactive Simulacra of Human Behavior*,
-[arXiv:2304.03442](https://arxiv.org/abs/2304.03442), supplies the observation/reflection/planning precedent and retrieval
-by relevance, recency and importance. SACM uses reflection as derivation while distinguishing a reflection from source
-evidence and principal-confirmed intent.
-
-### 6.3 MemGPT
-
-Packer, C., et al. (2023), *MemGPT: Towards LLMs as Operating Systems*,
-[arXiv:2310.08560](https://arxiv.org/abs/2310.08560), supplies hierarchical memory and cross-session persistence.
-SACM builds on those capabilities; authority boundaries and source-preserving derivation are additional governance concerns.
-
-### 6.4 Authorization and audit-log patterns
-
-Sandhu, R. S., Coyne, E. J., Feinstein, H. L., and Youman, C. E. (1996), *Role-Based Access Control Models*, is an
-authorization precedent. RBAC, MAC and capability models establish authorization before action and separation of actor
-from authorizing authority. Independent capture and append-only source apply established audit-log patterns.
-These analogies motivate SACM; they do not prove that natural-language mandates are machine-enforceable or that SACM replaces
-per-operation access checks. Runtime governance and training-time alignment address different questions and can coexist.
-
-### 6.5 Scale and governance
-
-The v0.4.0 Scale discussion introduced bounded recent windows plus archives regenerated from source. This version carries
-that lesson into shared recording and retrieval in Section 8. No claim that generation alone prevents stale caches is made:
-freshness needs a validated source revision and a completeness check.
-
-### 6.6 Contribution claims
+SACM builds on three capability-first memory models. Sumers et al. (2023), *Cognitive Architectures for Language Agents*
+([arXiv:2309.02427](https://arxiv.org/abs/2309.02427)), distinguish functional memory types; Park et al. (2023), *Generative
+Agents* ([arXiv:2304.03442](https://arxiv.org/abs/2304.03442)), supply the observation, reflection and planning precedent;
+Packer et al. (2023), *MemGPT* ([arXiv:2310.08560](https://arxiv.org/abs/2310.08560)), supply hierarchical memory and
+cross-session persistence. SACM keeps those capabilities and adds governance: authorship, authority and verifiability, and
+reflection as a derivation distinct from source evidence and confirmed intent. Role-based access control (Sandhu et al., 1996),
+MAC and capability models establish authorization before action and separation of actor from authority; independent capture
+and append-only source apply established audit-log patterns. These analogies motivate SACM; they do not prove that
+natural-language mandates are machine-enforceable or that SACM replaces per-operation access checks.
 
 SACM's stated contribution is transferring established authorization patterns to agent memory governance: the mandate gate,
-capture-author separation, trust-tier organization and convergence as a memory-state property.
-It claims no invention of shared memory, tiered memory, reflection, persistence or the underlying authorization mechanisms.
-Observed results are claimed only within their stated experiment scope.
-
-### 6.7 Augmented Individual Intelligence
-
-Holmager (2026), *Augmented Individual Intelligence*,
-[DOI:10.5281/zenodo.18417872](https://doi.org/10.5281/zenodo.18417872), includes agency preservation among its boundary
-conditions. SACM supplies governance infrastructure for that goal: retained principal authority, attributable decisions and
-independent observations. The existence of files or a conforming record schema alone does not prove preserved human agency.
+capture-author separation, trust-tier organization and convergence as a memory-state property. It claims no invention of shared
+memory, tiered memory, reflection, persistence or the underlying authorization mechanisms, and observed results are claimed only
+within their stated scope. Freshness of derived views needs a validated source revision and a completeness check (R-19);
+generation alone does not prevent stale caches.
 
 ## 7. Reference Implementation and Conformance
 
@@ -412,27 +360,18 @@ An implementation can place restricted scopes in separate repositories with inde
 
 ### 7.3 Conformance
 
-The contributor count is not a conformance mode. A deployment conforms to this version when every requirement that applies to it is implemented and its check passes for the declared deployment: R-01 to R-03, R-05 to R-16 and R-18 to R-20 always; R-04 where a mandate authorizes work without a human gate (a deployment whose work always passes one says so instead); R-17 when it claims convergence; R-21 when it claims efficiency or usefulness; R-22 when it extracts memory for training or evaluation; R-23 when it claims seamless adoption. A requirement may be marked not applicable only with its condition and a verifiable reason; this cannot waive an unconditional requirement. R-03 always forbids promoting trace into independent evidence, and a deployment without an evidence tier makes no independent-evidence or convergence claim. A local file pattern without separate roles is an illustration, not conformance. An implementation can conform before a particular work item converges; it must not report convergence for that item until R-17 passes.
+The contributor count is not a conformance mode. A deployment conforms to this version when every requirement that applies to it is implemented and its check passes for the declared deployment: R-01 to R-03, R-05 to R-16 and R-18 to R-20 always; R-04 where a mandate authorizes work without a human gate (a deployment whose work always passes one says so instead); R-17 when it claims convergence; R-21 when it extracts memory for training or evaluation. A requirement may be marked not applicable only with its condition and a verifiable reason; this cannot waive an unconditional requirement. R-03 always forbids promoting trace into independent evidence, and a deployment without an evidence tier makes no independent-evidence or convergence claim. A local file pattern without separate roles is an illustration, not conformance. An implementation can conform before a particular work item converges; it must not report convergence for that item until R-17 passes.
 
 A conformance report states the version, the deployment boundary, the checks, the results, the limitations and the policies that apply.
 
 ### 7.4 Current development state
 
-This version has been adopted for the specification's own development memory, by one author on one machine.
-That memory now resides in a separate private memory repository, bound to the specification's checkout by root commit;
-the public repository holds no memory and no pointer to it. The author's implementations were changed
-to resolve that binding and to write one record per file. None of these changes demonstrates R-07 access control, concurrent
-writers, cross-machine identity or newcomer adoption, and the evidence statuses in Appendix A are unchanged by them.
-The development runs behind a human pull-request gate and without independent capture (section 2.1). No deployment yet runs an
-autonomous agent on a shared memory without such a gate; that would require independent capture (R-04).
-No operational or full-conformance claim is made for this repository.
-
-### 7.5 Implementation provenance
-
-The `.acm/` pattern preceded this specification in the author's earlier work, archived as
-[DOI:10.5281/zenodo.19732827](https://doi.org/10.5281/zenodo.19732827), released April 24, 2026.
-Experience from using implementations informs the living specification; earlier observations do not demonstrate the
-new shared-memory contract or justify stronger novelty claims.
+This version has been adopted for the specification's own development memory, by one author on one machine, in a separate
+private memory repository bound by root commit; the public repository holds no memory and no pointer to it. That demonstrates
+none of R-07 access control, concurrent writers, cross-machine identity or newcomer adoption. The development runs behind a
+human pull-request gate and without independent capture (section 2.1). No deployment yet runs an autonomous agent on a shared
+memory without such a gate; that would require independent capture (R-04). No operational or full-conformance claim is made
+for this repository.
 
 ## 8. Shared Recording and Bounded Retrieval
 
@@ -474,28 +413,12 @@ Mechanical marker/date windows are a useful selection strategy. They do not guar
 whose answers depend on rejected alternatives, corrections and reasons. Escalate to source when the bounded view cannot
 support an answer, and state uncertainty when relevant evidence is unavailable.
 
-**R-21.** Deployments claiming efficient or useful accumulated memory MUST measure cold-start task orientation, context
-cost and answer/traceability quality against a stated baseline and question set. Entry count and marker volume MUST NOT
-substitute for value. The specification imposes no universal token budget or claim that compression is always beneficial.
-
 ### 8.4 Evaluation and training
 
-**R-22.** Extraction for evaluation, training or tuning MUST have an explicit policy from the memory's principal defining
+**R-21.** Extraction for evaluation, training or tuning MUST have an explicit policy from the memory's principal defining
 allowed purposes, scope and access. Training permission MUST NOT be inferred from permission to read or record.
 Prefer independently captured observations and principal-confirmed outcomes where available; label trace-derived cases as
 self-report. Evaluation before model changes is recommended, not an automatic entitlement to use private content.
-
-## 9. Adoption
-
-### 9.1 Adoption bar
-
-**R-23.** A reference implementation claiming seamless adoption MUST demonstrate a newcomer continuing applicable work
-by naming one installed entry skill after ordinary deployment setup, without reading the specification or manually supplying
-memory paths in each prompt. The test MUST include successful scope selection and visible safe failure for unavailable
-memory, not just installation or generation of an index.
-
-Repeat with another contributor or agent, task and session. Measure time/context and the ability to find the reasons for
-prior decisions. Record configuration assumptions. This specification states the bar; it does not claim it has been achieved.
 
 ## Appendix A: Requirement Checks
 
@@ -523,101 +446,14 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-18 | Atomic concurrent acceptance | Concurrent distinct entries survive exactly once; identical retries are idempotent; deliberate identifier/content collisions fail without overwriting; readers never observe a partially accepted record. |
 | R-19 | Snapshot freshness | Change source during/after generation and inject unreadable files; stale/incomplete views cannot be reported current. Removing derived files loses no source. |
 | R-20 | Source-backed retrieval | Ask why a decision was reversed from a compressed view; reach the correction and original source when they exist, and report insufficient context without inventing an answer when they do not; the context needed to answer does not grow with unrelated history. |
-| R-21 | Measured usefulness | Compare a fixed cold-start question set with and without scoped views; report context cost, time, correctness and unresolved why-questions, not entry volume. |
-| R-22 | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
-| R-23 | Cold-start adoption | A new contributor names one installed skill in a fresh session; with memory available it reaches the intended bound scope and continues a bounded task from prior memory, recovering the reason for an earlier decision, and with memory unavailable it fails explicitly, in both cases without per-prompt memory configuration. |
+| R-21 | Purpose authorization | Read permission alone cannot start an extraction pipeline; an allowed dataset retains source-tier and policy provenance. |
 
 The rows state the main falsifying tests, not every obligation of a requirement; an implementation that passes them can still violate
 one. Natural-language interpretation, policy quality and useful relevance are not made impossible to get wrong by a schema.
-R-06/R-18 can reject prohibited writes and collisions at an acceptance boundary or detect them afterward; R-20/R-21 require measured semantic outcomes and visible uncertainty.
+R-06/R-18 can reject prohibited writes and collisions at an acceptance boundary or detect them afterward; R-20 requires measured semantic outcomes and visible uncertainty.
 Conformance claims must distinguish properties a control, check or gate provides from instructions that contributors are merely expected to follow.
 
-## Appendix B: Evidence and Open-Problem Disposition
-
-The development ledger is not part of this specification's distribution. BS-nn identifies a numbered open problem from the author's development notes (not distributed); each is listed here with its disposition.
-The earlier profile proposals are source material, not a separate standard or an independent source of team conformance.
-
-### B.1 Available evidence and its limits
-
-- v0.4.0 defined the governance properties these requirements restate; publication alone is not enforcement evidence.
-- Private replay experiments observed shared-file merge conflicts and some silent line loss with line-union merging.
-  Distinct-file cases preserved the tested records. Colliding identifiers, authenticated provenance, hosted acceptance,
-  real simultaneous contributors and reader cost were not established. R-18 remains Proposed.
-- A private index/resolution prototype found stale manual counts and resolved the tested paths. Remote basenames, local
-  fallbacks, incomplete boundary handling and error-handling limitations prevent promoting it into the validated binding
-  required here. R-13/R-15/R-19 remain Proposed.
-- This specification contains no private source records or new runtime experiment results. New synthetic fixtures and independent
-  evaluation remain work to do. Descriptions above summarize limitations, not permission to publish the private material.
-
-### B.2 Disposition
-
-Requirement coverage means the design addresses the topic; it does not close its implementation evidence gap.
-
-| ID | Disposition | Remaining evidence or reason to reopen |
-|----|-------------------|---------------------------------------|
-| BS-01 | Proposed: R-19/R-20/R-21 | Measure staleness and answer quality at growing memory sizes. |
-| BS-02 | Proposed: R-19/R-20/R-21 | Test compressed why-questions and correction/source reachability. |
-| BS-03 | Out of generic specification | Adopting principals own content/licensing decisions; no organization-specific claim here. |
-| BS-04 | Proposed: R-07/R-08 | Adopter policy and end-to-end synthetic erasure, including inaccessible replicas. |
-| BS-05 | Proposed: R-06/R-07 | Test access separation and permitted recording; content sensitivity is not decidable by schema alone. |
-| BS-06 | Proposed: R-02/R-03/R-20 | Seed a wrong claim and verify it cannot acquire mandate authority; evaluate downstream correction. |
-| BS-07 | Proposed: R-02/R-10 | Exercise collective decision rules, peer conflicts and owner succession without self-authorization. |
-| BS-08 | Proposed: R-05/R-16/R-18 | Test ID collisions, retries, authenticated attribution and real concurrent acceptance. |
-| BS-09 | Proposed: R-22 | Adoption-specific purpose policy and an authorized evaluation dataset; no universal training permission. |
-| BS-10 | Proposed: R-19/R-20/R-21 | Measure cold-start retrieval cost and correctness; verify source revision and indexing completeness. |
-| BS-11 | Proposed: R-21/R-23 | Independent newcomer comparison with a baseline; volume is not value. |
-| BS-12 | Deferred: broader contemporary prior-art survey | Release/novelty claims beyond the modest positioning require first-hand verified sources. |
-| BS-13 | Superseded: no separate profile | Releases pin their versions (Appendix C); future compatibility changes need explicit migration. |
-| BS-14 | Release process: Appendix C | Requirements remain Proposed until their own evidence exists; keep visible reversals. |
-| BS-15 | Proposed: R-11/R-13/R-14/R-15 | Implement the reference binding contract and test clone/worktree/identity/boundary cases. |
-| BS-16 | Proposed: R-23 | Cold-run tests through an implementation in its separately governed repository. |
-
-Other deferred matters: author permission for private evidence publication; archive record creation; legal sufficiency of
-retention procedures; external review and academic submission. These do not prevent publishing this specification. They prevent
-claims that their own obligations or relevant release bars have been satisfied.
-
-## Appendix C: Historical Reference Mapping and Release Boundary
-
-The published v0.4.0 specification numbers both Convergence and Prior Art as Section 5. This version keeps Convergence at 5,
-renumbers Prior Art to 6 and Reference Implementation to 7. Historical documents are not rewritten.
-
-| Historical v0.4.0 reference | v0.5.0 reference |
-|--------------------------------|------------------------|
-| Sections 1-3 | Sections 1-3; requirements now have stable R-identifiers |
-| Section 4, Scoped Memory | Section 4, Memory Repository and Scopes |
-| Section 5, Convergence (5.1-5.8) | Section 5, Convergence |
-| Section 5, Prior Art (5.1-5.7) | Section 6, Prior Art and Contribution (6.1-6.7) |
-| Prior Art 5.5, The Governance Gap (its paragraph on scale within the trace tier) | Sections 6.5 and 8 |
-| Prior Art 5.6, contribution claims | Section 6.6 |
-| Section 6, Reference Implementation (6.1-6.6) | Section 7, Reference Implementation and Conformance |
-| Appendices A/B, PEA relationship and glossary | Sections 1/5.2 and Appendix D |
-
-Version 0.6.0 changed four things relative to 0.5.0: a mandate states its human gate (R-02); independent capture is required
-where work takes effect without one (R-04, section 7.3); permissions are described as reminders backed by intent, detection and
-gates, not as containment (R-06, R-07, section 2.5); and the stored derived view `orientation.md` is now `learning.md`, with an
-optional `generated/` folder for stored generated views (an implementation using the 0.5.0 name renames the file; section 7.2).
-No requirement was added or removed.
-
-Version 0.7.0 removed rather than added. Removed: sealing of closed months and its requirement (R-25) with the byte-exact record rule; the
-minimal and full conformance tiers (conformance is one list, and R-04 applies where work is ungated); the Inherited, Observed and Deferred
-evidence statuses (every requirement is Proposed); and the requirement R-24, whose release rule is now a maintainer's rule below. Changed: a
-confirmation is recorded with its source and a mandate revision is the hash of its content (R-02, R-16); the mandate is a confirmed
-mission or, for a run without one, the interpretation the principal confirmed for that run (Terms, Appendix D); the intent-tier file is `mission.md` (formerly `destination.md`; the artifact markers are `<!-- current-mission: complete -->` and `<!-- mission-history -->`); detection
-is stated to hold only outside the agent's reach (section 2.5); a short threat table was added (section 2.6); the checks of R-05 and R-14
-were aligned with their text. This specification implements the PEA principles and stands on its own, and names no implementation
-(section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
-independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that an implementation says which requirements it does not meet and that legacy in-repository memory is transitional. Descriptions in the README and metadata
-were reduced to what the specification claims. The name is Shared Agent Context Memory (SACM) and the abstract opens with the shared purpose; section 2.1 states that running without independent capture behind a human gate is acceptable when the absence is declared and the person at the gate remains responsible, and section 7.4 no longer names a binding mechanism. An informative section before the requirements says what the shared model is for and what has to be decided when more people write.
-Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
-not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
-
-Release rule (the maintainers', not a requirement on implementations). Before a release the specification version, the citation version, the archive metadata version and the requested tag must agree, a mechanical check must reject drift before publication, and an author-owned release decision is required in addition to passing the checks. Private observations stay private unless the author permits their inclusion. Publication must separately reconcile README, citation/archive descriptions, release workflow, requested tag and version. The
-repository's release workflow rejects a tag that differs from the versions stated in `SPEC.md`, `CITATION.cff` and `.zenodo.json`,
-and rejects a tag that carries development memory (`.acm/` or `.trail/`) at any depth. Release packaging must exclude private development
-memory by an explicit distribution boundary. Passing a version/structure check does not prove the absence of sensitive content
-from a public release.
-
-## Appendix D: Glossary
+## Appendix B: Glossary
 
 - **Principal:** the party with standing and an explicit decision rule to authorize a scope's work.
 - **Mandate:** principal-confirmed what, why and constraints: a confirmed mission, or the interpretation of a prompt the principal confirmed for one run; proposed agent articulation is not yet a mandate.
@@ -627,7 +463,7 @@ from a public release.
 - **Scope:** a declared authority/relevance boundary within memory; not an access permission.
 - **Source record:** accepted intent, trace or captured evidence retained under its tier's authorship/mutation rules.
 - **Derived view:** replaceable index, window, summary or learning file with source provenance and snapshot identity.
-- **Learning:** what a scope has learned so far, written as a derived view (`learning.md`) from its mandate and records; unrelated to training a model (R-22).
+- **Learning:** what a scope has learned so far, written as a derived view (`learning.md`) from its mandate and records; unrelated to training a model (R-21).
 - **Acceptance boundary:** the mechanism that admits records and applies roles, immutability and collision handling (in the reference route, the create-only write of the record file; committing and pushing it is publication).
 - **Capture-author separation:** the observed agent cannot author or suppress its independent observation record.
 - **Silence:** a bounded, provisional independent evaluation with no findings against the examined quality bar.
