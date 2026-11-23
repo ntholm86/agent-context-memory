@@ -24,13 +24,17 @@ authors:
     orcid: "https://orcid.org/0009-0009-7157-9084"
 repository-code: "https://github.com/ntholm86/shared-agent-context-memory"
 license: CC-BY-SA-4.0
-version: "0.7.0"
+version: "0.7.1"
 date-released: "2026-11-23"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20785505"
-    description: "Zenodo concept DOI covering all versions (v0.5.0 is 10.5281/zenodo.24431974)"
+    description: "Zenodo concept DOI covering all versions (v0.7.0 is 10.5281/zenodo.24455165, v0.5.0 is 10.5281/zenodo.24431974)"
+url: "https://github.com/ntholm86/shared-agent-context-memory"
 keywords:
+  - shared memory
+  - SACM
+  - Agent Context Memory
   - context memory
   - agent memory
   - AI governance
@@ -41,4 +45,26 @@ keywords:
   - capture-author separation
   - large language models
   - agent safety
+references:
+  - type: article
+    title: "Cognitive Architectures for Language Agents"
+    authors:
+      - family-names: Sumers
+        given-names: Theodore R.
+    year: 2023
+    url: "https://arxiv.org/abs/2309.02427"
+  - type: article
+    title: "Generative Agents: Interactive Simulacra of Human Behavior"
+    authors:
+      - family-names: Park
+        given-names: Joon Sung
+    year: 2023
+    url: "https://arxiv.org/abs/2304.03442"
+  - type: article
+    title: "MemGPT: Towards LLMs as Operating Systems"
+    authors:
+      - family-names: Packer
+        given-names: Charles
+    year: 2023
+    url: "https://arxiv.org/abs/2310.08560"
 

@@ -1,6 +1,6 @@
 # Shared Agent Context Memory (SACM) Specification
 
-**Version:** 0.7.0
+**Version:** 0.7.1
 **Date:** 2026-11-23
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0

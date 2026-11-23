@@ -1,7 +1,8 @@
 {
   "title": "Shared Agent Context Memory (SACM): A Governance-First Specification for AI Agent Context Memory",
-  "version": "0.7.0",
-  "description": "<p><strong>What this is.</strong> A specification for how AI-assisted work is kept organised in one shared memory (Shared Agent Context Memory, SACM), so that humans can audit it and stay responsible for the result. The same model serves one person and an organisation: a person working alone is a team of one.</p>\n<p><strong>The contribution.</strong> SACM recognizes that agent memory is fundamentally an authorization problem and applies established access control and audit-log patterns to this domain. The main proposal is the <em>Mandate Gate</em>: a pre-work mandate, confirmed by the principal, must exist in the agent's memory before work is a governed interval. Prior memory models (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from <em>during</em> work. SACM treats memory as a <em>precondition</em>.</p>\n<p><strong>Core structure.</strong> Three memory tiers organized by trust level: Intent (principal-confirmed mandate), Trace (agent records, append-only) and Evidence (captured separately from the agent). Memory lives in a repository of its own and is bound to repositories of work by identity; scopes identify what each mandate governs; shared recording is collision-safe, for one writer and many. 21 numbered requirements each have a specified check; every one is Proposed.</p>\n<p><strong>Relationship to PEA.</strong> SACM implements the <a href=\"https://github.com/ntholm86/principles-of-earned-autonomy\">Principles of Earned Autonomy (PEA)</a> for the context memory design problem: PEA is the theory, and its principles are SACM's one dependency. SACM stands on its own and can be implemented without the PEA skills.</p>\n<p><strong>Claims.</strong> The specification claims no implementation conformance: every requirement is Proposed. It acknowledges RBAC/MAC and audit-log principles and cites CoALA (arXiv:2309.02427), Generative Agents (arXiv:2304.03442) and MemGPT (arXiv:2310.08560).</p>\n<p><strong>Read in this order.</strong> README.md (overview), then SPEC.md (the full specification).</p>",
+  "version": "0.7.1",
+  "language": "eng",
+  "description": "<p><strong>What this is.</strong> A specification for how AI-assisted work is kept organised in one shared memory (Shared Agent Context Memory, SACM), so that humans can audit it and stay responsible for the result. The same model serves one person and an organisation: a person working alone is a team of one.</p>\n<p><strong>The contribution.</strong> SACM recognizes that agent memory is fundamentally an authorization problem and applies established access control and audit-log patterns to this domain. The main proposal is the <em>Mandate Gate</em>: a pre-work mandate, confirmed by the principal, must exist in the agent's memory before work is a governed interval. Prior memory models (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from <em>during</em> work. SACM treats memory as a <em>precondition</em>.</p>\n<p><strong>Core structure.</strong> Three memory tiers organized by trust level: Intent (principal-confirmed mandate), Trace (agent records, append-only) and Evidence (captured separately from the agent). Memory lives in a repository of its own and is bound to repositories of work by identity; scopes identify what each mandate governs; shared recording is collision-safe, for one writer and many. The cost of using the memory must not grow with its size (a task reads the mandates and the scope's current learning, and reaches the rest by reference). 21 numbered requirements each have a specified check; every one is Proposed. Conformance is minimal (intent and trace; evidence may be absent, and says so) or full (adds independent capture and evaluation).</p>\n<p><strong>Relationship to PEA.</strong> SACM implements the <a href=\"https://github.com/ntholm86/principles-of-earned-autonomy\">Principles of Earned Autonomy (PEA)</a> for the context memory design problem: PEA is the theory, and its principles are SACM's one dependency. SACM stands on its own and can be implemented without the PEA skills.</p>\n<p><strong>Claims.</strong> The specification claims no implementation conformance: every requirement is Proposed. It acknowledges RBAC/MAC and audit-log principles and cites CoALA (arXiv:2309.02427), Generative Agents (arXiv:2304.03442) and MemGPT (arXiv:2310.08560).</p>\n<p><strong>Read in this order.</strong> README.md (overview), then SPEC.md (the full specification).</p>",
   "creators": [
     {
       "name": "Holmager, Nils Wendelboe",
@@ -23,18 +24,22 @@
     "observable autonomy",
     "capture-author separation",
     "large language models",
-    "agent safety"
+    "agent safety",
+    "shared memory",
+    "SACM",
+    "Agent Context Memory",
+    "specification"
   ],
   "related_identifiers": [
     {
-      "identifier": "10.5281/zenodo.19732890",
+      "identifier": "10.5281/zenodo.19732889",
       "relation": "isDerivedFrom",
       "resource_type": "software",
       "scheme": "doi"
     },
     {
-      "identifier": "10.5281/zenodo.19732827",
-      "relation": "isDerivedFrom",
+      "identifier": "10.5281/zenodo.19732826",
+      "relation": "isSupplementedBy",
       "resource_type": "software",
       "scheme": "doi"
     },
@@ -43,6 +48,37 @@
       "relation": "isSupplementTo",
       "resource_type": "publication",
       "scheme": "doi"
+    },
+    {
+      "identifier": "https://github.com/ntholm86/shared-agent-context-memory",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "10.48550/arXiv.2309.02427",
+      "relation": "cites",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.48550/arXiv.2304.03442",
+      "relation": "cites",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.48550/arXiv.2310.08560",
+      "relation": "cites",
+      "resource_type": "publication-preprint",
+      "scheme": "doi"
     }
+  ],
+  "notes": "Versions up to 0.5.0 were published under the earlier name Agent Context Memory (ACM); from 0.7.0 the specification is called Shared Agent Context Memory (SACM) and its GitHub repository is ntholm86/shared-agent-context-memory (the old address redirects). Version 0.7.1 changes only this record's metadata and the version and date strings; the specification text is that of 0.7.0.",
+  "references": [
+    "Sumers, T. R., Yao, S., Narasimhan, K., & Griffiths, T. L. (2023). Cognitive Architectures for Language Agents. arXiv:2309.02427.",
+    "Park, J. S., O'Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). Generative Agents: Interactive Simulacra of Human Behavior. arXiv:2304.03442.",
+    "Packer, C., Wooders, S., Lin, K., Fang, V., Patil, S. G., Stoica, I., & Gonzalez, J. E. (2023). MemGPT: Towards LLMs as Operating Systems. arXiv:2310.08560.",
+    "Sandhu, R. S., Coyne, E. J., Feinstein, H. L., & Youman, C. E. (1996). Role-Based Access Control Models. IEEE Computer 29(2), 38-47."
   ]
 }

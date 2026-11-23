@@ -1,6 +1,6 @@
 # Shared Agent Context Memory (SACM)
 
-**A specification for how AI-assisted work is kept organised in one shared memory, so that humans can audit it and stay responsible for the result.** Version 0.7.0 (a working draft). 
+**A specification for how AI-assisted work is kept organised in one shared memory, so that humans can audit it and stay responsible for the result.** Version 0.7.1 (a working draft). 
 
 📄 **[Read the full specification →](./SPEC.md)**
 
@@ -32,6 +32,6 @@ To start, create a memory repository of your own that follows the specification,
 
 ## Citation
 
-Cite SACM using [CITATION.cff](./CITATION.cff). The concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions; 0.5.0 is [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974).
+Cite SACM using [CITATION.cff](./CITATION.cff). The concept DOI [10.5281/zenodo.20785505](https://doi.org/10.5281/zenodo.20785505) covers all versions; 0.7.0 is [DOI 10.5281/zenodo.24455165](https://doi.org/10.5281/zenodo.24455165) and 0.5.0 is [DOI 10.5281/zenodo.24431974](https://doi.org/10.5281/zenodo.24431974).
 
 [CC BY-SA 4.0](./LICENSE) — [Nils Wendelboe Holmager](https://nilsholmager.com/), 2026
