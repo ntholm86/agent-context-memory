@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" width="1600" height="1040" role="img" aria-labelledby="t d" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Liberation Sans', sans-serif">
   <title id="t">Shared Agent Context Memory: one memory for the whole team</title>
-  <desc id="d">Without a shared memory, each person and agent can start from zero and ask the same questions again. With one, the team keeps a memory of its own, in a separate repository apart from its code, holding a mission that a person confirms, what the team knows now, and a record of what was done and why. People and their agents read it first and keep records as they work. It can let a team learn once, let a newcomer or another agent continue from the records, keep a person in charge, and make review a matter of exceptions. Agents can use it through a skill: the PEA skills suite or the Work skill, the author's own.</desc>
+  <desc id="d">Without a shared memory, each person and agent can start from zero and ask the same questions again. With one, the team keeps a memory of its own, in a separate repository apart from its code, holding a goal that a person confirms, what the team knows now, and a record of what was done and why. People and their agents read it first and keep records as they work. It can let a team learn once, let a newcomer or another agent continue from the records, keep a person in charge, and make review a matter of exceptions. Agents can use it through a skill: the PEA skills suite or the Work skill, the author's own.</desc>
 
   <defs>
     <g id="person">
@@ -67,14 +67,14 @@
 
   <rect x="570" y="350" width="460" height="332" rx="20" fill="#F4F6FA" stroke="#DDE2EC" stroke-width="2"/>
 
-  <!-- Mission -->
+  <!-- Goal -->
   <rect x="588" y="366" width="424" height="88" rx="16" fill="#FFFFFF" stroke="#C5D0FF" stroke-width="2"/>
   <rect x="588" y="366" width="9" height="88" rx="4.5" fill="#3B5BDB"/>
   <circle cx="640" cy="410" r="26" fill="#E7ECFF"/>
   <g transform="translate(640 410) scale(1.15)" fill="#3B5BDB"><rect x="-8" y="-12" width="3" height="24" rx="1.5"/><path d="M-5 -12 L12 -6 L-5 0 Z"/></g>
-  <text x="684" y="402" font-size="28" font-weight="700" fill="#1F2937">Mission</text>
-  <text x="996" y="402" text-anchor="end" font-size="17" font-family="Consolas, 'Courier New', monospace" fill="#4B5563">mission.md</text>
-  <text x="684" y="434" font-size="21" fill="#4B5563">The goal and the limits</text>
+  <text x="684" y="402" font-size="28" font-weight="700" fill="#1F2937">Goal</text>
+  <text x="996" y="402" text-anchor="end" font-size="17" font-family="Consolas, 'Courier New', monospace" fill="#4B5563">goal.md</text>
+  <text x="684" y="434" font-size="21" fill="#4B5563">The aim and the limits</text>
 
   <!-- Learning -->
   <rect x="588" y="466" width="424" height="88" rx="16" fill="#FFFFFF" stroke="#B8EBD9" stroke-width="2"/>
@@ -139,7 +139,7 @@
   <g transform="translate(1160 609) scale(1.2)"><path d="M0 -13 L12 -8 V2 C12 9 6 13 0 15 C-6 13 -12 9 -12 2 V-8 Z" fill="#0CA678"/><path d="M-5 1 L-1 5 L6 -3" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
   <text x="1208" y="614" font-size="27" font-weight="700" fill="#1F2937">You stay in charge</text>
   <text x="1208" y="644" font-size="21" fill="#4B5563">A person confirms the</text>
-  <text x="1208" y="670" font-size="21" fill="#4B5563">mission. An agent cannot</text>
+  <text x="1208" y="670" font-size="21" fill="#4B5563">goal. An agent cannot</text>
   <text x="1208" y="696" font-size="21" fill="#4B5563">give itself authority.</text>
 
   <!-- 4 -->

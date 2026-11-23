@@ -1,12 +1,12 @@
 # Shared Agent Context Memory (SACM)
 
-**A specification for how AI-assisted work is kept organised in one shared memory, so that humans can audit it and stay responsible for the result.** Version 0.7.1 (a working draft). 
+**A specification for how AI-assisted work is kept organised in one shared memory, so that humans can audit it and stay responsible for the result.** Version 0.8.0 (a working draft). 
 
 📄 **[Read the full specification →](./SPEC.md)**
 
 An agent starting a task begins from what earlier work learned, found and was corrected on, read from a memory kept apart from the code and organised by scope. One person is a team of one; only the number of people and agents writing changes.
 
-![Illustration: without a shared memory each person and agent can start from zero; with one, the team's people and agents read a mission, what has been learned and the records first, and keep records as they work.](./images/shared-agent-context-memory.svg)
+![Illustration: without a shared memory each person and agent can start from zero; with one, the team's people and agents read a goal, what has been learned and the records first, and keep records as they work.](./images/shared-agent-context-memory.svg)
 
 ## The mandate gate
 
@@ -20,7 +20,7 @@ Governed work needs a principal-confirmed mandate already in memory, read by the
 | **Trace** | The agent's own account; source records are append-only | The agent |
 | **Evidence** | Observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
-21 numbered requirements (R-01 to R-21), each with a check in Appendix A, and two conformance levels: minimal (intent and trace; evidence may be absent, and says so) and full (adds independent capture and evaluation). Every requirement is Proposed: nothing is claimed as implemented or conformant. The specification requires properties, not a layout; the reference layout is one folder per scope holding `mission.md`, `learning.md` and `records/`, in a memory repository of its own.
+21 numbered requirements (R-01 to R-21), each with a check in Appendix A, and two conformance levels: minimal (intent and trace; evidence may be absent, and says so) and full (adds independent capture and evaluation). Every requirement is Proposed: nothing is claimed as implemented or conformant. The specification requires properties, not a layout; the reference layout is one folder per scope holding `goal.md`, `learning.md` and `records/`, in a memory repository of its own.
 
 The [PEA skills suite](https://github.com/ntholm86/principles-of-earned-autonomy-skills-suite) and the [Work skill](https://github.com/ntholm86/work-skill) are the author's own implementations of it, none yet claimed conformant. The specification names no implementation; another framework can implement it. It implements the [Principles of Earned Autonomy](https://github.com/ntholm86/principles-of-earned-autonomy), its one dependency.
 

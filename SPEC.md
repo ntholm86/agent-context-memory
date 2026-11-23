@@ -1,6 +1,6 @@
 # Shared Agent Context Memory (SACM) Specification
 
-**Version:** 0.7.1
+**Version:** 0.8.0
 **Date:** 2026-11-23
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
@@ -103,7 +103,7 @@ A database or service may implement the same properties as this illustrative ref
 ```text
 memory-repository/            memory-wide scope; .acm-root marks the top
   .acm-root
-  mission.md                  intent: the mandate (principal-confirmed)
+  goal.md                  intent: the mandate (principal-confirmed)
   learning.md                 trace: what this scope has learned so far; derived and replaceable
   records/<time>-<slug>.md    trace source: one file per record, identified by its path (R-18)
   tasks/<task-id>/            named task scope; the same three entries (under any scope)
@@ -116,7 +116,7 @@ memory-repository/            memory-wide scope; .acm-root marks the top
       paths/<repository-relative-path>/   path scope; the same three entries, and its own tasks/
 ```
 
-Every scope has the same shape and all its files are optional until used. The governing chain is the nesting: memory-wide, repository, path, task; a scope's mandate narrows its parent's. A task inside one path lives under it; a task spanning paths lives at repository level, names those paths in its own `mission.md` and reads their mandates as peers (a conflict pauses the affected action, R-10); a task not tied to a repository lives at memory-wide level. A code folder named like a scope entry (`records`, `tasks`, `evidence`, `generated`, or any name ending in `.md`) or beginning with `_` is written under `paths/` with one extra leading `_` (names compared without regard to letter case), so entries and child paths never share a name and the mapping stays reversible.
+Every scope has the same shape and all its files are optional until used. The governing chain is the nesting: memory-wide, repository, path, task; a scope's mandate narrows its parent's. A task inside one path lives under it; a task spanning paths lives at repository level, names those paths in its own `goal.md` and reads their mandates as peers (a conflict pauses the affected action, R-10); a task not tied to a repository lives at memory-wide level. A code folder named like a scope entry (`records`, `tasks`, `evidence`, `generated`, or any name ending in `.md`) or beginning with `_` is written under `paths/` with one extra leading `_` (names compared without regard to letter case), so entries and child paths never share a name and the mapping stays reversible.
 
 
 
