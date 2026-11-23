@@ -1,3 +1,4 @@
 # Development memory lives in a separate private memory repository, never in this public one.
 # Guard against an accidental local copy.
 .acm/
+/.acm/
