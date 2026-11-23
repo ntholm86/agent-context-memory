@@ -1,28 +1,30 @@
-# Agent Context Memory Specification
+# Shared Agent Context Memory (SACM) Specification
 
 **Version:** 0.7.0
 **Date:** 2026-11-22
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
 **Status:** Working draft; not an implementation-conformance claim. Every requirement is Proposed: none has been exercised by anyone but its author.
-**Baseline:** ACM v0.4.0 (commit 51e951e of this repository; never tagged).
+**Baseline:** ACM v0.4.0 (the name this specification had before SACM; commit 51e951e of this repository; never tagged).
 
 ## Abstract
 
-Agent Context Memory (ACM) specifies governance-first context memory for autonomous AI agents. Its purpose is cumulative,
-trustworthy work across people, sessions, tools and models, while the principal retains authority. Memory supplies the
-governed starting point for the next contributor rather than requiring the work to start over.
+Shared Agent Context Memory (SACM) specifies how AI-assisted work is kept organised in one shared memory, so that humans can
+audit it and stay responsible for the result. Its purpose is cumulative, trustworthy work across people, sessions, tools and
+models, while the principal retains authority: an agent starts from what earlier work learned, found and was corrected on,
+rather than starting over. The same model serves one contributor and many; a person working alone is a team of one, and only
+the number of people and agents reading and writing changes.
 
-ACM transfers established authorization and audit-log patterns to agent memory governance. Its mandate gate requires
+SACM transfers established authorization and audit-log patterns to agent memory governance. Its mandate gate requires
 principal-confirmed intent before governed work. Three trust tiers distinguish authorization, agent self-report and
 independently captured evidence. Scope identifies what the memory governs; access controls identify who can use it.
 
-The same model serves one contributor and many. Memory resides in its own repository, separately from repositories of work.
+Memory resides in its own repository, separately from repositories of work.
 Binding connects work to that memory; scoped retrieval makes it usable without reading the entire accumulated history.
 The specification defines required properties, not a mandatory vendor, configuration format, storage engine or skill host.
 
-ACM operationalizes [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy).
-It can be implemented independently of that reference ecosystem.
+SACM implements the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy), which are its
+one dependency. It can be implemented without any particular skills or tools.
 
 ## Reading and requirement status
 
@@ -34,13 +36,13 @@ Every requirement is **Proposed**: a design requirement awaiting implementation 
 Terms: the *mandate* is the intent tier: a confirmed `mission.md` (older memories call it `destination.md`) or, for a run that has none, the interpretation of the prompt that the principal confirmed for that run (or delegated in the prompt or a mission), stated in the run's checkpoint or single record; *records* and the derived `learning.md` are the trace tier (*trail* means the same, and `audit-trail.md` is the legacy single-file form); `evidence/` is the evidence tier.
 
 The checks in this specification are specified tests, not executed test results. A mechanical check of document structure or
-version consistency does not establish ACM conformance, privacy, useful retrieval or correct agent behaviour.
+version consistency does not establish SACM conformance, privacy, useful retrieval or correct agent behaviour.
 
 ## 1. Trust Tiers
 
 ### 1.1 Intent, trace and evidence
 
-ACM organizes memory by authorship and trust, independently of functional memory types.
+SACM organizes memory by authorship and trust, independently of functional memory types.
 
 | Tier | Responsibility | Authority and mutability |
 |------|----------------|--------------------------|
@@ -77,8 +79,8 @@ Record capture gaps. Conflicting observations require investigation, not an agen
 Working, episodic, semantic and procedural memory can coexist with the trust axis. Functional classifications do not
 grant authorship rights. A recalled decision is not automatically a new instruction.
 
-Useful skills may be distilled from accumulated learning. That is an awareness, not an ACM skill-generation function.
-ACM does not prescribe where skills live or how a principal adopts them.
+Useful skills may be distilled from accumulated learning. That is an awareness, not an SACM skill-generation function.
+SACM does not prescribe where skills live or how a principal adopts them.
 
 ## 2. Structural Requirements
 
@@ -134,14 +136,14 @@ the affected record identifiers, authority, reason, affected replicas and verifi
 It MUST distinguish an intentionally missing record from a silently lost record.
 
 This is a proposed exception to the v0.4.0 statement that no party can ever change captured evidence. It does not authorize
-erasure here. An adopter determines lawful retention and erasure; ACM supplies no legal opinion or guarantee that every
+erasure here. An adopter determines lawful retention and erasure; SACM supplies no legal opinion or guarantee that every
 backup, cache or public clone can be recalled.
 
 ### 2.5 Controls and their limits
 
 An agent that can act can often act around a control. File permissions, access restrictions and prohibitions written in
 instructions are therefore reminders and friction, not containment, against an agent that is mistaken or determined enough to
-cross them. ACM relies on three things, in this order.
+cross them. SACM relies on three things, in this order.
 
 1. **Intent.** The confirmed mandate tells the agent what it must not do and why, so that not crossing the line is the agent's
    own understanding of the work.
@@ -172,7 +174,7 @@ Not addressed: key management, multi-tenant access control, and versioning or mi
 
 ### 3.1 Governed work interval
 
-**R-09.** Before an ACM-governed work interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
+**R-09.** Before an SACM-governed work interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
 and be read. The agent's interpretation, scope, governing mandate revision and authority to proceed MUST be visible in accepted trace
 before the first change or other consequential action. Examination that changes nothing may precede that record, and its
 findings are recorded afterward. Binding validation and mandate reading are preflight, not authorization to alter the work.
@@ -195,7 +197,7 @@ does not confer standing on the next writer. The implementation must surface the
 
 **R-11.** Missing, inaccessible, invalid or ambiguous binding, governing mandate or required trace acceptance MUST be
 reported explicitly. Work depending on it MUST pause. Work independently authorized by the current prompt and available
-governing context MAY continue, but MUST NOT be represented as a valid ACM-governed interval without passing R-09.
+governing context MAY continue, but MUST NOT be represented as a valid SACM-governed interval without passing R-09.
 
 The implementation MUST NOT claim unavailable memory was read, invent a replacement mandate, silently switch memory sources,
 or silently create a competing local trail. A deployment may queue records for the same bound destination only if its policy
@@ -291,28 +293,28 @@ within that authority. Memory carries the track record against which greater del
 ### 6.1 CoALA
 
 Sumers, T. R., Yao, S., Narasimhan, K., and Griffiths, T. L. (2023), *Cognitive Architectures for Language Agents*,
-[arXiv:2309.02427](https://arxiv.org/abs/2309.02427), distinguishes functional memory types. ACM retains that functional
+[arXiv:2309.02427](https://arxiv.org/abs/2309.02427), distinguishes functional memory types. SACM retains that functional
 axis and adds governance by authorship, authority and verifiability. It does not claim to invent functional or tiered memory.
 
 ### 6.2 Generative Agents
 
 Park, J. S., et al. (2023), *Generative Agents: Interactive Simulacra of Human Behavior*,
 [arXiv:2304.03442](https://arxiv.org/abs/2304.03442), supplies the observation/reflection/planning precedent and retrieval
-by relevance, recency and importance. ACM uses reflection as derivation while distinguishing a reflection from source
+by relevance, recency and importance. SACM uses reflection as derivation while distinguishing a reflection from source
 evidence and principal-confirmed intent.
 
 ### 6.3 MemGPT
 
 Packer, C., et al. (2023), *MemGPT: Towards LLMs as Operating Systems*,
 [arXiv:2310.08560](https://arxiv.org/abs/2310.08560), supplies hierarchical memory and cross-session persistence.
-ACM builds on those capabilities; authority boundaries and source-preserving derivation are additional governance concerns.
+SACM builds on those capabilities; authority boundaries and source-preserving derivation are additional governance concerns.
 
 ### 6.4 Authorization and audit-log patterns
 
 Sandhu, R. S., Coyne, E. J., Feinstein, H. L., and Youman, C. E. (1996), *Role-Based Access Control Models*, is an
 authorization precedent. RBAC, MAC and capability models establish authorization before action and separation of actor
 from authorizing authority. Independent capture and append-only source apply established audit-log patterns.
-These analogies motivate ACM; they do not prove that natural-language mandates are machine-enforceable or that ACM replaces
+These analogies motivate SACM; they do not prove that natural-language mandates are machine-enforceable or that SACM replaces
 per-operation access checks. Runtime governance and training-time alignment address different questions and can coexist.
 
 ### 6.5 Scale and governance
@@ -323,7 +325,7 @@ freshness needs a validated source revision and a completeness check.
 
 ### 6.6 Contribution claims
 
-ACM's stated contribution is transferring established authorization patterns to agent memory governance: the mandate gate,
+SACM's stated contribution is transferring established authorization patterns to agent memory governance: the mandate gate,
 capture-author separation, trust-tier organization and convergence as a memory-state property.
 It claims no invention of shared memory, tiered memory, reflection, persistence or the underlying authorization mechanisms.
 Observed results are claimed only within their stated experiment scope.
@@ -332,7 +334,7 @@ Observed results are claimed only within their stated experiment scope.
 
 Holmager (2026), *Augmented Individual Intelligence*,
 [DOI:10.5281/zenodo.18417872](https://doi.org/10.5281/zenodo.18417872), includes agency preservation among its boundary
-conditions. ACM supplies governance infrastructure for that goal: retained principal authority, attributable decisions and
+conditions. SACM supplies governance infrastructure for that goal: retained principal authority, attributable decisions and
 independent observations. The existence of files or a conforming record schema alone does not prove preserved human agency.
 
 ## 7. Reference Implementation and Conformance
@@ -486,7 +488,7 @@ Each row gives a falsifiable implementation check. No row asserts that its check
 | R-08 | Authorized exception | In a synthetic store, exercise authorized erasure across declared replicas and leave a non-sensitive event; an unauthorized writer cannot erase. Report unreachable replicas. |
 | R-09 | Pre-work gate | Missing mandate, unread governing revision or unaccepted interpretation prevents governed action. Agent-created text never authorizes itself. |
 | R-10 | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution. |
-| R-11 | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled ACM-valid. |
+| R-11 | Explicit degraded state | Disconnect memory or trace acceptance; report it, pause dependent work and do not create fallback memory. Independent prompt-authorized work is not labelled SACM-valid. |
 | R-12 | Separate repository | The memory is held in a separately identified and governed store, two work repositories each resolve to their own repository-level scope in it, a clean distribution of the work repository contains no development memory, and adding a second writer requires no trace-layout migration. |
 | R-13 | Validated binding | Rename/move clones, use two same-named repositories, a fork sharing the root commit and conflicting bindings; with root-commit binding, a clone or fork sharing a root commit resolves to the same binding (another mechanism states its own fork rule), and the others preserve intended identity or fail, with no guessed reads/writes. |
 | R-14 | Intent-based scope | Resolve a deep path, task ambiguity and a code-path move; retain old references and write only to the narrowest applicable scope (a task the principal named, else the path scope containing the work); a code folder named like a scope entry resolves to a distinct, reversible path. |
