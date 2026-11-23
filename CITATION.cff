@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this specification, please cite it as below."
 type: software
-title: "Agent Context Memory: A Governance-First Specification for AI Agent Context Memory"
+title: "Shared Agent Context Memory (SACM): A Governance-First Specification for AI Agent Context Memory"
 abstract: >
   SACM (Shared Agent Context Memory) is a specification for how AI-assisted work is kept
   organised in one shared memory, so that humans can audit it and stay responsible for the
@@ -12,8 +12,8 @@ abstract: >
   mandate, confirmed by the principal, must exist in the agent's memory before work
   is a governed interval. SACM defines three memory tiers organized by trust level
   (intent / trace / evidence), capture-author separation, a memory kept in
-  a repository of its own and bound to repositories of work by identity, a one-rule
-  scope layout, collision-safe shared recording (one file per record), and 21 numbered
+  a repository of its own and bound to repositories of work by identity, scopes,
+  collision-safe shared recording, and 21 numbered
   requirements with specified checks. SACM implements the Principles of Earned
   Autonomy (PEA) for the context memory design problem: PEA is the theory and its principles are
   SACM's one dependency. SACM stands on its own and can be implemented without the PEA skills. The specification claims
@@ -25,7 +25,7 @@ authors:
 repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
 version: "0.7.0"
-date-released: "2026-11-22"
+date-released: "2026-11-23"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20785505"
