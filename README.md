@@ -18,6 +18,12 @@ SACM implements the [Principles of Earned Autonomy (PEA)](https://github.com/nth
 
 ---
 
+## What it is for
+
+Intended outcomes, not yet demonstrated results: learning that accumulates across people (a correction made once becomes everyone's starting point); continuity across sessions, tools and models; earned autonomy at team scale (a shared, auditable record is what lets a team decide how much to delegate, and an agent that works from the team's accumulated context is safer to delegate to); orientation for a newcomer, human or agent; attributable records that can serve as audit evidence; and memory the principal can own, tied to no tool or vendor.
+
+---
+
 ## The main proposal: the mandate gate
 
 A pre-work mandate, confirmed by the principal, must exist in memory before work is a governed interval: a confirmed mission or, where there is none, the interpretation of the prompt that the principal confirmed for the run, recorded at its checkpoint. The agent may help draft it but cannot confirm its own authority. The three context memory models SACM compares itself with (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from *during* work. SACM treats memory as a *precondition*: the gate that determines whether SACM-governed work can begin.

@@ -26,6 +26,24 @@ The specification defines required properties, not a mandatory vendor, configura
 SACM implements the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy), which are its
 one dependency. It can be implemented without any particular skills or tools.
 
+## What the shared model is for (informative)
+
+These are the outcomes the requirements aim at. They are intentions, not demonstrated results (section 7.4).
+
+- **Learning that accumulates across people.** A correction made once becomes everyone's starting point.
+- **Continuity across sessions, tools and models.** The memory carries the work when the person, agent, tool or model changes.
+- **Earned autonomy at team scale.** A shared, auditable record of what agents were authorized to do and did is what lets a team
+  decide how much to delegate; an agent that works from the team's accumulated context for its product is safer to delegate to.
+- **Orientation.** A newcomer, human or agent, starts from what is already recorded.
+- **Accountability.** Attributable, append-only records of who authorized what and why can serve as audit evidence.
+- **Memory the principal can own.** Nothing ties the memory to a particular tool or vendor. Whether recorded cases may be used
+  for evaluation or training is the memory owner's decision (R-22).
+
+The model does not change when more people write; what has to be decided is who the principal is (R-02: a person, role or
+collective with a decision rule), the recording and access policy (R-07) and how peer conflicts are resolved (R-10). Attribution
+(R-16) and collision-safe acceptance (R-18) work the same for one writer and many, and adding a contributor needs no migration
+(R-12).
+
 ## Reading and requirement status
 
 MUST, MUST NOT, SHOULD and MAY express conformance requirements. Each requirement has a stable identifier and a check
@@ -589,7 +607,7 @@ is stated to hold only outside the agent's reach (section 2.5); a short threat t
 were aligned with their text. This specification implements the PEA principles and stands on its own, and names no implementation
 (section 7.1); R-20 says what identifying the sources of a derived view means. The Mandate Gate is unchanged. Two wordings were made consistent with R-03 and R-04: a reviewed trace is what the record rests on, not
 independent evidence (section 2.1), and R-04 itself carries the ungated-work condition. R-17 follows Principle 3 of PEA, and section 7.1 states that an implementation says which requirements it does not meet and that legacy in-repository memory is transitional. Descriptions in the README and metadata
-were reduced to what the specification claims. The name is Shared Agent Context Memory (SACM) and the abstract opens with the shared purpose; section 2.1 states that running without independent capture behind a human gate is acceptable when the absence is declared and the person at the gate remains responsible, and section 7.4 no longer names a binding mechanism.
+were reduced to what the specification claims. The name is Shared Agent Context Memory (SACM) and the abstract opens with the shared purpose; section 2.1 states that running without independent capture behind a human gate is acceptable when the absence is declared and the person at the gate remains responsible, and section 7.4 no longer names a binding mechanism. An informative section before the requirements says what the shared model is for and what has to be decided when more people write.
 Older erroneous references to "Section 4" for Convergence are interpreted by the named topic, with this mapping made explicit,
 not by changing source history. Old prototype and profile links are not normative dependencies of this specification.
 
