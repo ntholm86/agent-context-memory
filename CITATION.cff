@@ -11,7 +11,7 @@ abstract: >
   working alone is a team of one. The main proposal is the Mandate Gate: a pre-work
   mandate, confirmed by the principal, must exist in the agent's memory before work
   is a governed interval. SACM defines three memory tiers organized by trust level
-  (intent / trace / evidence), capture-author separation where work is ungated, a memory kept in
+  (intent / trace / evidence), capture-author separation, a memory kept in
   a repository of its own and bound to repositories of work by identity, a one-rule
   scope layout, collision-safe shared recording (one file per record), and 21 numbered
   requirements with specified checks. SACM implements the Principles of Earned

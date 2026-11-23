@@ -8,7 +8,7 @@ An agent starting a task begins from what earlier work learned, found and was co
 
 ## The mandate gate
 
-Governed work needs a principal-confirmed mandate already in memory: a confirmed `mission.md`, or the interpretation of the prompt that the principal confirmed for the run. The agent may help draft it but cannot confirm its own authority.
+Governed work needs a principal-confirmed mandate already in memory, read by the agent before it acts, with the agent's interpretation visible in the trace. The agent may help draft it but cannot confirm its own authority.
 
 ## Three tiers, by trust
 
@@ -18,7 +18,7 @@ Governed work needs a principal-confirmed mandate already in memory: a confirmed
 | **Trace** | The agent's own account; source records are append-only | The agent |
 | **Evidence** | Observations the agent cannot author, filter, alter or delete | A component separate from the agent |
 
-21 numbered requirements (R-01 to R-21), each with a check in Appendix A. Every one is Proposed: nothing is claimed as implemented or conformant. The specification requires properties, not a layout; the reference layout is one folder per scope holding `mission.md`, `learning.md` and `records/`, in a memory repository of its own.
+21 numbered requirements (R-01 to R-21), each with a check in Appendix A, and two conformance levels: minimal (intent and trace; evidence may be absent, and says so) and full (adds independent capture). Every requirement is Proposed: nothing is claimed as implemented or conformant. The specification requires properties, not a layout; the reference layout is one folder per scope holding `mission.md`, `learning.md` and `records/`, in a memory repository of its own.
 
 The [PEA skills suite](https://github.com/ntholm86/principles-of-earned-autonomy-skills-suite) and the [Work skill](https://github.com/ntholm86/work-skill) implement it. The specification names no implementation; another framework can implement it. It implements the [Principles of Earned Autonomy](https://github.com/ntholm86/principles-of-earned-autonomy), its one dependency.
 
