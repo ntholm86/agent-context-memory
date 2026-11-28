@@ -1,7 +1,7 @@
 # Agent Context Memory (ACM) Specification
 
-**Version:** 0.8.0
-**Date:** 2026-11-23
+**Version:** 0.9.0
+**Date:** 2026-11-28
 **Author:** Nils Wendelboe Holmager
 **License:** CC BY-SA 4.0
 **Status:** Working draft; not an implementation-conformance claim. Every requirement is Proposed: none has been exercised by anyone but its author.
@@ -23,7 +23,7 @@ The specification defines required properties, not a mandatory vendor, configura
 ACM operationalizes [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy).
 It can be implemented independently of that reference ecosystem.
 
-The specification was previously named Shared Agent Context Memory (SACM) through version 0.8.0. That name remains in historical releases and citations; this source uses ACM for the current specification.
+The specification was previously named Shared Agent Context Memory (SACM) through version 0.8.0. That name remains in historical releases and citations; v0.9.0 restores ACM as the specification name and uses Shared ACM only for a team use of it. This release changes identity and citation metadata, not the 21 requirements or their Proposed status.
 
 ## Reading
 

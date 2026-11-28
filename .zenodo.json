@@ -1,8 +1,8 @@
 {
   "title": "Agent Context Memory (ACM): A Governance-First Specification",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "language": "eng",
-  "description": "<p><strong>What this is.</strong> A specification for how AI-assisted work is kept organised in one Agent Context Memory (ACM), so that humans can audit it and stay responsible for the result. A team use of ACM is Shared ACM. The same model serves one person and an organisation: a person working alone is a team of one.</p>\n<p><strong>The contribution.</strong> ACM recognizes that agent memory is fundamentally an authorization problem and applies established access control and audit-log patterns to this domain. The main proposal is the <em>Mandate Gate</em>: a pre-work mandate, confirmed by the principal, must exist in the agent's memory before work is a governed interval. Prior memory models (MemGPT, CoALA, Generative Agents) treat memory as a working resource the agent draws from <em>during</em> work. ACM treats memory as a <em>precondition</em>.</p>\n<p><strong>Core structure.</strong> Three memory tiers organized by trust level: Intent (principal-confirmed mandate), Trace (agent records, append-only) and Evidence (captured separately from the agent). Memory lives in a repository of its own and is bound to repositories of work by identity; scopes identify what each mandate governs; shared recording is collision-safe, for one writer and many. The cost of using the memory must not grow with its size (a task reads the mandates and the scope's current learning, and reaches the rest by reference). 21 numbered requirements each have a specified check; every one is Proposed. Conformance is minimal (intent and trace; evidence may be absent, and says so) or full (adds independent capture and evaluation).</p>\n<p><strong>Relationship to PEA.</strong> ACM implements the <a href=\"https://github.com/ntholm86/principles-of-earned-autonomy\">Principles of Earned Autonomy (PEA)</a> for the context memory design problem: PEA is the theory, and its principles are ACM's one dependency. ACM stands on its own and can be implemented without the PEA skills.</p>\n<p><strong>Claims.</strong> The specification claims no implementation conformance: every requirement is Proposed. It acknowledges RBAC/MAC and audit-log principles and cites CoALA (arXiv:2309.02427), Generative Agents (arXiv:2304.03442) and MemGPT (arXiv:2310.08560).</p>\n<p><strong>Read in this order.</strong> README.md (overview), then SPEC.md (the full specification).</p>",
+  "description": "<p><strong>What this is.</strong> Agent Context Memory (ACM) is a governance-first specification for how AI-assisted work is kept organised in memory separate from repositories of work. A team use is called Shared ACM; the same model serves one person or an organisation.</p><p><strong>Contribution.</strong> ACM treats agent memory as an authorization problem. Its Mandate Gate requires principal-confirmed intent before governed work. Memory is organised into Intent, Trace, and Evidence tiers; work repositories bind to repository-level scopes by identity; and 21 numbered requirements specify checks for authority, append-only recording, independent evidence, scoped retrieval, and bounded startup cost.</p><p><strong>v0.9.0 release.</strong> This version restores Agent Context Memory as the canonical public specification name. Shared ACM describes a team use, not a separate specification. The 21 requirements, their checks, and their Proposed status are unchanged. Earlier SACM releases and citations remain historical records.</p><p><strong>Relationship to PEA.</strong> ACM implements the <a href='https://doi.org/10.5281/zenodo.24624324'>Principles of Earned Autonomy (PEA)</a> for the context-memory design problem. It can be used independently of the author's implementations. Agent Evidence Proxy can supply an external evidence boundary, but ACM claims no implementation conformance.</p><p><strong>Claims and limitations.</strong> Every requirement is Proposed. The specification does not claim that any named implementation is conformant, that a hash chain prevents full-ledger rewriting, or that model reasoning itself is made correct. It acknowledges CoALA, Generative Agents, MemGPT, RBAC/MAC, and audit-log prior art.</p><p><strong>Read in this order.</strong> README.md, then SPEC.md.</p>",
   "creators": [
     {
       "name": "Holmager, Nils Wendelboe",
@@ -31,6 +31,18 @@
     "specification"
   ],
   "related_identifiers": [
+    {
+      "identifier": "10.5281/zenodo.24624324",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5281/zenodo.24624043",
+      "relation": "isSupplementedBy",
+      "resource_type": "software",
+      "scheme": "doi"
+    },
     {
       "identifier": "10.5281/zenodo.19732889",
       "relation": "isDerivedFrom",
@@ -74,7 +86,7 @@
       "scheme": "doi"
     }
   ],
-  "notes": "Versions up to 0.5.0 were published as Agent Context Memory (ACM); versions 0.7.0 through 0.8.0 were published as Shared Agent Context Memory (SACM). The current source restores ACM as the specification name and uses Shared ACM only for a team use of it. Historical titles and citations remain unchanged. Version 0.7.1 changes only that record's metadata and version and date strings; the specification text is that of 0.7.0. Version 0.8.0 renamed the reference intent file from mission.md to goal.md; no requirement changed.",
+  "notes": "Versions up to 0.5.0 were published as Agent Context Memory (ACM); versions 0.7.0 through 0.8.0 were published as Shared Agent Context Memory (SACM). v0.9.0 restores ACM as the specification name and uses Shared ACM only for a team use of it. Historical titles and citations remain unchanged. Version 0.7.1 changes only that record's metadata and version/date strings; version 0.8.0 renamed mission.md to goal.md. v0.9.0 changes identity and release metadata, not the 21 requirements or their Proposed status.",
   "references": [
     "Sumers, T. R., Yao, S., Narasimhan, K., & Griffiths, T. L. (2023). Cognitive Architectures for Language Agents. arXiv:2309.02427.",
     "Park, J. S., O'Brien, J. C., Cai, C. J., Morris, M. R., Liang, P., & Bernstein, M. S. (2023). Generative Agents: Interactive Simulacra of Human Behavior. arXiv:2304.03442.",

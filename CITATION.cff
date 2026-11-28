@@ -24,12 +24,15 @@ authors:
     orcid: "https://orcid.org/0009-0009-7157-9084"
 repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
-version: "0.8.0"
-date-released: "2026-11-23"
+version: "0.9.0"
+date-released: "2026-11-28"
 identifiers:
   - type: doi
     value: "10.5281/zenodo.20785505"
     description: "Zenodo concept DOI covering all versions (v0.7.0 is 10.5281/zenodo.24455165, v0.5.0 is 10.5281/zenodo.24431974)"
+  - type: doi
+    value: "10.5281/zenodo.24624570"
+    description: "Zenodo archive reserved for Agent Context Memory v0.9.0"
 url: "https://github.com/ntholm86/agent-context-memory"
 keywords:
   - shared memory
@@ -46,6 +49,20 @@ keywords:
   - large language models
   - agent safety
 references:
+  - type: software
+    title: "Principles of Earned Autonomy: A Governance Framework for Autonomous Agents"
+    authors:
+      - family-names: Holmager
+        given-names: Nils Wendelboe
+    doi: "10.5281/zenodo.24624324"
+    repository-code: "https://github.com/ntholm86/principles-of-earned-autonomy"
+  - type: software
+    title: "Agent Evidence Proxy (AEP)"
+    authors:
+      - family-names: Holmager
+        given-names: Nils Wendelboe
+    doi: "10.5281/zenodo.24624043"
+    repository-code: "https://github.com/ntholm86/agent-evidence-proxy"
   - type: article
     title: "Cognitive Architectures for Language Agents"
     authors:
