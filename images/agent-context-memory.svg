@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040" width="1600" height="1040" role="img" aria-labelledby="t d" font-family="'Segoe UI', 'Helvetica Neue', Arial, 'Liberation Sans', sans-serif">
-  <title id="t">Shared Agent Context Memory: one memory for the whole team</title>
-  <desc id="d">Without a shared memory, each person and agent can start from zero and ask the same questions again. With one, the team keeps a memory of its own, in a separate repository apart from its code, holding a goal that a person confirms, what the team knows now, and a record of what was done and why. People and their agents read it first and keep records as they work. It can let a team learn once, let a newcomer or another agent continue from the records, keep a person in charge, and make review a matter of exceptions. Agents can use it through a skill: the PEA skills suite or the Work skill, the author's own.</desc>
+  <title id="t">Agent Context Memory: persistent context for one person or a team</title>
+  <desc id="d">Without shared memory, each person and agent can start from zero and ask the same questions again. With Agent Context Memory, a person or team keeps memory in a separate repository apart from its code, holding a goal that a person confirms, what has been learned, and a record of what was done and why. People and agents read it first and keep records as they work. They can use it through Agent Cognition Skills or the Work skill, the author's own.</desc>
 
   <defs>
     <g id="person">
@@ -20,7 +20,7 @@
   <rect width="1600" height="1040" fill="#F4F6FA"/>
 
   <!-- Header -->
-  <text x="800" y="84" text-anchor="middle" font-size="58" font-weight="700" fill="#1F2937">Shared Agent Context Memory</text>
+  <text x="800" y="84" text-anchor="middle" font-size="58" font-weight="700" fill="#1F2937">Agent Context Memory</text>
   <text x="800" y="136" text-anchor="middle" font-size="30" fill="#4B5563">One memory for the whole team, so work need not start from zero.</text>
 
   <!-- Panel 1: today -->
@@ -153,7 +153,7 @@
   <rect x="40" y="900" width="1520" height="116" rx="26" fill="#FFFFFF" stroke="#E2E6EE" stroke-width="2"/>
   <text x="70" y="934" font-size="16" font-weight="700" letter-spacing="2" fill="#4B5563">THE AUTHOR'S SKILLS</text>
   <rect x="70" y="950" width="240" height="46" rx="23" fill="#F1E8FF"/>
-  <text x="190" y="982" text-anchor="middle" font-size="23" font-weight="700" fill="#5F3DC4">PEA skills suite</text>
+  <text x="190" y="982" text-anchor="middle" font-size="23" font-weight="700" fill="#5F3DC4">Agent Cognition Skills</text>
   <text x="338" y="982" text-anchor="middle" font-size="22" fill="#4B5563">or</text>
   <rect x="366" y="950" width="170" height="46" rx="23" fill="#F1E8FF"/>
   <text x="451" y="982" text-anchor="middle" font-size="23" font-weight="700" fill="#5F3DC4">Work skill</text>
