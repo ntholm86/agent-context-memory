@@ -1,4 +1,4 @@
-# Shared Agent Context Memory (SACM) Specification
+# Agent Context Memory (ACM) Specification
 
 **Version:** 0.8.0
 **Date:** 2026-11-23
@@ -8,11 +8,11 @@
 
 ## Abstract
 
-Shared Agent Context Memory (SACM) specifies governance-first context memory for autonomous AI agents. Its purpose is cumulative,
+Agent Context Memory (ACM) specifies governance-first context memory for autonomous AI agents. A team repository using it is Shared ACM. Its purpose is cumulative,
 trustworthy work across people, sessions, tools and models, while the principal retains authority. Memory supplies the
 governed starting point for the next contributor rather than requiring the work to start over.
 
-SACM transfers established authorization and audit-log patterns to agent memory governance. Its mandate gate requires
+ACM transfers established authorization and audit-log patterns to agent memory governance. Its mandate gate requires
 principal-confirmed intent before governed work. Three trust tiers distinguish authorization, agent self-report and
 independently captured evidence. Scope identifies what the memory governs; access controls identify who can use it.
 
@@ -20,8 +20,10 @@ The same model serves one contributor and many. Memory resides in its own reposi
 Binding connects work to that memory; scoped retrieval makes it usable without reading the entire accumulated history.
 The specification defines required properties, not a mandatory vendor, configuration format, storage engine or skill host.
 
-SACM operationalizes [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy).
+ACM operationalizes [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy).
 It can be implemented independently of that reference ecosystem.
+
+The specification was previously named Shared Agent Context Memory (SACM) through version 0.8.0. That name remains in historical releases and citations; this source uses ACM for the current specification.
 
 ## Reading
 
@@ -63,13 +65,13 @@ capture at its acceptance boundary. Rejected or unavailable operations MUST prod
 
 ## 3. The Mandate Gate
 
-**R-09.** Before an SACM-governed interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
+**R-09.** Before an ACM-governed interval begins, all applicable principal-confirmed mandates MUST exist, be resolved
 and be read. The agent's interpretation, scope, mandate revisions and authority to proceed MUST be visible in accepted trace
 before the first change or other consequential action. Examination that changes nothing may precede that record.
 
 **R-10.** Higher-scope mandates MUST govern lower scopes; lower scopes MAY narrow authority, never expand it. Unresolved peer conflicts MUST be surfaced to the principal of the enclosing scope and the affected action MUST pause; neither the newest record nor the agent's preference wins. If applicable authority changes during work, affected actions MUST pause until the governing context and interpretation are revalidated. A departed owner or inaccessible authority confers no standing on the next writer; the missing authorization is surfaced.
 
-**R-11.** Missing, inaccessible, invalid or ambiguous binding, governing mandate or required trace acceptance MUST be reported explicitly, and dependent work MUST pause. Work independently authorized by the current prompt and available governing context MAY continue but MUST NOT be represented as a valid SACM-governed interval without passing R-09. The implementation MUST NOT claim unavailable memory was read, invent a replacement mandate, silently switch memory repositories or silently create a competing local trace; records may be queued only if policy permits and are not represented as accepted shared records.
+**R-11.** Missing, inaccessible, invalid or ambiguous binding, governing mandate or required trace acceptance MUST be reported explicitly, and dependent work MUST pause. Work independently authorized by the current prompt and available governing context MAY continue but MUST NOT be represented as a valid ACM-governed interval without passing R-09. The implementation MUST NOT claim unavailable memory was read, invent a replacement mandate, silently switch memory repositories or silently create a competing local trace; records may be queued only if policy permits and are not represented as accepted shared records.
 
 ## 4. Memory Repository and Scopes
 
@@ -92,7 +94,7 @@ identity and independence, and whether it is fresh or a same-session follow-up.
 
 ## 6. Prior Art and Contribution
 
-SACM builds on three capability-first memory models: Sumers et al. (2023), *Cognitive Architectures for Language Agents* ([arXiv:2309.02427](https://arxiv.org/abs/2309.02427)), which distinguishes functional memory types; Park et al. (2023), *Generative Agents* ([arXiv:2304.03442](https://arxiv.org/abs/2304.03442)), the observation, reflection and planning precedent; and Packer et al. (2023), *MemGPT* ([arXiv:2310.08560](https://arxiv.org/abs/2310.08560)), hierarchical memory and cross-session persistence. It keeps those capabilities and adds governance: authorship, authority and verifiability, with reflection as a derivation distinct from source evidence and confirmed intent. Role-based access control models (Sandhu et al., 1996, IEEE Computer 29(2)), MAC and capability models establish authorization before action and separation of actor from authority; independent capture and append-only source apply established audit-log patterns. These analogies motivate SACM; they do not prove that natural-language mandates are machine-enforceable.
+ACM builds on three capability-first memory models: Sumers et al. (2023), *Cognitive Architectures for Language Agents* ([arXiv:2309.02427](https://arxiv.org/abs/2309.02427)), which distinguishes functional memory types; Park et al. (2023), *Generative Agents* ([arXiv:2304.03442](https://arxiv.org/abs/2304.03442)), the observation, reflection and planning precedent; and Packer et al. (2023), *MemGPT* ([arXiv:2310.08560](https://arxiv.org/abs/2310.08560)), hierarchical memory and cross-session persistence. It keeps those capabilities and adds governance: authorship, authority and verifiability, with reflection as a derivation distinct from source evidence and confirmed intent. Role-based access control models (Sandhu et al., 1996, IEEE Computer 29(2)), MAC and capability models establish authorization before action and separation of actor from authority; independent capture and append-only source apply established audit-log patterns. These analogies motivate ACM; they do not prove that natural-language mandates are machine-enforceable.
 
 Its stated contribution is transferring established authorization patterns to agent memory governance: the mandate gate, capture-author separation, trust-tier organization and convergence as a memory-state property. It claims no invention of shared memory, tiered memory, reflection, persistence or the underlying authorization mechanisms, and observed results are claimed only within their stated scope.
 
@@ -162,7 +164,7 @@ Each row gives a falsifiable implementation check.
 | R-08 | Authorized exception | In a synthetic store, authorized erasure across declared replicas leaves a non-sensitive event; an unauthorized writer cannot erase; unreachable replicas are reported; a store claiming both append-only and erasure without exposing the conflict is rejected; an intentionally missing record is distinguishable from a lost one. |
 | R-09 | Pre-work gate | A missing mandate, unread governing revision or unaccepted interpretation prevents governed action; read-only examination before the record is allowed. |
 | R-10 | Authority resolution | A lower scope cannot widen authority; conflicting peers and a mid-work mandate change pause affected actions until authorized resolution; an unresolved peer conflict goes to the enclosing scope's principal; a departed owner's mandate gives the next writer no standing. |
-| R-11 | Explicit degraded state | Disconnect memory or trace acceptance: it is reported, dependent work pauses, no fallback memory is created, prompt-authorized work is not labelled SACM-valid, and queued records are not represented as accepted. |
+| R-11 | Explicit degraded state | Disconnect memory or trace acceptance: it is reported, dependent work pauses, no fallback memory is created, prompt-authorized work is not labelled ACM-valid, and queued records are not represented as accepted. |
 | R-12 | Separate repository | Memory is a separately governed store; two work repositories each resolve to their own scope; a clean distribution of a work repository contains no development memory; a second writer needs no migration. |
 | R-13 | Validated binding | The binding is established at setup, not in prompts. Rename or move clones, use two same-named repositories, a fork or copy and conflicting bindings: each keeps its identity or fails, a fork or copy never silently inherits another binding, and nothing is guessed. |
 | R-14 | Intent-based scope | A deep path, an ambiguous task and a code-path move: old references stay resolvable and writes go only to the narrowest applicable scope; a code folder named like a scope entry maps to a distinct, reversible path. |

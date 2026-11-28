@@ -1,22 +1,22 @@
 cff-version: 1.2.0
 message: "If you use this specification, please cite it as below."
 type: software
-title: "Shared Agent Context Memory (SACM): A Governance-First Specification for AI Agent Context Memory"
+title: "Agent Context Memory (ACM): A Governance-First Specification"
 abstract: >
-  SACM (Shared Agent Context Memory) is a specification for how AI-assisted work is kept
+  Agent Context Memory (ACM) is a specification for how AI-assisted work is kept
   organised in one shared memory, so that humans can audit it and stay responsible for the
   result. It recognizes that agent memory is fundamentally
   an authorization problem and applies established access control and audit-log
   patterns to this domain. The same model serves one person and an organisation: a person
   working alone is a team of one. The main proposal is the Mandate Gate: a pre-work
   mandate, confirmed by the principal, must exist in the agent's memory before work
-  is a governed interval. SACM defines three memory tiers organized by trust level
+  is a governed interval. ACM defines three memory tiers organized by trust level
   (intent / trace / evidence), capture-author separation, a memory kept in
   a repository of its own and bound to repositories of work by identity, scopes,
   collision-safe shared recording, and 21 numbered
-  requirements with specified checks. SACM implements the Principles of Earned
+  requirements with specified checks. ACM implements the Principles of Earned
   Autonomy (PEA) for the context memory design problem: PEA is the theory and its principles are
-  SACM's one dependency. SACM stands on its own and can be implemented without the PEA skills. The specification claims
+  ACM's one dependency. ACM stands on its own and can be implemented without the PEA skills. The specification claims
   no implementation conformance: every requirement is Proposed.
 authors:
   - family-names: Holmager
@@ -33,7 +33,7 @@ identifiers:
 url: "https://github.com/ntholm86/shared-agent-context-memory"
 keywords:
   - shared memory
-  - SACM
+  - ACM
   - Agent Context Memory
   - context memory
   - agent memory
