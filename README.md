@@ -24,7 +24,7 @@ Governed work needs a principal-confirmed mandate already in memory, read by the
 
 21 numbered requirements (R-01 to R-21), each with a check in Appendix A, and two conformance levels: minimal (intent and trace; evidence may be absent, and says so) and full (adds independent capture and evaluation). Every requirement is Proposed: nothing is claimed as implemented or conformant. The specification requires properties, not a layout; the reference layout is one folder per scope holding `goal.md`, `learning.md` and `records/`, in a memory repository of its own.
 
-The [Agent Cognition Skills](https://github.com/ntholm86/agent-cognition-skills) and the [Work skill](https://github.com/ntholm86/work-skill) are the author's own implementations of it, none yet claimed conformant. The specification names no implementation; another framework can implement it. It implements the [Principles of Earned Autonomy](https://github.com/ntholm86/principles-of-earned-autonomy), its one dependency.
+The [Agent Cognition Skills (ACS)](https://github.com/ntholm86/agent-cognition-skills) and the [Work skill](https://github.com/ntholm86/work-skill) are the author's own implementations of it, none yet claimed conformant. The specification names no implementation; another framework can implement it. It implements the [Principles of Earned Autonomy (PEA)](https://github.com/ntholm86/principles-of-earned-autonomy), its one dependency.
 
 ## Adopting it
 
