@@ -22,7 +22,7 @@ authors:
   - family-names: Holmager
     given-names: Nils Wendelboe
     orcid: "https://orcid.org/0009-0009-7157-9084"
-repository-code: "https://github.com/ntholm86/shared-agent-context-memory"
+repository-code: "https://github.com/ntholm86/agent-context-memory"
 license: CC-BY-SA-4.0
 version: "0.8.0"
 date-released: "2026-11-23"
@@ -30,7 +30,7 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.20785505"
     description: "Zenodo concept DOI covering all versions (v0.7.0 is 10.5281/zenodo.24455165, v0.5.0 is 10.5281/zenodo.24431974)"
-url: "https://github.com/ntholm86/shared-agent-context-memory"
+url: "https://github.com/ntholm86/agent-context-memory"
 keywords:
   - shared memory
   - ACM
