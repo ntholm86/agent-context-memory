@@ -8,7 +8,7 @@ An agent starting a task begins from what earlier work learned, found and was co
 
 Agent Context Memory is abbreviated **ACM**. An ACM repository used by a team is called **Shared ACM**. Versions through 0.8.0 were published as Shared Agent Context Memory (SACM); that history and those citations remain valid.
 
-![Illustration: without a shared memory each person and agent can start from zero; with one, the team's people and agents read a goal, what has been learned and the records first, and keep records as they work.](./images/agent-context-memory.svg)
+![Illustration: without a shared memory each person and agent can start from zero; with one, the team's people and agents read a goal, what has been learned and the records first, and keep records as they work.](./images/shared-agent-context-memory.svg)
 
 ## The mandate gate
 
